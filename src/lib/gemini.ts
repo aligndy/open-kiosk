@@ -52,11 +52,11 @@ export async function generateMenuImage(
     ? "Use the provided reference image as a style guide. Match its visual style, color tone, composition, lighting, and overall aesthetic as closely as possible."
     : "";
 
-  const fullPrompt = `Generate a professional cafe menu photo. Product photography style, top-down or 45-degree angle view.
+  const fullPrompt = `Generate a professional cafe menu photo in a perfect 1:1 square format. Product photography style, top-down or 45-degree angle view. The subject should be centered in the frame.
 ${bgInstruction}
 ${referenceInstruction}
 Item: ${prompt}
-Style: Professional food photography, bright even lighting, high resolution, appetizing presentation`;
+Style: Professional food photography, bright even lighting, high resolution, appetizing presentation, square aspect ratio`;
 
   const parts: Array<{ text: string } | { inlineData: { mimeType: string; data: string } }> = [];
 

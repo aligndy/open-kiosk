@@ -17,7 +17,7 @@ export default function MenuCard({ menu, currentLanguage, onSelect }: MenuCardPr
       className="flex flex-col overflow-hidden rounded-xl bg-white shadow-sm active:scale-[0.98] transition-transform"
     >
       {/* Menu image */}
-      <div className="relative aspect-square w-full bg-gray-100">
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-gray-100">
         {menu.imageUrl ? (
           <img
             src={menu.imageUrl}

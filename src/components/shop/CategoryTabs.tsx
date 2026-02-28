@@ -23,7 +23,7 @@ export default function CategoryTabs({
   const showVending = categories.length >= 2 && onVendingToggle;
 
   return (
-    <div className="sticky top-[60px] z-10 overflow-x-auto border-b border-gray-200 bg-white">
+    <div className="sticky top-[60px] z-20 overflow-x-auto border-b border-gray-200 bg-white">
       <div className="flex gap-1 px-2 py-2">
         {showVending && (
           <button

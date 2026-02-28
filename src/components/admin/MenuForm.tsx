@@ -65,6 +65,9 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const [siblingMenus, setSiblingMenus] = useState<{ id: number; name: string; imageUrl: string | null }[]>([]);
   const [selectedRefUrl, setSelectedRefUrl] = useState<string | null>(null);
 
+  // Image preview overlay
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
   useEffect(() => {
     const init = async () => {
       const catRes = await fetch("/api/categories");
@@ -518,7 +521,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                     ? "border-blue-500 ring-2 ring-blue-200"
                     : "border-gray-200 hover:border-gray-400"
                 }`}
-                onClick={() => selectGalleryImage(img)}
+                onClick={() => imageUrl === img.imageUrl ? setPreviewUrl(img.imageUrl) : selectGalleryImage(img)}
               >
                 <img
                   src={img.imageUrl}
@@ -622,7 +625,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                     <button
                       key={`${ref.label}-${idx}`}
                       type="button"
-                      onClick={() => setSelectedRefUrl(selectedRefUrl === ref.url ? null : ref.url)}
+                      onClick={() => selectedRefUrl === ref.url ? setPreviewUrl(ref.url) : setSelectedRefUrl(ref.url)}
                       className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 transition-colors ${
                         selectedRefUrl === ref.url
                           ? "border-purple-500 bg-purple-50"
@@ -752,6 +755,19 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           {t("common.cancel")}
         </button>
       </div>
+      {/* Image Preview Overlay */}
+      {previewUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setPreviewUrl(null)}
+        >
+          <img
+            src={previewUrl}
+            alt="Preview"
+            className="max-w-full max-h-full rounded-lg object-contain"
+          />
+        </div>
+      )}
     </form>
   );
 }

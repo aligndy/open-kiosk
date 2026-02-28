@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { generateMenuImage } from "@/lib/gemini";
 import { writeFile, mkdir, readFile } from "fs/promises";
 import path from "path";
+import { cropToSquare } from "@/lib/image";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -24,10 +25,11 @@ export async function POST(request: Request) {
       referenceImageBase64 = fileBuffer.toString("base64");
     }
 
-    const imageBuffer = await generateMenuImage(prompt, {
+    const rawBuffer = await generateMenuImage(prompt, {
       transparentBg: transparentBg !== false,
       referenceImageBase64,
     });
+    const imageBuffer = await cropToSquare(rawBuffer);
     const fileName = `menu-${menuId || "new"}-${Date.now()}.png`;
     const generatedDir = path.join(process.cwd(), "public", "generated");
     await mkdir(generatedDir, { recursive: true });

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { generateMenuImage } from "@/lib/gemini";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { cropToSquare } from "@/lib/image";
 
 export async function GET(
   _request: Request,
@@ -50,10 +51,11 @@ export async function POST(
         }
       }
 
-      const imageBuffer = await generateMenuImage(prompt, {
+      const rawBuffer = await generateMenuImage(prompt, {
         transparentBg: true,
         referenceImageBase64,
       });
+      const imageBuffer = await cropToSquare(rawBuffer);
       const fileName = `category-${categoryId}-${Date.now()}.png`;
       const generatedDir = path.join(process.cwd(), "public", "generated");
       await mkdir(generatedDir, { recursive: true });
@@ -75,11 +77,11 @@ export async function POST(
           { status: 400 }
         );
       }
-      const ext = file.name.split(".").pop() || "png";
-      const fileName = `category-${categoryId}-${Date.now()}.${ext}`;
+      const fileName = `category-${categoryId}-${Date.now()}.png`;
       const uploadDir = path.join(process.cwd(), "public", "uploads");
       await mkdir(uploadDir, { recursive: true });
-      const buffer = Buffer.from(await file.arrayBuffer());
+      const raw = Buffer.from(await file.arrayBuffer());
+      const buffer = await cropToSquare(raw);
       await writeFile(path.join(uploadDir, fileName), buffer);
       imageUrl = `/uploads/${fileName}`;
     } else {
@@ -114,10 +116,11 @@ export async function POST(
       }
     }
 
-    const imageBuffer = await generateMenuImage(prompt, {
+    const rawBuffer = await generateMenuImage(prompt, {
       transparentBg: true,
       referenceImageBase64,
     });
+    const imageBuffer = await cropToSquare(rawBuffer);
     const fileName = `category-${categoryId}-${Date.now()}.png`;
     const generatedDir = path.join(process.cwd(), "public", "generated");
     await mkdir(generatedDir, { recursive: true });

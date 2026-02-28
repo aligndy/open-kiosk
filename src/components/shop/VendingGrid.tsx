@@ -114,7 +114,7 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
   };
 
   return (
-    <div className="grid grid-cols-3 gap-2 p-2">
+    <div className="grid grid-cols-4 gap-2 p-2">
       {cards.map((card, idx) => {
         const count = getCount(card);
         return (
@@ -155,7 +155,7 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
             )}
 
             {/* Image */}
-            <div className="aspect-square w-full bg-gray-100">
+            <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-gray-100">
               {card.imageUrl ? (
                 <img
                   src={card.imageUrl}

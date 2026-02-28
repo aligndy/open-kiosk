@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { cropToSquare } from "@/lib/image";
 
 export async function GET(
   _request: Request,
@@ -55,11 +56,11 @@ export async function POST(
     );
   }
 
-  const ext = file.name.split(".").pop() || "png";
-  const fileName = `menu-${menuId}-${Date.now()}.${ext}`;
+  const fileName = `menu-${menuId}-${Date.now()}.png`;
   const uploadDir = path.join(process.cwd(), "public", "uploads");
   await mkdir(uploadDir, { recursive: true });
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const raw = Buffer.from(await file.arrayBuffer());
+  const buffer = await cropToSquare(raw);
   await writeFile(path.join(uploadDir, fileName), buffer);
   const imageUrl = `/uploads/${fileName}`;
 

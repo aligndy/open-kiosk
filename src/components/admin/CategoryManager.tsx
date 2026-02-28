@@ -36,6 +36,7 @@ export default function CategoryManager() {
   const [galleryGenerating, setGalleryGenerating] = useState(false);
   const [galleryUploading, setGalleryUploading] = useState(false);
   const [fileDragOver, setFileDragOver] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -395,7 +396,7 @@ export default function CategoryManager() {
                         ? "border-blue-500 ring-2 ring-blue-200"
                         : "border-gray-200 hover:border-gray-400"
                     }`}
-                    onClick={() => selectGalleryImage(img)}
+                    onClick={() => galleryCategory.referenceImageUrl === img.imageUrl ? setPreviewUrl(img.imageUrl) : selectGalleryImage(img)}
                   >
                     <img
                       src={img.imageUrl}
@@ -464,6 +465,19 @@ export default function CategoryManager() {
               </label>
             </div>
           </div>
+        </div>
+      )}
+      {/* Image Preview Overlay */}
+      {previewUrl && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setPreviewUrl(null)}
+        >
+          <img
+            src={previewUrl}
+            alt="Preview"
+            className="max-w-full max-h-full rounded-lg object-contain"
+          />
         </div>
       )}
     </div>
