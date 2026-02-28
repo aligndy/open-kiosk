@@ -28,6 +28,7 @@
   "payment.title": "Plačilo",
   "payment.amount": "Znesek za plačilo",
   "payment.signature": "Podpis",
+  "payment.placeholder": "Podpišite tukaj",
   "payment.clearSignature": "Ponovni podpis",
   "payment.processing": "Obdelava...",
   "payment.complete": "Plačilo uspešno",

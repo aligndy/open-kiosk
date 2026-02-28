@@ -28,6 +28,7 @@
   "payment.title": "Betaling",
   "payment.amount": "Te betalen",
   "payment.signature": "Handtekening",
+  "payment.placeholder": "Zet hier uw handtekening",
   "payment.clearSignature": "Wissen",
   "payment.processing": "Verwerken...",
   "payment.complete": "Betaling voltooid",

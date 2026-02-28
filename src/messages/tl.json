@@ -28,6 +28,7 @@
   "payment.title": "Pagbabayad",
   "payment.amount": "Halaga ng Babayaran",
   "payment.signature": "Lagda",
+  "payment.placeholder": "Pirmahan dito",
   "payment.clearSignature": "Muling Isulat",
   "payment.processing": "Pinoproseso...",
   "payment.complete": "Bayad Kumpleto",

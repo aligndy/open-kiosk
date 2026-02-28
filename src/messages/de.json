@@ -29,6 +29,7 @@
   "payment.title": "Zahlung",
   "payment.amount": "Zahlungsbetrag",
   "payment.signature": "Unterschrift",
+  "payment.placeholder": "Hier unterschreiben",
   "payment.clearSignature": "Zurücksetzen",
   "payment.processing": "Verarbeitung...",
   "payment.complete": "Zahlung abgeschlossen",

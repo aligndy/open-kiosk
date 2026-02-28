@@ -28,6 +28,7 @@
   "payment.title": "Platba",
   "payment.amount": "Suma platby",
   "payment.signature": "Podpis",
+  "payment.placeholder": "Podpíšte sa sem",
   "payment.clearSignature": "Znova",
   "payment.processing": "Spracováva sa...",
   "payment.complete": "Platba dokončená",

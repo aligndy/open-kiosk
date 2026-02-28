@@ -29,6 +29,7 @@
   "payment.title": "Pago",
   "payment.amount": "Importe a pagar",
   "payment.signature": "Firma",
+  "payment.placeholder": "Firme aquí",
   "payment.clearSignature": "Borrar firma",
   "payment.processing": "Procesando...",
   "payment.complete": "Pago completado",

@@ -28,6 +28,7 @@
   "payment.title": "ការទូទាត់",
   "payment.amount": "ចំនួនទឹកប្រាក់ដែលត្រូវបង់",
   "payment.signature": "ហត្ថលេខា",
+  "payment.placeholder": "សូមចុះហត្ថលេខានៅទីនេះ",
   "payment.clearSignature": "សរសេរម្ដងទៀត",
   "payment.processing": "កំពុងដំណើរការ...",
   "payment.complete": "ការទូទាត់បានបញ្ចប់",

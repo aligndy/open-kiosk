@@ -28,6 +28,7 @@
   "payment.title": "Plată",
   "payment.amount": "Suma de plată",
   "payment.signature": "Semnătură",
+  "payment.placeholder": "Semnează aici",
   "payment.clearSignature": "Resetează",
   "payment.processing": "Se procesează...",
   "payment.complete": "Plată finalizată",

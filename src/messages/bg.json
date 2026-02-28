@@ -28,6 +28,7 @@
   "payment.title": "Плащане",
   "payment.amount": "Сума за плащане",
   "payment.signature": "Подпис",
+  "payment.placeholder": "Подпишете тук",
   "payment.clearSignature": "Изчисти",
   "payment.processing": "Обработка...",
   "payment.complete": "Плащането завърши",

@@ -28,6 +28,7 @@
   "payment.title": "Ödeme",
   "payment.amount": "Ödeme Tutarı",
   "payment.signature": "İmza",
+  "payment.placeholder": "Lütfen buraya imza atın",
   "payment.clearSignature": "Temizle",
   "payment.processing": "İşleniyor...",
   "payment.complete": "Ödeme Tamamlandı",

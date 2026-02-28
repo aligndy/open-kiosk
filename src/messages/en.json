@@ -29,6 +29,7 @@
   "payment.title": "Payment",
   "payment.amount": "Amount",
   "payment.signature": "Signature",
+  "payment.placeholder": "Sign here",
   "payment.clearSignature": "Clear",
   "payment.processing": "Processing...",
   "payment.complete": "Payment Complete",

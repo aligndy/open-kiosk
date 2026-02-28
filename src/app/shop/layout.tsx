@@ -4,11 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useLanguageStore } from "@/stores/languageStore";
+import { useUiStore } from "@/stores/uiStore";
 import CartView from "@/components/shop/CartView";
 import CartBar from "@/components/shop/CartBar";
+import PaymentModal from "@/components/shop/PaymentModal";
 import LanguageSelector from "@/components/shop/LanguageSelector";
 import CameraAgeDetector from "@/components/shop/CameraAgeDetector";
-import { t } from "@/lib/i18n";
+import { t, formatPrice } from "@/lib/i18n";
 
 export default function ShopLayout({
   children,
@@ -21,8 +23,10 @@ export default function ShopLayout({
   const clearCart = useCartStore((s) => s.clearCart);
   const { currentLanguage, supportedLanguages, setLanguage, setSupportedLanguages } =
     useLanguageStore();
+  const isVendingMode = useUiStore((s) => s.isVendingMode);
   const router = useRouter();
   const [showCart, setShowCart] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [storeName, setStoreName] = useState(() => t("shop.defaultStoreName", currentLanguage));
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [useCamera, setUseCamera] = useState(false);
@@ -130,11 +134,39 @@ export default function ShopLayout({
       {/* Content */}
       <main className="flex-1 pb-24">{children}</main>
 
-      {orderType && (
+      {orderType && !isVendingMode && (
         <CartBar
           totalItems={totalItems}
           totalAmount={totalAmount}
           onOpenCart={() => setShowCart(true)}
+        />
+      )}
+
+      {orderType && isVendingMode && totalItems > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-gray-200 bg-white px-4 py-3 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
+          <button
+            onClick={() => setShowPayment(true)}
+            className="flex h-16 w-full items-center justify-between rounded-xl bg-green-600 px-6 text-white active:bg-green-700"
+          >
+            <span className="text-xl font-bold">
+              {t("cart.checkout", currentLanguage)}
+            </span>
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-700 text-lg font-bold">
+                {totalItems}
+              </span>
+              <span className="text-2xl font-bold">
+                {t("cart.total", currentLanguage)} {formatPrice(totalAmount, currentLanguage)}
+              </span>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {showPayment && (
+        <PaymentModal
+          onClose={() => setShowPayment(false)}
+          onPaymentComplete={() => setShowPayment(false)}
         />
       )}
 

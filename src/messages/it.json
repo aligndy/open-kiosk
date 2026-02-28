@@ -28,6 +28,7 @@
   "payment.title": "Pagamento",
   "payment.amount": "Importo da pagare",
   "payment.signature": "Firma",
+  "payment.placeholder": "Firma qui",
   "payment.clearSignature": "Cancella firma",
   "payment.processing": "Elaborazione...",
   "payment.complete": "Pagamento completato",

@@ -28,6 +28,7 @@
   "payment.title": "Төлбөр",
   "payment.amount": "Төлөх дүн",
   "payment.signature": "Гарын үсэг",
+  "payment.placeholder": "Энд гарын үсэг зурна уу",
   "payment.clearSignature": "Дахин зурах",
   "payment.processing": "Боловсруулж байна...",
   "payment.complete": "Төлбөр амжилттай",

@@ -28,6 +28,7 @@
   "payment.title": "الدفع",
   "payment.amount": "مبلغ الدفع",
   "payment.signature": "التوقيع",
+  "payment.placeholder": "يرجى التوقيع هنا",
   "payment.clearSignature": "إعادة الكتابة",
   "payment.processing": "جارٍ المعالجة...",
   "payment.complete": "تم الدفع",

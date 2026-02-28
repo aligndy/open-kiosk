@@ -28,6 +28,7 @@
   "payment.title": "Betaling",
   "payment.amount": "Betalingsbeløp",
   "payment.signature": "Signatur",
+  "payment.placeholder": "Signer her",
   "payment.clearSignature": "Tøm signatur",
   "payment.processing": "Behandler...",
   "payment.complete": "Betaling fullført",

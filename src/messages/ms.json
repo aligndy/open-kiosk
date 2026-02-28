@@ -28,6 +28,7 @@
   "payment.title": "Pembayaran",
   "payment.amount": "Jumlah Pembayaran",
   "payment.signature": "Tandatangan",
+  "payment.placeholder": "Tandatangan di sini",
   "payment.clearSignature": "Cuba Lagi",
   "payment.processing": "Memproses...",
   "payment.complete": "Pembayaran Selesai",

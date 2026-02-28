@@ -28,6 +28,7 @@
   "payment.title": "Fizetés",
   "payment.amount": "Fizetendő összeg",
   "payment.signature": "Aláírás",
+  "payment.placeholder": "Írja alá ide",
   "payment.clearSignature": "Újra",
   "payment.processing": "Feldolgozás...",
   "payment.complete": "Fizetés kész",

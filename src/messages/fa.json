@@ -28,6 +28,7 @@
   "payment.title": "پرداخت",
   "payment.amount": "مبلغ پرداختی",
   "payment.signature": "امضا",
+  "payment.placeholder": "اینجا را امضا کنید",
   "payment.clearSignature": "پاک کردن امضا",
   "payment.processing": "در حال پردازش...",
   "payment.complete": "پرداخت کامل شد",

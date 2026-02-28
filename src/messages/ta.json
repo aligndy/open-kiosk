@@ -28,6 +28,7 @@
   "payment.title": "கட்டணம்",
   "payment.amount": "கட்டணத் தொகை",
   "payment.signature": "கையெழுத்து",
+  "payment.placeholder": "இங்கே கையொப்பமிடவும்",
   "payment.clearSignature": "மீண்டும் எழுது",
   "payment.processing": "செயல்படுத்துகிறது...",
   "payment.complete": "கட்டணம் முடிந்தது",
