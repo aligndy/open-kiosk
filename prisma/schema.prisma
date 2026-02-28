@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Category {
+  id               Int      @id @default(autoincrement())
+  name             String
+  nameTranslations String   @default("{}")
+  sortOrder        Int      @default(0)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  menus            Menu[]
+}
+
+model Menu {
+  id                      Int           @id @default(autoincrement())
+  categoryId              Int
+  category                Category      @relation(fields: [categoryId], references: [id])
+  name                    String
+  nameTranslations        String        @default("{}")
+  description             String        @default("")
+  descriptionTranslations String        @default("{}")
+  price                   Int
+  imageUrl                String?
+  isActive                Boolean       @default(true)
+  sortOrder               Int           @default(0)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  optionGroups            OptionGroup[]
+  orderItems              OrderItem[]
+}
+
+model OptionGroup {
+  id               Int      @id @default(autoincrement())
+  menuId           Int
+  menu             Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  name             String
+  nameTranslations String   @default("{}")
+  required         Boolean  @default(false)
+  sortOrder        Int      @default(0)
+  options          Option[]
+}
+
+model Option {
+  id               Int         @id @default(autoincrement())
+  optionGroupId    Int
+  optionGroup      OptionGroup @relation(fields: [optionGroupId], references: [id], onDelete: Cascade)
+  name             String
+  nameTranslations String      @default("{}")
+  priceModifier    Int         @default(0)
+  sortOrder        Int         @default(0)
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  orderNumber String      @unique
+  status      String      @default("pending")
+  totalAmount Int
+  language    String      @default("ko")
+  createdAt   DateTime    @default(now())
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id              Int    @id @default(autoincrement())
+  orderId         Int
+  order           Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuId          Int
+  menu            Menu   @relation(fields: [menuId], references: [id])
+  menuName        String
+  quantity        Int
+  unitPrice       Int
+  selectedOptions String @default("[]")
+  subtotal        Int
+}
+
+model StoreSettings {
+  id                 Int    @id @default(1)
+  storeName          String @default("카페")
+  defaultLanguage    String @default("ko")
+  supportedLanguages String @default("[\"ko\"]")
+}
