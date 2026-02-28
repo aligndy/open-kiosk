@@ -23,6 +23,7 @@ interface OrderCardProps {
   order: Order;
   showComplete: boolean;
   onComplete: (id: number) => void;
+  isNew?: boolean;
 }
 
 function formatTime(dateStr: string) {
@@ -50,11 +51,12 @@ function parseOptions(optionsJson: string) {
 
 export type { Order, OrderItem };
 
-export default function OrderCard({ order, showComplete, onComplete }: OrderCardProps) {
+export default function OrderCard({ order, showComplete, onComplete, isNew }: OrderCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow p-4 border">
+    <div className={`bg-white rounded-lg shadow p-4 border ${isNew ? "border-red-400 ring-2 ring-red-200" : ""}`}>
       <div className="flex justify-between items-center mb-3">
-        <span className="text-lg font-bold text-gray-800">
+        <span className="flex items-center gap-2 text-lg font-bold text-gray-800">
+          {isNew && <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse" />}
           {order.orderNumber}
         </span>
         <span className="text-sm text-gray-500">

@@ -6,7 +6,7 @@ import path from "path";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { prompt, menuId } = body;
+  const { prompt, menuId, transparentBg } = body;
 
   if (!prompt) {
     return NextResponse.json(
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const imageBuffer = await generateMenuImage(prompt);
+    const imageBuffer = await generateMenuImage(prompt, { transparentBg: transparentBg !== false });
     const fileName = `menu-${menuId || "new"}-${Date.now()}.png`;
     const generatedDir = path.join(process.cwd(), "public", "generated");
     await mkdir(generatedDir, { recursive: true });

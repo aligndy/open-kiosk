@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-28T02:37:31.082Z",
+  "lastUpdated": "2026-02-28T02:53:05.169Z",
   "activeFeatures": [
     "kiosk-initial",
     "k",
@@ -50,9 +50,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:39:33.311Z",
-        "lastUpdated": "2026-02-28T02:13:59.888Z"
+        "lastUpdated": "2026-02-28T02:53:01.157Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/types/index.ts"
+      "lastFile": "/Users/dgoon/works/k/src/lib/gemini.ts"
     },
     "categories": {
       "phase": "do",
@@ -167,7 +167,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:41:17.344Z",
-        "lastUpdated": "2026-02-28T01:41:17.344Z"
+        "lastUpdated": "2026-02-28T02:49:30.312Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/api/generate-image/route.ts"
     },
@@ -206,9 +206,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:42:27.312Z",
-        "lastUpdated": "2026-02-28T02:18:56.047Z"
+        "lastUpdated": "2026-02-28T02:53:05.169Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/components/admin/SettingsForm.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/admin/MenuForm.tsx"
     },
     "shop": {
       "phase": "do",
@@ -297,7 +297,7 @@
   "session": {
     "startedAt": "2026-02-28T01:00:00.934Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-02-28T02:37:31.082Z"
+    "lastActivity": "2026-02-28T02:53:05.169Z"
   },
   "history": [
     {
@@ -817,6 +817,78 @@
     {
       "timestamp": "2026-02-28T02:37:31.082Z",
       "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:47:47.306Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:47:52.216Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:47:56.726Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:48:03.683Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:49:22.444Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:49:26.900Z",
+      "feature": "generate-image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:49:30.312Z",
+      "feature": "generate-image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:49:36.239Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:49:42.158Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:49:52.116Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:53:01.157Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T02:53:05.169Z",
+      "feature": "admin",
       "phase": "do",
       "action": "updated"
     }

@@ -35,7 +35,8 @@ ${JSON.stringify({ items }, null, 2)}
 }
 
 export async function generateMenuImage(
-  prompt: string
+  prompt: string,
+  options?: { transparentBg?: boolean }
 ): Promise<Buffer> {
   const genAI = getGeminiClient();
   const model = genAI.getGenerativeModel({
@@ -43,9 +44,14 @@ export async function generateMenuImage(
     generationConfig: { responseModalities: ["image", "text"] } as never,
   });
 
-  const fullPrompt = `카페 메뉴 사진을 생성해주세요. 음식/음료 사진 스타일로, 깨끗한 배경에 메뉴만 부각되도록 합니다.
-설명: ${prompt}
-스타일: 프로페셔널 푸드 포토그래피, 밝은 조명, 깨끗한 배경`;
+  const bgInstruction = options?.transparentBg
+    ? "The background MUST be pure white (#FFFFFF). No shadows, no gradients, no textures on the background. Only the food/drink item should be visible on a completely clean white background."
+    : "";
+
+  const fullPrompt = `Generate a professional cafe menu photo. Product photography style, top-down or 45-degree angle view.
+${bgInstruction}
+Item: ${prompt}
+Style: Professional food photography, bright even lighting, high resolution, appetizing presentation`;
 
   const result = await model.generateContent(fullPrompt);
   const parts = result.response.candidates?.[0]?.content?.parts;

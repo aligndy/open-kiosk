@@ -36,6 +36,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePrompt, setImagePrompt] = useState("");
+  const [transparentBg, setTransparentBg] = useState(true);
   const [generatingImage, setGeneratingImage] = useState(false);
   const [optionGroups, setOptionGroups] = useState<OptionGroupInput[]>([]);
   const [saving, setSaving] = useState(false);
@@ -87,14 +88,17 @@ export default function MenuForm({ menuId }: MenuFormProps) {
     }
   };
 
+  const defaultPrompt = [name, description].filter(Boolean).join(" - ");
+
   const generateImage = async () => {
-    if (!imagePrompt.trim()) return;
+    const finalPrompt = imagePrompt.trim() || defaultPrompt;
+    if (!finalPrompt) return;
     setGeneratingImage(true);
     try {
       const res = await fetch("/api/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: imagePrompt, menuId: menuId || null }),
+        body: JSON.stringify({ prompt: finalPrompt, menuId: menuId || null, transparentBg }),
       });
       const data = await res.json();
       if (data.imageUrl) {
@@ -391,18 +395,26 @@ export default function MenuForm({ menuId }: MenuFormProps) {
               type="text"
               value={imagePrompt}
               onChange={(e) => setImagePrompt(e.target.value)}
-              placeholder="이미지 설명 (예: 아이스 아메리카노)"
+              placeholder={defaultPrompt || "메뉴명을 먼저 입력하세요"}
               className="flex-1 border rounded-md px-3 py-2 text-sm"
             />
             <button
               type="button"
               onClick={generateImage}
-              disabled={generatingImage || !imagePrompt.trim()}
+              disabled={generatingImage || (!imagePrompt.trim() && !defaultPrompt)}
               className="px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 disabled:opacity-50"
             >
               {generatingImage ? "생성 중..." : "생성"}
             </button>
           </div>
+          <label className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+            <input
+              type="checkbox"
+              checked={transparentBg}
+              onChange={(e) => setTransparentBg(e.target.checked)}
+            />
+            흰 배경으로 생성
+          </label>
         </div>
       </div>
 
