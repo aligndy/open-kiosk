@@ -46,7 +46,7 @@ export default function PaymentModal({ onClose }: PaymentModalProps) {
 
       const order = await res.json();
       clearCart();
-      router.push(`/shop/order-complete?orderNumber=${order.orderNumber}`);
+      router.push(`/shop/order-complete?orderId=${order.id}&orderNumber=${order.orderNumber}`);
     } catch {
       alert("주문에 실패했습니다. 다시 시도해주세요.");
       setSubmitting(false);
