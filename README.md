@@ -1,36 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 디지털 약자를 위한 AI 기반 키오스크 프로젝트
 
-## Getting Started
+이 프로젝트는 디지털 소외 계층을 포함한 모든 사용자가 키오스크를 보다 쉽게 이용할 수 있도록, 인공지능(AI) 기술을 활용한 키오스크 솔루션을 개발합니다. 자영업자와 고객 모두에게 향상된 접근성과 편의성을 제공하는 것을 목표로 합니다.
 
-First, run the development server:
+## 주요 목표
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 자영업자를 위한 AI 기반 관리 편의성 증진
+*   **메뉴 등록 및 관리 자동화**: AI를 활용하여 메뉴 등록 과정을 간소화하고, 효율적인 관리를 지원합니다.
+*   **다국어 지원 강화**: AI 번역 기술을 통해 다양한 언어를 손쉽게 추가하고 관리하여, 외국인 고객에게도 원활한 서비스를 제공합니다.
+*   **운영 효율성 개선**: AI 기반 데이터 분석을 통해 매장 운영에 필요한 인사이트를 제공하고, 전반적인 효율성을 높입니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 고객을 위한 직관적인 키오스크 접근성 향상
+*   **음성 인식 및 안내**: 음성 명령을 통해 메뉴를 선택하고 주문할 수 있으며, AI 음성 안내를 통해 키오스크 사용에 어려움이 있는 고객도 쉽게 이용할 수 있도록 돕습니다.
+*   **개인 맞춤형 추천**: AI가 고객의 주문 이력이나 선호도를 분석하여 맞춤형 메뉴를 추천하고, 선택 과정을 더욱 편리하게 만듭니다.
+*   **직관적인 사용자 인터페이스(UI)**: 디지털 약자를 고려한 쉬운 UI/UX를 제공하여, 복잡함 없이 원하는 메뉴를 찾고 주문할 수 있도록 설계합니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+이 프로젝트를 통해 자영업자는 운영 부담을 줄이고 더 많은 고객에게 서비스를 제공할 수 있으며, 고객은 디지털 격차 없이 편리하게 키오스크를 이용할 수 있는 포용적인 환경을 구축하고자 합니다.
