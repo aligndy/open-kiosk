@@ -2,22 +2,18 @@ import "dotenv/config";
 import fs from "fs";
 import path from "path";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { ALL_LANGUAGES } from "../src/lib/languages";
 
 const MESSAGES_DIR = path.join(__dirname, "../src/messages");
 const SOURCE_LANG = "ko";
-const TARGET_LANGS = ["en", "ja", "zh", "es", "fr", "de", "vi", "th"];
+const TARGET_LANGS = ALL_LANGUAGES
+  .map((l) => l.code)
+  .filter((code) => code !== SOURCE_LANG);
 const BATCH_SIZE = 50;
 
-const LANG_NAMES: Record<string, string> = {
-  en: "English",
-  ja: "Japanese",
-  zh: "Chinese (Simplified)",
-  es: "Spanish",
-  fr: "French",
-  de: "German",
-  vi: "Vietnamese",
-  th: "Thai",
-};
+const LANG_NAMES: Record<string, string> = Object.fromEntries(
+  ALL_LANGUAGES.map((l) => [l.code, l.label])
+);
 
 // Keys that should NOT be translated (keep original)
 const SKIP_KEYS = new Set(["common.priceFormat"]);
@@ -105,7 +101,18 @@ ${JSON.stringify(toTranslate, null, 2)}`;
     console.log(`[${lang}] Done - ${Object.keys(sorted).length} total keys`);
   }
 
-  console.log("\nTranslation complete!");
+  // Generate barrel file for i18n
+  const existingFiles = fs.readdirSync(MESSAGES_DIR)
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => f.replace(".json", ""));
+
+  const imports = existingFiles.map((lang) => `import ${lang} from "./${lang}.json";`).join("\n");
+  const exports = existingFiles.join(", ");
+  const barrel = `${imports}\n\ntype Messages = Record<string, string>;\nexport const messages: Record<string, Messages> = { ${exports} };\n`;
+  fs.writeFileSync(path.join(MESSAGES_DIR, "index.ts"), barrel);
+
+  console.log(`\nGenerated messages/index.ts with ${existingFiles.length} languages`);
+  console.log("Translation complete!");
 }
 
 main().catch(console.error);

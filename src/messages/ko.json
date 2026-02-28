@@ -160,5 +160,10 @@
   "admin.translation.translateError": "번역 중 오류가 발생했습니다.",
   "admin.translation.prefillError": "전체 번역 중 오류가 발생했습니다.",
   "admin.translation.translatingLang": "{label} 번역 중... ({current}/{total})",
-  "admin.translation.translationComplete": "{count}개 언어, 총 {total}개 항목 번역 완료"
+  "admin.translation.retranslateAll": "전체 재번역",
+  "admin.translation.retranslateConfirm": "모든 번역을 다시 생성합니다. 기존 번역이 덮어씌워집니다. 계속하시겠습니까?",
+  "admin.translation.translationComplete": "{count}개 언어, 총 {total}개 항목 번역 완료",
+  "admin.settings.moreLanguages": "더 많은 언어 보기...",
+  "admin.settings.selectAll": "모두 선택",
+  "admin.settings.deselectAll": "모두 해제"
 }

@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "An error occurred during image generation.",
   "admin.menuForm.requiredFields": "Category, name, and price are required.",
   "admin.menuForm.enterNameFirst": "Enter the menu name first",
+  "admin.menuForm.generateDescription": "AI Description",
+  "admin.menuForm.generatingDescription": "Generating...",
+  "admin.menuForm.descGenFailed": "Failed to generate description",
+  "admin.menuForm.descGenError": "Error generating description.",
   "admin.menuForm.galleryLabel.ai": "AI Generated",
   "admin.menuForm.galleryLabel.upload": "Upload",
   "admin.category.management": "Category Management",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "An error occurred during translation.",
   "admin.translation.prefillError": "An error occurred during full translation.",
   "admin.translation.translatingLang": "Translating {label}... ({current}/{total})",
-  "admin.translation.translationComplete": "Translation complete for {count} languages, {total} items in total"
+  "admin.translation.retranslateAll": "Retranslate All",
+  "admin.translation.retranslateConfirm": "Regenerate all translations? This will overwrite existing translations. Continue?",
+  "admin.translation.translationComplete": "Translation complete for {count} languages, {total} items in total",
+  "admin.settings.moreLanguages": "More languages...",
+  "admin.settings.selectAll": "Select All",
+  "admin.settings.deselectAll": "Deselect All"
 }

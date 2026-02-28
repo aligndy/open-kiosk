@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "Une erreur s'est produite lors de la génération de l'image.",
   "admin.menuForm.requiredFields": "La catégorie, le nom et le prix sont obligatoires.",
   "admin.menuForm.enterNameFirst": "Veuillez d'abord saisir le nom du menu",
+  "admin.menuForm.generateDescription": "IA Description",
+  "admin.menuForm.generatingDescription": "Génération...",
+  "admin.menuForm.descGenFailed": "Échec de la génération",
+  "admin.menuForm.descGenError": "Erreur lors de la génération de la description.",
   "admin.menuForm.galleryLabel.ai": "Génération IA",
   "admin.menuForm.galleryLabel.upload": "Télécharger",
   "admin.category.management": "Gestion des catégories",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "Une erreur s'est produite lors de la traduction.",
   "admin.translation.prefillError": "Une erreur s'est produite lors du préremplissage de l'ensemble de la traduction.",
   "admin.translation.translatingLang": "Traduction de {label}... ({current}/{total})",
-  "admin.translation.translationComplete": "{count} langues, {total} éléments traduits"
+  "admin.translation.retranslateAll": "Retraduire tout",
+  "admin.translation.retranslateConfirm": "Régénérer toutes les traductions. Les traductions existantes seront écrasées. Continuer ?",
+  "admin.translation.translationComplete": "{count} langues, {total} éléments traduits",
+  "admin.settings.moreLanguages": "Plus de langues...",
+  "admin.settings.selectAll": "Tout sélectionner",
+  "admin.settings.deselectAll": "Tout désélectionner"
 }

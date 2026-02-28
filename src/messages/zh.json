@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "图片生成时发生错误。",
   "admin.menuForm.requiredFields": "类别、名称和价格是必填项。",
   "admin.menuForm.enterNameFirst": "请先输入菜单名",
+  "admin.menuForm.generateDescription": "AI生成描述",
+  "admin.menuForm.generatingDescription": "生成中...",
+  "admin.menuForm.descGenFailed": "生成描述失败",
+  "admin.menuForm.descGenError": "生成描述时发生错误。",
   "admin.menuForm.galleryLabel.ai": "AI生成",
   "admin.menuForm.galleryLabel.upload": "上传",
   "admin.category.management": "类别管理",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "翻译过程中发生错误。",
   "admin.translation.prefillError": "全部翻译过程中发生错误。",
   "admin.translation.translatingLang": "{label} 翻译中... ({current}/{total})",
-  "admin.translation.translationComplete": "{count} 个语言，共 {total} 个项目翻译完成"
+  "admin.translation.retranslateAll": "全部重新翻译",
+  "admin.translation.retranslateConfirm": "将重新生成所有翻译。现有翻译将被覆盖。是否继续？",
+  "admin.translation.translationComplete": "{count} 个语言，共 {total} 个项目翻译完成",
+  "admin.settings.moreLanguages": "查看更多语言...",
+  "admin.settings.selectAll": "全选",
+  "admin.settings.deselectAll": "取消全选"
 }

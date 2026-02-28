@@ -1,18 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
-const LANGUAGE_LABELS: Record<string, string> = {
-  ko: "한국어",
-  en: "English",
-  ja: "日本語",
-  zh: "中文",
-  fr: "Français",
-  es: "Español",
-  de: "Deutsch",
-  vi: "Tiếng Việt",
-  th: "ภาษาไทย",
-};
+import { LANGUAGE_LABELS, CORE_LANGUAGE_CODES } from "@/lib/languages";
 
 interface LanguageSelectorProps {
   currentLanguage: string;
@@ -26,14 +15,25 @@ export default function LanguageSelector({
   onSelect,
 }: LanguageSelectorProps) {
   const [langOpen, setLangOpen] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   if (supportedLanguages.length <= 1) return null;
+
+  const coreLangs = supportedLanguages.filter((l) => CORE_LANGUAGE_CODES.has(l));
+  const otherLangs = supportedLanguages.filter((l) => !CORE_LANGUAGE_CODES.has(l));
+  const hasOthers = otherLangs.length > 0;
+
+  const handleSelect = (lang: string) => {
+    onSelect(lang);
+    setLangOpen(false);
+    setShowMore(false);
+  };
 
   return (
     <>
       <div className="relative">
         <button
-          onClick={() => setLangOpen(!langOpen)}
+          onClick={() => { setLangOpen(!langOpen); setShowMore(false); }}
           className="flex h-12 items-center gap-1 rounded-lg border border-gray-300 px-3 text-lg font-medium text-gray-700"
         >
           {LANGUAGE_LABELS[currentLanguage] || currentLanguage}
@@ -42,14 +42,11 @@ export default function LanguageSelector({
           </svg>
         </button>
         {langOpen && (
-          <div className="absolute right-0 top-14 z-40 min-w-[140px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
-            {supportedLanguages.map((lang) => (
+          <div className="absolute right-0 top-14 z-40 min-w-[160px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+            {coreLangs.map((lang) => (
               <button
                 key={lang}
-                onClick={() => {
-                  onSelect(lang);
-                  setLangOpen(false);
-                }}
+                onClick={() => handleSelect(lang)}
                 className={`block w-full px-4 py-3 text-left text-lg ${
                   lang === currentLanguage
                     ? "bg-amber-50 font-bold text-amber-700"
@@ -59,13 +56,41 @@ export default function LanguageSelector({
                 {LANGUAGE_LABELS[lang] || lang}
               </button>
             ))}
+
+            {hasOthers && !showMore && (
+              <button
+                onClick={() => setShowMore(true)}
+                className="block w-full px-4 py-3 text-left text-base text-gray-400 border-t border-gray-100"
+              >
+                + {otherLangs.length}
+              </button>
+            )}
+
+            {hasOthers && showMore && (
+              <>
+                <div className="border-t border-gray-100" />
+                {otherLangs.map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => handleSelect(lang)}
+                    className={`block w-full px-4 py-3 text-left text-lg ${
+                      lang === currentLanguage
+                        ? "bg-amber-50 font-bold text-amber-700"
+                        : "text-gray-700"
+                    }`}
+                  >
+                    {LANGUAGE_LABELS[lang] || lang}
+                  </button>
+                ))}
+              </>
+            )}
           </div>
         )}
       </div>
 
       {/* Click outside to close language dropdown */}
       {langOpen && (
-        <div className="fixed inset-0 z-20" onClick={() => setLangOpen(false)} />
+        <div className="fixed inset-0 z-20" onClick={() => { setLangOpen(false); setShowMore(false); }} />
       )}
     </>
   );

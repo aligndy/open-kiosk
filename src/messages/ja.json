@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "画像生成中にエラーが発生しました。",
   "admin.menuForm.requiredFields": "カテゴリー、名前、価格は必須です。",
   "admin.menuForm.enterNameFirst": "メニュー名を先に入力してください",
+  "admin.menuForm.generateDescription": "AIで説明作成",
+  "admin.menuForm.generatingDescription": "作成中...",
+  "admin.menuForm.descGenFailed": "説明作成に失敗",
+  "admin.menuForm.descGenError": "説明作成中にエラーが発生しました。",
   "admin.menuForm.galleryLabel.ai": "AI生成",
   "admin.menuForm.galleryLabel.upload": "アップロード",
   "admin.category.management": "カテゴリー管理",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "翻訳中にエラーが発生しました。",
   "admin.translation.prefillError": "全体翻訳中にエラーが発生しました。",
   "admin.translation.translatingLang": "{label} 翻訳中... ({current}/{total})",
-  "admin.translation.translationComplete": "{count}言語、合計{total}個の項目を翻訳完了"
+  "admin.translation.retranslateAll": "すべて再翻訳",
+  "admin.translation.retranslateConfirm": "すべての翻訳を再生成します。既存の翻訳は上書きされます。続行しますか？",
+  "admin.translation.translationComplete": "{count}言語、合計{total}個の項目を翻訳完了",
+  "admin.settings.moreLanguages": "他の言語を見る...",
+  "admin.settings.selectAll": "すべて選択",
+  "admin.settings.deselectAll": "すべて選択解除"
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useT } from "@/lib/i18n";
+import { LANGUAGE_LABELS } from "@/lib/languages";
 
 interface TranslationItem {
   id: number;
@@ -15,18 +16,6 @@ interface TranslationItem {
 interface Settings {
   supportedLanguages: string;
 }
-
-const LANGUAGE_LABELS: Record<string, string> = {
-  ko: "한국어",
-  en: "English",
-  ja: "日本語",
-  zh: "中文",
-  es: "Español",
-  fr: "Français",
-  de: "Deutsch",
-  vi: "Tiếng Việt",
-  th: "ภาษาไทย",
-};
 
 function safeParseJson(json: string): Record<string, string> {
   try {
@@ -44,6 +33,8 @@ export default function TranslationManager() {
   const [saving, setSaving] = useState(false);
   const [prefilling, setPrefilling] = useState(false);
   const [prefillStatus, setPrefillStatus] = useState("");
+  const [retranslating, setRetranslating] = useState(false);
+  const [retranslateStatus, setRetranslateStatus] = useState("");
   const t = useT();
 
   useEffect(() => {
@@ -166,6 +157,35 @@ export default function TranslationManager() {
     }
     setPrefilling(false);
     setPrefillStatus("");
+  };
+
+  const retranslateAll = async () => {
+    if (languages.length === 0) return;
+    if (!confirm(t("admin.translation.retranslateConfirm"))) return;
+    setRetranslating(true);
+    let totalTranslated = 0;
+    try {
+      for (let i = 0; i < languages.length; i++) {
+        const lang = languages[i];
+        const label = LANGUAGE_LABELS[lang] || lang;
+        setRetranslateStatus(t("admin.translation.translatingLang", { label, current: i + 1, total: languages.length }));
+        const res = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ targetLanguage: lang, onlyMissing: false }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          totalTranslated += data.translatedCount;
+        }
+      }
+      if (selectedLang) await fetchTranslations(selectedLang);
+      alert(t("admin.translation.translationComplete", { count: languages.length, total: totalTranslated }));
+    } catch {
+      alert(t("admin.translation.prefillError"));
+    }
+    setRetranslating(false);
+    setRetranslateStatus("");
   };
 
   const updateTranslation = (key: string, value: string) => {
@@ -325,10 +345,18 @@ export default function TranslationManager() {
 
             <button
               onClick={prefillAll}
-              disabled={prefilling}
+              disabled={prefilling || retranslating}
               className="px-4 py-2 bg-teal-600 text-white text-sm rounded-md hover:bg-teal-700 disabled:opacity-50"
             >
               {prefilling ? prefillStatus : t("admin.translation.prefillAll")}
+            </button>
+
+            <button
+              onClick={retranslateAll}
+              disabled={prefilling || retranslating}
+              className="px-4 py-2 bg-orange-600 text-white text-sm rounded-md hover:bg-orange-700 disabled:opacity-50"
+            >
+              {retranslating ? retranslateStatus : t("admin.translation.retranslateAll")}
             </button>
 
             <button

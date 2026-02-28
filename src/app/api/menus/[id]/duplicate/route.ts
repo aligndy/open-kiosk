@@ -31,18 +31,18 @@ export async function POST(
       categoryId: source.categoryId,
       sortOrder: source.sortOrder + 1,
       imageUrl: source.imageUrl,
-      nameTranslations: source.nameTranslations,
-      descriptionTranslations: source.descriptionTranslations,
+      nameTranslations: "{}",
+      descriptionTranslations: "{}",
       optionGroups: {
         create: source.optionGroups.map((g) => ({
           name: g.name,
-          nameTranslations: g.nameTranslations,
+          nameTranslations: "{}",
           required: g.required,
           sortOrder: g.sortOrder,
           options: {
             create: g.options.map((o) => ({
               name: o.name,
-              nameTranslations: o.nameTranslations,
+              nameTranslations: "{}",
               priceModifier: o.priceModifier,
               sortOrder: o.sortOrder,
             })),

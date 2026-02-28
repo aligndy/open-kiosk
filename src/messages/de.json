@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "Fehler bei der Bildgenerierung.",
   "admin.menuForm.requiredFields": "Kategorie, Name und Preis sind erforderlich.",
   "admin.menuForm.enterNameFirst": "Bitte zuerst den Menünamen eingeben",
+  "admin.menuForm.generateDescription": "KI Beschreibung",
+  "admin.menuForm.generatingDescription": "Wird generiert...",
+  "admin.menuForm.descGenFailed": "Beschreibung konnte nicht generiert werden",
+  "admin.menuForm.descGenError": "Fehler beim Generieren der Beschreibung.",
   "admin.menuForm.galleryLabel.ai": "KI Generiert",
   "admin.menuForm.galleryLabel.upload": "Hochladen",
   "admin.category.management": "Kategorieverwaltung",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "Fehler beim Übersetzen.",
   "admin.translation.prefillError": "Fehler beim Ausfüllen der gesamten Übersetzung.",
   "admin.translation.translatingLang": "Übersetze {label}... ({current}/{total})",
-  "admin.translation.translationComplete": "{count} Sprachen, insgesamt {total} Elemente übersetzt"
+  "admin.translation.retranslateAll": "Alle neu übersetzen",
+  "admin.translation.retranslateConfirm": "Alle Übersetzungen neu erstellen? Bestehende Übersetzungen werden überschrieben. Fortfahren?",
+  "admin.translation.translationComplete": "{count} Sprachen, insgesamt {total} Elemente übersetzt",
+  "admin.settings.moreLanguages": "Weitere Sprachen anzeigen...",
+  "admin.settings.selectAll": "Alle auswählen",
+  "admin.settings.deselectAll": "Alle abwählen"
 }

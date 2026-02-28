@@ -2,18 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useT } from "@/lib/i18n";
-
-const AVAILABLE_LANGUAGES = [
-  { code: "ko", label: "한국어" },
-  { code: "en", label: "English" },
-  { code: "ja", label: "日本語" },
-  { code: "zh", label: "中文" },
-  { code: "es", label: "Español" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "vi", label: "Tiếng Việt" },
-  { code: "th", label: "ภาษาไทย" },
-];
+import { ALL_LANGUAGES, CORE_LANGUAGE_CODES, LANGUAGE_LABELS } from "@/lib/languages";
 
 export default function SettingsForm() {
   const [storeName, setStoreName] = useState("");
@@ -94,7 +83,7 @@ export default function SettingsForm() {
     try {
       for (let i = 0; i < nonKo.length; i++) {
         const lang = nonKo[i];
-        const label = AVAILABLE_LANGUAGES.find((l) => l.code === lang)?.label || lang;
+        const label = LANGUAGE_LABELS[lang] || lang;
         setPrefillStatus(t("admin.settings.translatingLang", { label, current: i + 1, total: nonKo.length }));
         const res = await fetch("/api/translate", {
           method: "POST",
@@ -229,11 +218,30 @@ export default function SettingsForm() {
 
         <div className="bg-white rounded-lg shadow p-4 space-y-4">
           <h3 className="font-medium text-gray-800">{t("admin.settings.supportedLanguages")}</h3>
-          <p className="text-xs text-gray-500">
-            {t("admin.settings.languageDescription")}
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-500">
+              {t("admin.settings.languageDescription")}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setSupportedLanguages(ALL_LANGUAGES.map((l) => l.code))}
+                className="text-xs text-blue-600 hover:text-blue-800"
+              >
+                {t("admin.settings.selectAll")}
+              </button>
+              <span className="text-xs text-gray-300">|</span>
+              <button
+                type="button"
+                onClick={() => setSupportedLanguages(["ko"])}
+                className="text-xs text-blue-600 hover:text-blue-800"
+              >
+                {t("admin.settings.deselectAll")}
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-2">
-            {AVAILABLE_LANGUAGES.map((lang) => (
+            {ALL_LANGUAGES.filter((l) => CORE_LANGUAGE_CODES.has(l.code)).map((lang) => (
               <label
                 key={lang.code}
                 className={`flex items-center gap-2 p-2 rounded border text-sm cursor-pointer ${supportedLanguages.includes(lang.code)
@@ -251,6 +259,29 @@ export default function SettingsForm() {
               </label>
             ))}
           </div>
+          <details className="mt-2">
+            <summary className="text-sm text-gray-500 cursor-pointer hover:text-gray-700">
+              {t("admin.settings.moreLanguages")}
+            </summary>
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              {ALL_LANGUAGES.filter((l) => !CORE_LANGUAGE_CODES.has(l.code)).map((lang) => (
+                <label
+                  key={lang.code}
+                  className={`flex items-center gap-2 p-2 rounded border text-sm cursor-pointer ${supportedLanguages.includes(lang.code)
+                      ? "bg-blue-50 border-blue-300"
+                      : "bg-white border-gray-200"
+                    }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={supportedLanguages.includes(lang.code)}
+                    onChange={() => toggleLanguage(lang.code)}
+                  />
+                  <span>{lang.label}</span>
+                </label>
+              ))}
+            </div>
+          </details>
         </div>
 
         <div className="bg-white rounded-lg shadow p-4 space-y-4">

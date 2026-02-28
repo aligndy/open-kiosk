@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "Ocurrió un error al generar la imagen.",
   "admin.menuForm.requiredFields": "Categoría, nombre y precio son obligatorios.",
   "admin.menuForm.enterNameFirst": "Introduce el nombre del menú primero",
+  "admin.menuForm.generateDescription": "Descripción con IA",
+  "admin.menuForm.generatingDescription": "Generando...",
+  "admin.menuForm.descGenFailed": "Error al generar descripción",
+  "admin.menuForm.descGenError": "Ocurrió un error al generar la descripción.",
   "admin.menuForm.galleryLabel.ai": "Generado por IA",
   "admin.menuForm.galleryLabel.upload": "Subir",
   "admin.category.management": "Gestión de categorías",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "Ocurrió un error durante la traducción.",
   "admin.translation.prefillError": "Ocurrió un error durante la traducción completa.",
   "admin.translation.translatingLang": "Traduciendo {label}... ({current}/{total})",
-  "admin.translation.translationComplete": "{count} idiomas, {total} elementos traducidos"
+  "admin.translation.retranslateAll": "Volver a traducir todo",
+  "admin.translation.retranslateConfirm": "Se volverán a generar todas las traducciones. Las traducciones existentes se sobrescribirán. ¿Continuar?",
+  "admin.translation.translationComplete": "{count} idiomas, {total} elementos traducidos",
+  "admin.settings.moreLanguages": "Ver más idiomas...",
+  "admin.settings.selectAll": "Seleccionar todo",
+  "admin.settings.deselectAll": "Deseleccionar todo"
 }
