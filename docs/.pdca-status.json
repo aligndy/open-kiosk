@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-28T06:02:33.969Z",
+  "lastUpdated": "2026-02-28T06:19:09.838Z",
   "activeFeatures": [
     "kiosk-initial",
     "k",
@@ -26,7 +26,9 @@
     "[imageId]",
     "duplicate",
     "scripts",
-    "generate-description"
+    "generate-description",
+    "messages",
+    "reorder"
   ],
   "primaryFeature": "kiosk-initial",
   "features": {
@@ -55,9 +57,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:39:33.311Z",
-        "lastUpdated": "2026-02-28T05:58:03.704Z"
+        "lastUpdated": "2026-02-28T06:15:12.135Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/lib/gemini.ts"
+      "lastFile": "/Users/dgoon/works/k/src/lib/i18n.ts"
     },
     "categories": {
       "phase": "do",
@@ -211,9 +213,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:42:27.312Z",
-        "lastUpdated": "2026-02-28T06:02:33.969Z"
+        "lastUpdated": "2026-02-28T06:19:09.838Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/components/admin/MenuForm.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/admin/MenuManager.tsx"
     },
     "shop": {
       "phase": "do",
@@ -224,9 +226,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:43:12.219Z",
-        "lastUpdated": "2026-02-28T05:08:41.333Z"
+        "lastUpdated": "2026-02-28T06:10:44.697Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/components/shop/VendingGrid.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/shop/LanguageSelector.tsx"
     },
     "new": {
       "phase": "do",
@@ -328,7 +330,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T03:55:23.679Z",
-        "lastUpdated": "2026-02-28T03:55:23.679Z"
+        "lastUpdated": "2026-02-28T06:11:50.735Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/api/menus/[id]/duplicate/route.ts"
     },
@@ -341,7 +343,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T04:32:12.897Z",
-        "lastUpdated": "2026-02-28T04:32:12.897Z"
+        "lastUpdated": "2026-02-28T06:14:53.282Z"
       },
       "lastFile": "/Users/dgoon/works/k/scripts/translate-ui.ts"
     },
@@ -357,6 +359,32 @@
         "lastUpdated": "2026-02-28T05:58:16.184Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/api/generate-description/route.ts"
+    },
+    "messages": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-28T06:15:03.599Z",
+        "lastUpdated": "2026-02-28T06:15:03.599Z"
+      },
+      "lastFile": "/Users/dgoon/works/k/src/messages/index.ts"
+    },
+    "reorder": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-28T06:18:30.290Z",
+        "lastUpdated": "2026-02-28T06:18:30.290Z"
+      },
+      "lastFile": "/Users/dgoon/works/k/src/app/api/menus/reorder/route.ts"
     }
   },
   "pipeline": {
@@ -367,7 +395,7 @@
   "session": {
     "startedAt": "2026-02-28T01:00:00.934Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-02-28T06:02:33.969Z"
+    "lastActivity": "2026-02-28T06:19:09.838Z"
   },
   "history": [
     {
@@ -1912,6 +1940,108 @@
     },
     {
       "timestamp": "2026-02-28T06:02:33.969Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:10:27.811Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:10:44.697Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:10:50.911Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:10:55.632Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:11:05.960Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:11:12.830Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:11:19.303Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:11:30.764Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:11:38.679Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:11:50.735Z",
+      "feature": "duplicate",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:13:46.916Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:14:53.282Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:15:03.599Z",
+      "feature": "messages",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:15:12.135Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:15:26.402Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:18:30.290Z",
+      "feature": "reorder",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:19:09.838Z",
       "feature": "admin",
       "phase": "do",
       "action": "updated"
