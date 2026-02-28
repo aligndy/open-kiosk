@@ -39,6 +39,7 @@ yarn-error.log*
 
 # claude code
 .claude/
+.bkit/
 
 # vercel
 .vercel
