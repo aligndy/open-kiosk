@@ -53,6 +53,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const [transparentBg, setTransparentBg] = useState(true);
   const [generatingImage, setGeneratingImage] = useState(false);
   const [optionGroups, setOptionGroups] = useState<OptionGroupInput[]>([]);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -203,6 +204,27 @@ export default function MenuForm({ menuId }: MenuFormProps) {
       usedUrls.add(img.imageUrl);
     }
   }
+
+  const generateDescription = async () => {
+    if (!name.trim() || !categoryId) return;
+    setGeneratingDescription(true);
+    try {
+      const res = await fetch("/api/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ menuName: name.trim(), categoryId }),
+      });
+      const data = await res.json();
+      if (data.description) {
+        setDescription(data.description);
+      } else {
+        alert(data.error?.message || t("admin.menuForm.descGenFailed"));
+      }
+    } catch {
+      alert(t("admin.menuForm.descGenError"));
+    }
+    setGeneratingDescription(false);
+  };
 
   const generateImage = async () => {
     const finalPrompt = imagePrompt.trim() || defaultPrompt;
@@ -473,12 +495,23 @@ export default function MenuForm({ menuId }: MenuFormProps) {
 
         <div>
           <label className="block text-sm text-gray-600 mb-1">{t("admin.menuForm.description")}</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded-md px-3 py-2 text-sm"
-            rows={2}
-          />
+          <div className="flex gap-2">
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="flex-1 border rounded-md px-3 py-2 text-sm"
+              rows={2}
+            />
+            <button
+              type="button"
+              onClick={generateDescription}
+              disabled={generatingDescription || !name.trim() || !categoryId}
+              className="self-start flex items-center gap-1 px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              {generatingDescription ? t("admin.menuForm.generatingDescription") : t("admin.menuForm.generateDescription")}
+            </button>
+          </div>
         </div>
 
         <div>
@@ -579,34 +612,41 @@ export default function MenuForm({ menuId }: MenuFormProps) {
 
         {/* Actions row */}
         <div className="border-t pt-4 space-y-3">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={imagePrompt}
+          <div className="space-y-2">
+            <textarea
+              value={imagePrompt || defaultPrompt}
               onChange={(e) => setImagePrompt(e.target.value)}
-              placeholder={defaultPrompt || t("admin.menuForm.enterNameFirst")}
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  generateImage();
+                }
+              }}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none resize-none"
+              rows={2}
             />
-            <button
-              type="button"
-              onClick={generateImage}
-              disabled={generatingImage || (!imagePrompt.trim() && !defaultPrompt)}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              {generatingImage ? t("admin.menuForm.generating") : t("admin.menuForm.aiGenerate")}
-            </button>
-            <label className={`flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer whitespace-nowrap ${galleryUploading ? "opacity-40 pointer-events-none" : ""}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              {galleryUploading ? t("admin.menuForm.uploading") : t("admin.menuForm.fileUpload")}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                disabled={galleryUploading}
-                className="hidden"
-              />
-            </label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={generateImage}
+                disabled={generatingImage || (!imagePrompt.trim() && !defaultPrompt)}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                {generatingImage ? t("admin.menuForm.generating") : t("admin.menuForm.aiGenerate")}
+              </button>
+              <label className={`flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer whitespace-nowrap ${galleryUploading ? "opacity-40 pointer-events-none" : ""}`}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                {galleryUploading ? t("admin.menuForm.uploading") : t("admin.menuForm.fileUpload")}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={galleryUploading}
+                  className="hidden"
+                />
+              </label>
+            </div>
           </div>
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm text-gray-600">

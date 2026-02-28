@@ -83,6 +83,35 @@ Style: Professional food photography, bright even lighting, high resolution, app
   throw new Error("No image data in response");
 }
 
+export async function generateMenuDescription(
+  menuName: string,
+  storeName: string,
+  storeDescription: string,
+  siblingMenus: { name: string; description: string }[]
+): Promise<string> {
+  const genAI = getGeminiClient();
+  const model = genAI.getGenerativeModel({ model: process.env.GEMINI_TEXT_MODEL || "gemini-3.0-flash" });
+
+  const siblingContext = siblingMenus.length > 0
+    ? `\n같은 카테고리의 다른 메뉴들:\n${siblingMenus.map((m) => `- ${m.name}: ${m.description}`).join("\n")}`
+    : "";
+
+  const prompt = `당신은 카페/음식점 메뉴 설명을 작성하는 전문가입니다.
+아래 정보를 참고하여 메뉴 설명을 한 줄로 작성해주세요.
+
+매장명: ${storeName}
+${storeDescription ? `매장 설명: ${storeDescription}` : ""}
+메뉴명: ${menuName}${siblingContext}
+
+규칙:
+- 같은 카테고리의 다른 메뉴 설명이 있다면 톤, 길이, 스타일을 맞춰주세요.
+- 없다면 간결하고 매력적인 한 줄 설명을 작성하세요.
+- 설명만 출력하세요. 따옴표나 다른 텍스트 없이 설명 텍스트만 반환하세요.`;
+
+  const result = await model.generateContent(prompt);
+  return result.response.text().trim();
+}
+
 export async function estimateAge(imageBase64: string, mimeType: string): Promise<number> {
   const genAI = getGeminiClient();
   const model = genAI.getGenerativeModel({ model: process.env.GEMINI_AGE_MODEL || "gemini-3.0-flash" });
