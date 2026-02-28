@@ -90,6 +90,8 @@ model StoreSettings {
   logoUrl            String?
   defaultLanguage    String  @default("ko")
   supportedLanguages String  @default("[\"ko\"]")
+  useCameraDetection Boolean @default(true)
+  vendingModeAge     Int     @default(50)
 }
 
 model CategoryImage {

@@ -22,6 +22,8 @@ export default function SettingsForm() {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [clearLogo, setClearLogo] = useState(false);
   const [supportedLanguages, setSupportedLanguages] = useState<string[]>(["ko"]);
+  const [useCameraDetection, setUseCameraDetection] = useState(true);
+  const [vendingModeAge, setVendingModeAge] = useState(50);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [missingCount, setMissingCount] = useState(0);
@@ -36,6 +38,8 @@ export default function SettingsForm() {
       setStoreName(data.storeName || "");
       setStoreDescription(data.storeDescription || "");
       setLogoUrl(data.logoUrl || null);
+      setUseCameraDetection(data.useCameraDetection ?? true);
+      setVendingModeAge(data.vendingModeAge || 50);
       const langs = JSON.parse(data.supportedLanguages || '["ko"]');
       setSupportedLanguages(langs);
       setLoading(false);
@@ -124,6 +128,8 @@ export default function SettingsForm() {
         formData.append("storeName", storeName);
         formData.append("storeDescription", storeDescription);
         formData.append("supportedLanguages", JSON.stringify(supportedLanguages));
+        formData.append("useCameraDetection", String(useCameraDetection));
+        formData.append("vendingModeAge", String(vendingModeAge));
         if (logoFile) formData.append("logo", logoFile);
         if (clearLogo) formData.append("clearLogo", "true");
         const res = await fetch("/api/settings", { method: "PUT", body: formData });
@@ -139,6 +145,8 @@ export default function SettingsForm() {
             storeName,
             storeDescription,
             supportedLanguages: JSON.stringify(supportedLanguages),
+            useCameraDetection,
+            vendingModeAge,
           }),
         });
       }
@@ -228,11 +236,10 @@ export default function SettingsForm() {
             {AVAILABLE_LANGUAGES.map((lang) => (
               <label
                 key={lang.code}
-                className={`flex items-center gap-2 p-2 rounded border text-sm cursor-pointer ${
-                  supportedLanguages.includes(lang.code)
+                className={`flex items-center gap-2 p-2 rounded border text-sm cursor-pointer ${supportedLanguages.includes(lang.code)
                     ? "bg-blue-50 border-blue-300"
                     : "bg-white border-gray-200"
-                } ${lang.code === "ko" ? "opacity-75 cursor-not-allowed" : ""}`}
+                  } ${lang.code === "ko" ? "opacity-75 cursor-not-allowed" : ""}`}
               >
                 <input
                   type="checkbox"
@@ -244,6 +251,37 @@ export default function SettingsForm() {
               </label>
             ))}
           </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4 space-y-4">
+          <h3 className="font-medium text-gray-800">{t("admin.settings.cameraDetection")}</h3>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={useCameraDetection}
+              onChange={(e) => setUseCameraDetection(e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+            />
+            <span className="text-sm font-medium text-gray-700">{t("admin.settings.enableCameraDetection")}</span>
+          </label>
+
+          {useCameraDetection && (
+            <div className="pl-6 space-y-2 mt-2">
+              <label className="block text-sm text-gray-600 mb-1">{t("admin.settings.vendingModeAge")}</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max="120"
+                  value={vendingModeAge}
+                  onChange={(e) => setVendingModeAge(Number(e.target.value))}
+                  className="w-24 border rounded-md px-3 py-2 text-sm"
+                />
+                <span className="text-sm text-gray-500">세 이상일 경우 자판기 모드로 자동 전환</span>
+              </div>
+            </div>
+          )}
         </div>
 
         <button

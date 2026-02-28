@@ -8,11 +8,16 @@ import OptionModal from "@/components/shop/OptionModal";
 import CategoryTabs from "@/components/shop/CategoryTabs";
 import MenuGrid from "@/components/shop/MenuGrid";
 import VendingGrid from "@/components/shop/VendingGrid";
+import OrderTypeSelection from "@/components/shop/OrderTypeSelection";
+import { useUiStore } from "@/stores/uiStore";
+import { useCartStore } from "@/stores/cartStore";
+import { showToast } from "@/components/ui/Toast";
 
 export default function ShopPage() {
   const [categories, setCategories] = useState<CategoryWithMenus[]>([]);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
-  const [vendingMode, setVendingMode] = useState(false);
+  const { isVendingMode, setVendingMode, showAgeDetectionToast, setShowAgeDetectionToast } = useUiStore();
+  const orderType = useCartStore((s) => s.orderType);
   const [selectedMenu, setSelectedMenu] = useState<MenuWithOptions | null>(null);
   const [loading, setLoading] = useState(true);
   const currentLanguage = useLanguageStore((s) => s.currentLanguage);
@@ -27,9 +32,16 @@ export default function ShopPage() {
           setActiveCategory(data[0].id);
         }
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (showAgeDetectionToast) {
+      showToast(t("shop.vendingAutoEnabled"), "info");
+      setShowAgeDetectionToast(false);
+    }
+  }, [showAgeDetectionToast, setShowAgeDetectionToast, t]);
 
   const currentCategory = categories.find((c) => c.id === activeCategory);
 
@@ -39,11 +51,12 @@ export default function ShopPage() {
   };
 
   const handleVendingToggle = () => {
-    setVendingMode((prev) => !prev);
-    if (!vendingMode) {
-      setActiveCategory(null);
-    } else if (categories.length > 0) {
+    const nextMode = !isVendingMode;
+    setVendingMode(nextMode);
+    if (!nextMode && categories.length > 0) {
       setActiveCategory(categories[0].id);
+    } else {
+      setActiveCategory(null);
     }
   };
 
@@ -63,6 +76,10 @@ export default function ShopPage() {
     );
   }
 
+  if (!orderType) {
+    return <OrderTypeSelection />;
+  }
+
   return (
     <>
       <CategoryTabs
@@ -70,11 +87,11 @@ export default function ShopPage() {
         activeCategory={activeCategory}
         onSelect={handleCategorySelect}
         currentLanguage={currentLanguage}
-        vendingMode={vendingMode}
+        vendingMode={isVendingMode}
         onVendingToggle={handleVendingToggle}
       />
 
-      {vendingMode ? (
+      {isVendingMode ? (
         <VendingGrid
           categories={categories}
           currentLanguage={currentLanguage}

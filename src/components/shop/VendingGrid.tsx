@@ -130,7 +130,7 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
                 selectedOptions: card.selectedOptions,
               })
             }
-            className="relative flex flex-col overflow-hidden rounded-lg bg-white shadow-sm active:scale-[0.97] transition-transform"
+            className="relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm active:scale-[0.97] transition-transform"
           >
             {/* Remove button */}
             {count > 0 && (
@@ -177,14 +177,14 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
             </div>
 
             {/* Info */}
-            <div className="flex flex-1 flex-col p-1.5">
-              <p className="text-xs font-bold text-gray-900 leading-tight line-clamp-2">
+            <div className="flex flex-1 flex-col p-2">
+              <p className="text-sm font-bold text-gray-900 leading-tight line-clamp-2">
                 {card.menuName}
                 {card.optionLabel && (
                   <span className="font-normal text-gray-500"> · {card.optionLabel}</span>
                 )}
               </p>
-              <p className="mt-0.5 text-sm font-extrabold text-amber-600">
+              <p className="mt-1 text-base font-extrabold text-amber-600">
                 {formatPrice(card.totalPrice, currentLanguage)}
               </p>
             </div>

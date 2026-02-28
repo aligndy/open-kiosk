@@ -9,6 +9,8 @@ function optionsKey(options: SelectedOption[]): string {
 }
 
 interface CartStore {
+  orderType: "dineIn" | "takeOut" | null;
+  setOrderType: (type: "dineIn" | "takeOut" | null) => void;
   items: CartItem[];
   addItem: (item: Omit<CartItem, "subtotal">) => void;
   removeItem: (index: number) => void;
@@ -30,6 +32,8 @@ function calcSubtotal(item: Omit<CartItem, "subtotal">): number {
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
+  orderType: null,
+  setOrderType: (orderType) => set({ orderType }),
   items: [],
 
   addItem: (item) => {
@@ -59,7 +63,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
     });
   },
 
-  clearCart: () => set({ items: [] }),
+  clearCart: () => set({ items: [], orderType: null }),
 
   addOrIncrementItem: (item) => {
     const key = optionsKey(item.selectedOptions);

@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-28T04:10:47.433Z",
+  "lastUpdated": "2026-02-28T05:08:41.333Z",
   "activeFeatures": [
     "kiosk-initial",
     "k",
@@ -24,7 +24,8 @@
     "ui",
     "images",
     "[imageId]",
-    "duplicate"
+    "duplicate",
+    "scripts"
   ],
   "primaryFeature": "kiosk-initial",
   "features": {
@@ -53,7 +54,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:39:33.311Z",
-        "lastUpdated": "2026-02-28T03:01:08.145Z"
+        "lastUpdated": "2026-02-28T05:02:01.226Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/lib/gemini.ts"
     },
@@ -170,7 +171,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:41:17.344Z",
-        "lastUpdated": "2026-02-28T03:24:19.574Z"
+        "lastUpdated": "2026-02-28T05:01:28.444Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/api/generate-image/route.ts"
     },
@@ -209,9 +210,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:42:27.312Z",
-        "lastUpdated": "2026-02-28T04:10:47.433Z"
+        "lastUpdated": "2026-02-28T05:04:45.858Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/components/admin/MenuForm.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/admin/CategoryManager.tsx"
     },
     "shop": {
       "phase": "do",
@@ -222,9 +223,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:43:12.219Z",
-        "lastUpdated": "2026-02-28T03:57:47.600Z"
+        "lastUpdated": "2026-02-28T05:08:41.333Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/app/shop/layout.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/shop/VendingGrid.tsx"
     },
     "new": {
       "phase": "do",
@@ -261,7 +262,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:45:04.588Z",
-        "lastUpdated": "2026-02-28T02:16:50.920Z"
+        "lastUpdated": "2026-02-28T04:34:52.222Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/shop/order-complete/page.tsx"
     },
@@ -300,7 +301,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T03:10:19.979Z",
-        "lastUpdated": "2026-02-28T03:24:07.150Z"
+        "lastUpdated": "2026-02-28T05:01:53.891Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/api/categories/[id]/images/route.ts"
     },
@@ -329,6 +330,19 @@
         "lastUpdated": "2026-02-28T03:55:23.679Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/app/api/menus/[id]/duplicate/route.ts"
+    },
+    "scripts": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-02-28T04:32:12.897Z",
+        "lastUpdated": "2026-02-28T04:32:12.897Z"
+      },
+      "lastFile": "/Users/dgoon/works/k/scripts/translate-ui.ts"
     }
   },
   "pipeline": {
@@ -339,7 +353,7 @@
   "session": {
     "startedAt": "2026-02-28T01:00:00.934Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-02-28T04:10:47.433Z"
+    "lastActivity": "2026-02-28T05:08:41.333Z"
   },
   "history": [
     {
@@ -1465,6 +1479,378 @@
     {
       "timestamp": "2026-02-28T04:10:47.433Z",
       "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:31:42.941Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:12.897Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:28.186Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:37.626Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:42.509Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:46.336Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:50.507Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:32:54.188Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:33:19.670Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:33:49.553Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:34:05.765Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:34:25.175Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:34:38.249Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:34:43.038Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:34:46.931Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:34:52.222Z",
+      "feature": "order-complete",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:35:04.240Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:35:19.056Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:35:53.509Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:36:11.889Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:37:41.112Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:38:43.902Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:39:25.315Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:40:11.028Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:48:12.658Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:49:51.184Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:49:56.589Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:01.510Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:07.310Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:12.568Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:17.652Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:23.381Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:28.430Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:50:55.822Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:51:06.324Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:51:11.265Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:51:16.536Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T04:59:12.462Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:02.694Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:11.986Z",
+      "feature": "images",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:18.028Z",
+      "feature": "images",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:23.078Z",
+      "feature": "generate-image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:28.444Z",
+      "feature": "generate-image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:33.440Z",
+      "feature": "images",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:47.623Z",
+      "feature": "images",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:01:53.891Z",
+      "feature": "images",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:02:01.226Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:02:49.011Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:02:56.409Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:03:01.379Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:03:06.789Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:03:11.393Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:03:16.410Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:03:21.239Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:04:24.941Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:04:29.430Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:04:41.357Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:04:45.858Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:05:28.940Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:05:40.371Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:08:34.958Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:08:41.333Z",
+      "feature": "shop",
       "phase": "do",
       "action": "updated"
     }

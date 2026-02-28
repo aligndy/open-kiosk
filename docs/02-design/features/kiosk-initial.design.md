@@ -73,6 +73,10 @@
 
 주문 생성: Browser → POST /api/orders → Prisma → SQLite → 주문번호 반환
 
+[얼굴 인식 및 자판기 모드 플로우]
+초기 로드: Browser(카메라 권한) → 화면 캡처 → POST /api/estimate-age (FormData) → Gemini Vision API
+상태 전환: 연령 >= 기준(50) 판별 시 → 클라이언트 VendingMode=true 상태 변경 → 자판기 모드 UI 렌더링
+
 [관리 플로우]
 메뉴 등록: Browser → POST /api/menus (+ FormData) → Prisma → SQLite
 이미지 생성: Browser → POST /api/generate-image → Gemini API → 이미지 저장 → URL 반환
@@ -179,10 +183,12 @@ model OrderItem {
 }
 
 model StoreSettings {
-  id                  Int    @id @default(1)
-  storeName           String @default("카페")
-  defaultLanguage     String @default("ko")
-  supportedLanguages  String @default("[\"ko\"]") // JSON array
+  id                    Int     @id @default(1)
+  storeName             String  @default("카페")
+  defaultLanguage       String  @default("ko")
+  supportedLanguages    String  @default("[\"ko\"]") // JSON array
+  useCameraDetection    Boolean @default(true)       // 카메라 나이 인식 사용 여부
+  vendingModeAge        Int     @default(50)         // 자판기 모드 전환 기준 연령
 }
 ```
 
@@ -249,6 +255,7 @@ const localizedName = translations[currentLanguage] || menu.name;
 | **AI (Gemini)** | | | | |
 | POST | `/api/translate` | 일괄 번역 | `{ targetLanguage }` | `{ success, translatedCount }` |
 | POST | `/api/generate-image` | 이미지 생성 | `{ prompt, menuId? }` | `{ imageUrl }` |
+| POST | `/api/estimate-age` | 나이 추정 | FormData (image) | `{ estimatedAge, isVendingMode }` |
 | **Toss Front (Mock)** | | | | |
 | GET | `/api/tossfront` | 폴링 엔드포인트 | - | `{ status, data? }` |
 | **Store Settings** | | | | |
@@ -364,6 +371,25 @@ Gemini API 호출 시 이미지 생성 프롬프트:
 스타일: 프로페셔널 푸드 포토그래피, 밝은 조명, 깨끗한 배경
 ```
 
+#### `POST /api/estimate-age`
+
+```typescript
+// Request (FormData)
+// File: image (카메라 캡처 이미지)
+
+// Response (200)
+{
+  "estimatedAge": 55,
+  "isVendingMode": true // DB의 vendingModeAge(예: 50) 이상일 경우 true 반환
+}
+```
+
+Gemini Vision API 호출 시 프롬프트:
+```
+이 사람의 나이대를 숫자로만 추정해서 대답해주세요 (예: 25, 50, 65). 다른 말은 덧붙이지 마세요.
+※ 얼굴이 없거나 사람이 아닌 경우 -1을 반환하세요.
+```
+
 #### `GET /api/tossfront`
 
 ```typescript
@@ -391,7 +417,9 @@ Gemini API 호출 시 이미지 생성 프롬프트:
 
 ## 5. UI/UX Design
 
-### 5.1 구매 페이지 (`/shop`) - 세로 키오스크 (1080x1920)
+### 5.1 일반 구매 페이지 (`/shop`) - 세로 키오스크 (1080x1920)
+
+우측 하단 등에 '돋보기(큰 글씨 모드)' 수동 토글 버튼을 두어 권한이 없거나 인식이 안된 사용자도 자판기 모드로 전환할 수 있게 한다.
 
 ```
 ┌────────────────────────────────────────┐
@@ -424,7 +452,40 @@ Gemini API 호출 시 이미지 생성 프롬프트:
 └────────────────────────────────────────┘
 ```
 
-### 5.2 옵션 선택 모달 (메뉴 클릭 시)
+### 5.2 자판기 모드 UI (Vending Machine Mode)
+
+50대 이상으로 인식되거나 수동으로 전환된 경우 제공되는 극단적으로 단순화된 UI. 
+- 복잡한 메뉴 뎁스 제거
+- 가로 1열 또는 2열의 거대한 버튼
+- 옵션 팝업 생략 (기본 옵션: 뜨거움/레귤러 사이즈 등으로 즉시 담기)
+- 모달 단계 축소 (장바구니 확인 없이 '결제하기' 버튼으로 직행도 고려)
+
+```
+┌────────────────────────────────────────┐
+│  [일반 화면으로]             [🛒 결제하기] │
+├────────────────────────────────────────┤
+│                                        │
+│  ┌──────────────────────────────────┐  │
+│  │                                  │  │
+│  │   📷 아메리카노 (따뜻하게)          │  │
+│  │   4,500원                         │  │
+│  │                                  │  │
+│  │   [ 👆 이 음료 선택하기    ]        │  │
+│  └──────────────────────────────────┘  │
+│                                        │
+│  ┌──────────────────────────────────┐  │
+│  │                                  │  │
+│  │   📷 카페라떼 (따뜻하게)            │  │
+│  │   5,000원                         │  │
+│  │                                  │  │
+│  │   [ 👆 이 음료 선택하기    ]        │  │
+│  └──────────────────────────────────┘  │
+│                                        │
+└────────────────────────────────────────┘
+```
+**동작 방식**: '이 음료 선택하기'를 누르면 즉시 장바구니에 담기고 하단의 누적 금액이 업데이트되며 결제 유도.
+
+### 5.3 옵션 선택 모달 (일반 모드 메뉴 클릭 시)
 
 > 옵션 그룹은 관리자가 메뉴별로 자유롭게 정의한다.
 > 정해진 옵션 종류(사이즈, 온도 등)는 없으며, 메뉴에 등록된
@@ -689,7 +750,9 @@ Gemini API 호출 시 이미지 생성 프롬프트:
 
 ```
 [구매 플로우]
-/shop → 카테고리 선택 → 메뉴 클릭 → 옵션 선택 모달 → 장바구니 담기
+- /shop 진입 시 카메라 접근 권한 요청 (비동기) → 화면 캡처 및 나이 추정 API 호출
+- 연령 >= 50 판별 시 자판기 모드 활성화 (수동으로도 전환 가능)
+/shop (일반 or 자판기 모드) → 카테고리 선택 → 메뉴 클릭 → (옵션 선택) → 장바구니 담기
      → 장바구니 확인 → 결제하기 → 서명 팝업 → 결제 완료 → 주문 완료 (5초 후 자동 리셋)
 
 [관리 플로우]
@@ -716,6 +779,8 @@ Gemini API 호출 시 이미지 생성 프롬프트:
 | `SignaturePad` | `src/components/shop/SignaturePad.tsx` | 서명 캔버스 |
 | `OrderComplete` | `src/components/shop/OrderComplete.tsx` | 주문 완료 화면 |
 | `LanguageSelector` | `src/components/shop/LanguageSelector.tsx` | 언어 선택 드롭다운 |
+| `CameraAgeDetector` | `src/components/shop/CameraAgeDetector.tsx` | 숨겨진 비디오 캡처 및 연령 추정 클라이언트 |
+| `VendingMenuCard` | `src/components/shop/VendingMenuCard.tsx` | 자판기 모드용 대형 카드 컴포넌트 |
 | `AdminLayout` | `src/app/admin/layout.tsx` | 관리 페이지 레이아웃 (사이드바) |
 | `AdminSidebar` | `src/components/admin/AdminSidebar.tsx` | 관리 사이드바 네비게이션 |
 | `OrderManager` | `src/components/admin/OrderManager.tsx` | 주문 목록 및 완료 처리 |
@@ -758,6 +823,15 @@ interface CartStore {
   clearCart: () => void;
   totalAmount: () => number;
   totalItems: () => number;
+}
+```
+
+```typescript
+// src/stores/uiStore.ts
+interface UiStore {
+  isVendingMode: boolean;
+  setVendingMode: (isVendingMode: boolean) => void;
+  // ... 기타 클라이언트 UI 상태 (에러 모달 등)
 }
 ```
 
@@ -993,7 +1067,8 @@ k/
 9. [ ] **관리 페이지**: Admin layout → 카테고리 → 메뉴(+이미지) → 번역 → 설정
 10. [ ] **구매 페이지**: Shop layout → 메뉴 그리드 → 옵션 모달 → 장바구니 → 결제Mock → 주문완료
 11. [ ] **다국어 적용**: 구매 페이지에 언어 전환 기능 통합
-12. [ ] **접근성 검증**: 글씨 크기, 터치 영역, 대비 확인
+12. [ ] **연령 인식 및 자판기 모드**: 카메라 캡처 로직 추가 (`/api/estimate-age`), Zustand 연동 및 Vending UI 분기
+13. [ ] **접근성 검증**: 글씨 크기, 터치 영역, 대비 확인
 
 ---
 

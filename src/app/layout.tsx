@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: "카페 주문 키오스크",
 };
 
+import ToastContainer from "@/components/ui/Toast";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -13,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <ToastContainer />
+      </body>
     </html>
   );
 }

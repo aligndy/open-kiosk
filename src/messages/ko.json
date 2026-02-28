@@ -9,12 +9,14 @@
   "common.saveError": "저장 중 오류가 발생했습니다.",
   "common.priceFormat": "{amount}원",
   "common.add": "추가",
-
   "shop.loadingMenus": "메뉴를 불러오는 중...",
   "shop.noMenus": "등록된 메뉴가 없습니다",
   "shop.defaultStoreName": "카페",
   "shop.vending": "자판기",
-
+  "shop.vendingAutoEnabled": "50대 이상으로 추정되어 자판기 모드로 자동 전환되었습니다.",
+  "shop.selectOrderType": "방문 형태를 선택해주세요",
+  "shop.orderType.dineIn": "매장 식사",
+  "shop.orderType.takeOut": "포장",
   "cart.viewCart": "장바구니 보기",
   "cart.title": "장바구니",
   "cart.empty": "장바구니가 비어있습니다",
@@ -22,9 +24,7 @@
   "cart.totalAmount": "총 금액",
   "cart.checkout": "결제하기",
   "cart.addToCart": "{price} 장바구니 담기",
-
   "option.required": "필수",
-
   "payment.title": "결제",
   "payment.amount": "결제 금액",
   "payment.signature": "서명",
@@ -32,7 +32,6 @@
   "payment.processing": "처리 중...",
   "payment.complete": "결제 완료",
   "payment.orderFailed": "주문에 실패했습니다. 다시 시도해주세요.",
-
   "order.completed": "주문이 완료되었습니다",
   "order.orderNumber": "주문번호",
   "order.loadingDetails": "주문 내역 로딩 중...",
@@ -40,7 +39,6 @@
   "order.total": "합계",
   "order.redirectCountdown": "{seconds}초 후 처음 화면으로 돌아갑니다",
   "order.backToHome": "처음으로 돌아가기",
-
   "admin.title": "카페 관리자",
   "admin.preview": "미리보기",
   "admin.nav.orders": "주문",
@@ -48,7 +46,6 @@
   "admin.nav.menus": "메뉴",
   "admin.nav.translations": "번역",
   "admin.nav.settings": "설정",
-
   "admin.order.management": "주문 관리",
   "admin.order.newOrders": "새 주문 {count}건",
   "admin.order.pending": "대기중",
@@ -56,7 +53,6 @@
   "admin.order.complete": "완료",
   "admin.order.noPending": "대기중인 주문이 없습니다.",
   "admin.order.noCompleted": "완료된 주문이 없습니다.",
-
   "admin.menu.management": "메뉴 관리",
   "admin.menu.addNew": "새 메뉴 추가",
   "admin.menu.noMenus": "등록된 메뉴가 없습니다.",
@@ -70,7 +66,6 @@
   "admin.menu.inactive": "비활성",
   "admin.menu.confirmDelete": "이 메뉴를 삭제하시겠습니까?",
   "admin.menu.duplicate": "복제",
-
   "admin.menuForm.basicInfo": "기본 정보",
   "admin.menuForm.category": "카테고리",
   "admin.menuForm.selectPlaceholder": "선택하세요",
@@ -105,7 +100,6 @@
   "admin.menuForm.enterNameFirst": "메뉴명을 먼저 입력하세요",
   "admin.menuForm.galleryLabel.ai": "AI 생성",
   "admin.menuForm.galleryLabel.upload": "업로드",
-
   "admin.category.management": "카테고리 관리",
   "admin.category.addNew": "새 카테고리 추가",
   "admin.category.name": "이름",
@@ -118,7 +112,6 @@
   "admin.category.referenceImages": "{name} - 레퍼런스 이미지",
   "admin.category.imageDescription": "이미지 설명 입력",
   "admin.category.categoryImage": "카테고리 이미지",
-
   "admin.settings.title": "설정",
   "admin.settings.storeInfo": "매장 정보",
   "admin.settings.storeName": "매장명",
@@ -137,7 +130,9 @@
   "admin.settings.translationComplete": "{count}개 언어, 총 {total}개 항목 번역 완료",
   "admin.settings.translationError": "번역 중 오류가 발생했습니다.",
   "admin.settings.saved": "설정이 저장되었습니다.",
-
+  "admin.settings.cameraDetection": "카메라 나이 인식",
+  "admin.settings.enableCameraDetection": "고객 연령 추정을 통한 자판기 모드 자동 전환 사용",
+  "admin.settings.vendingModeAge": "자판기 모드 전환 기준 연령",
   "admin.translation.management": "번역 관리",
   "admin.translation.noLanguages": "지원 언어가 설정되지 않았습니다.",
   "admin.translation.addLanguagesHint": "설정 페이지에서 언어를 추가해주세요.",

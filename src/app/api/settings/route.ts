@@ -25,6 +25,13 @@ export async function PUT(request: NextRequest) {
     const supportedLanguages = formData.get("supportedLanguages") as string | null;
     if (supportedLanguages !== null) data.supportedLanguages = supportedLanguages;
 
+    const useCameraDetection = formData.get("useCameraDetection");
+    if (useCameraDetection !== null) data.useCameraDetection = useCameraDetection === "true";
+
+    const vendingModeAge = formData.get("vendingModeAge");
+    if (vendingModeAge !== null) data.vendingModeAge = parseInt(vendingModeAge as string, 10);
+
+
     const logo = formData.get("logo") as File | null;
     if (logo && logo.size > 0) {
       const MAX_FILE_SIZE = 5 * 1024 * 1024;

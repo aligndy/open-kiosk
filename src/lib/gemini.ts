@@ -82,3 +82,29 @@ Style: Professional food photography, bright even lighting, high resolution, app
 
   throw new Error("No image data in response");
 }
+
+export async function estimateAge(imageBase64: string, mimeType: string): Promise<number> {
+  const genAI = getGeminiClient();
+  // Vision capabilities are supported by gemini-1.5-flash and gemini-1.5-pro
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const prompt = `이 사람의 나이대를 숫자로만 추정해서 대답해주세요 (예: 25, 50, 65). 다른 말은 덧붙이지 마세요.
+※ 얼굴이 없거나 사람이 아닌 경우 -1을 반환하세요.`;
+
+  const imagePart = {
+    inlineData: {
+      data: imageBase64,
+      mimeType
+    }
+  };
+
+  const result = await model.generateContent([prompt, imagePart]);
+  const text = result.response.text();
+  const age = parseInt(text.trim(), 10);
+
+  if (isNaN(age)) {
+    return -1;
+  }
+
+  return age;
+}
