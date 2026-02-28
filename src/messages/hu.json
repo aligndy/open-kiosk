@@ -21,6 +21,7 @@
   "cart.empty": "A kosár üres",
   "cart.backToMenu": "Vissza a menühöz",
   "cart.totalAmount": "Összesen",
+  "cart.total": "Összesen",
   "cart.checkout": "Fizetés",
   "cart.addToCart": "{price} Kosárba",
   "option.required": "Kötelező",

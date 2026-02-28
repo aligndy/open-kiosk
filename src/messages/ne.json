@@ -21,6 +21,7 @@
   "cart.empty": "कार्ट खाली छ",
   "cart.backToMenu": "मेनुमा फर्कनुहोस्",
   "cart.totalAmount": "कुल रकम",
+  "cart.total": "जम्मा",
   "cart.checkout": "भुक्तानी गर्नुहोस्",
   "cart.addToCart": "{price} कार्टमा थप्नुहोस्",
   "option.required": "अनिवार्य",

@@ -21,6 +21,7 @@
   "cart.empty": "Winkelwagen is leeg",
   "cart.backToMenu": "Terug naar menu",
   "cart.totalAmount": "Totaalbedrag",
+  "cart.total": "Totaal",
   "cart.checkout": "Afrekenen",
   "cart.addToCart": "{price} Toevoegen aan winkelwagen",
   "option.required": "Verplicht",

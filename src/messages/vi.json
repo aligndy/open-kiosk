@@ -22,6 +22,7 @@
   "cart.empty": "Giỏ hàng trống",
   "cart.backToMenu": "Quay lại menu",
   "cart.totalAmount": "Tổng tiền",
+  "cart.total": "Tổng cộng",
   "cart.checkout": "Thanh toán",
   "cart.addToCart": "Thêm {price} vào giỏ hàng",
   "option.required": "Bắt buộc",

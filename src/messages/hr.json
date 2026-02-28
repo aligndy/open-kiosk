@@ -21,6 +21,7 @@
   "cart.empty": "Košarica je prazna",
   "cart.backToMenu": "Povratak na meni",
   "cart.totalAmount": "Ukupno",
+  "cart.total": "Ukupno",
   "cart.checkout": "Završi kupnju",
   "cart.addToCart": "Dodaj u košaricu {price}",
   "option.required": "Obavezno",

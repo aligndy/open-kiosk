@@ -21,6 +21,7 @@
   "cart.empty": "העגלה ריקה",
   "cart.backToMenu": "חזרה לתפריט",
   "cart.totalAmount": "סה\"כ",
+  "cart.total": "סך הכל",
   "cart.checkout": "לתשלום",
   "cart.addToCart": "הוסף לעגלה {price}",
   "option.required": "חובה",

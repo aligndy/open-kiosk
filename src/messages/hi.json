@@ -21,6 +21,7 @@
   "cart.empty": "कार्ट खाली है",
   "cart.backToMenu": "मेनू पर वापस जाएं",
   "cart.totalAmount": "कुल राशि",
+  "cart.total": "कुल",
   "cart.checkout": "चेकआउट",
   "cart.addToCart": "{price} कार्ट में जोड़ें",
   "option.required": "ज़रूरी",

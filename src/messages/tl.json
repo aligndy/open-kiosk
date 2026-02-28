@@ -21,6 +21,7 @@
   "cart.empty": "Walang laman ang cart",
   "cart.backToMenu": "Bumalik sa Menu",
   "cart.totalAmount": "Kabuuang Halaga",
+  "cart.total": "Kabuuang Halaga",
   "cart.checkout": "Magbayad",
   "cart.addToCart": "Idagdag sa Cart ({price})",
   "option.required": "Kailangan",

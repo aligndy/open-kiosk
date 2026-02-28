@@ -21,6 +21,7 @@
   "cart.empty": "Košík je prázdny",
   "cart.backToMenu": "Späť do ponuky",
   "cart.totalAmount": "Celková suma",
+  "cart.total": "Spolu",
   "cart.checkout": "Prejsť k pokladni",
   "cart.addToCart": "Pridať do košíka ({price})",
   "option.required": "Povinné",

@@ -21,6 +21,7 @@
   "cart.empty": "Troli anda kosong",
   "cart.backToMenu": "Kembali ke Menu",
   "cart.totalAmount": "Jumlah",
+  "cart.total": "Jumlah",
   "cart.checkout": "Bayar",
   "cart.addToCart": "Tambah ke Troli {price}",
   "option.required": "Wajib",

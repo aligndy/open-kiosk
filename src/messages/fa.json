@@ -21,6 +21,7 @@
   "cart.empty": "سبد خرید خالی است",
   "cart.backToMenu": "بازگشت به منو",
   "cart.totalAmount": "مبلغ کل",
+  "cart.total": "جمع کل",
   "cart.checkout": "پرداخت",
   "cart.addToCart": "افزودن به سبد خرید {price}",
   "option.required": "الزامی",

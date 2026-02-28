@@ -21,6 +21,7 @@
   "cart.empty": "Varukorgen är tom",
   "cart.backToMenu": "Tillbaka till menyn",
   "cart.totalAmount": "Totalsumma",
+  "cart.total": "Totalt",
   "cart.checkout": "Betala",
   "cart.addToCart": "Lägg till i varukorgen {price}",
   "option.required": "Krävs",

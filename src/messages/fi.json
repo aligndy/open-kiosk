@@ -21,6 +21,7 @@
   "cart.empty": "Ostoskori on tyhjä",
   "cart.backToMenu": "Palaa valikkoon",
   "cart.totalAmount": "Summa",
+  "cart.total": "Yhteensä",
   "cart.checkout": "Kassalle",
   "cart.addToCart": "Lisää ostoskoriin {price}",
   "option.required": "Pakollinen",

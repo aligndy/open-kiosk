@@ -22,6 +22,7 @@
   "cart.empty": "El carrito está vacío",
   "cart.backToMenu": "Volver al menú",
   "cart.totalAmount": "Importe total",
+  "cart.total": "Total",
   "cart.checkout": "Pagar",
   "cart.addToCart": "Añadir {price} al carrito",
   "option.required": "Obligatorio",

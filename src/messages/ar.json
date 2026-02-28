@@ -21,6 +21,7 @@
   "cart.empty": "السلة فارغة",
   "cart.backToMenu": "العودة إلى القائمة",
   "cart.totalAmount": "المبلغ الإجمالي",
+  "cart.total": "المجموع",
   "cart.checkout": "الدفع",
   "cart.addToCart": "إضافة إلى السلة {price}",
   "option.required": "إلزامي",

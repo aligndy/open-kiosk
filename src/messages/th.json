@@ -22,6 +22,7 @@
   "cart.empty": "ตะกร้าสินค้าว่างเปล่า",
   "cart.backToMenu": "กลับไปที่เมนู",
   "cart.totalAmount": "ราคารวม",
+  "cart.total": "รวม",
   "cart.checkout": "ชำระเงิน",
   "cart.addToCart": "ใส่ตะกร้า {price}",
   "option.required": "จำเป็น",

@@ -21,6 +21,7 @@
   "cart.empty": "Сагс хоосон байна",
   "cart.backToMenu": "Цэс рүү буцах",
   "cart.totalAmount": "Нийт дүн",
+  "cart.total": "Нийт",
   "cart.checkout": "Төлбөр төлөх",
   "cart.addToCart": "{price} Сагсанд хийх",
   "option.required": "Заавал",

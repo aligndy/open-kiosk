@@ -21,6 +21,7 @@
   "cart.empty": "Koszyk jest pusty",
   "cart.backToMenu": "Powrót do menu",
   "cart.totalAmount": "Suma",
+  "cart.total": "Suma",
   "cart.checkout": "Do kasy",
   "cart.addToCart": "Dodaj do koszyka {price}",
   "option.required": "Wymagane",
