@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
         const base64 = buffer.toString("base64");
 
         const age = await estimateAge(base64, image.type);
+        console.log(`[CameraAgeDetector] Estimated age: ${age}`);
 
         const settings = await prisma.storeSettings.findUnique({ where: { id: 1 } });
 

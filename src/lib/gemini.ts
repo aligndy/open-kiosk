@@ -85,8 +85,7 @@ Style: Professional food photography, bright even lighting, high resolution, app
 
 export async function estimateAge(imageBase64: string, mimeType: string): Promise<number> {
   const genAI = getGeminiClient();
-  // Vision capabilities are supported by gemini-1.5-flash and gemini-1.5-pro
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: process.env.GEMINI_AGE_MODEL || "gemini-3.0-flash" });
 
   const prompt = `이 사람의 나이대를 숫자로만 추정해서 대답해주세요 (예: 25, 50, 65). 다른 말은 덧붙이지 마세요.
 ※ 얼굴이 없거나 사람이 아닌 경우 -1을 반환하세요.`;

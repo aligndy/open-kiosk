@@ -14,10 +14,17 @@ export default function CameraAgeDetector() {
 
         let stream: MediaStream | null = null;
         let timeoutId: NodeJS.Timeout;
+        let isCancelled = false;
 
         const startCameraAndCapture = async () => {
+            if (isCancelled) return;
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                if (isCancelled) {
+                    stream.getTracks().forEach(track => track.stop());
+                    return;
+                }
+
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                 }
@@ -27,7 +34,7 @@ export default function CameraAgeDetector() {
                     timeoutId = setTimeout(resolve, 1500);
                 });
 
-                if (!videoRef.current || hasCaptured.current) return;
+                if (isCancelled || !videoRef.current || hasCaptured.current) return;
 
                 hasCaptured.current = true;
 
@@ -45,7 +52,7 @@ export default function CameraAgeDetector() {
                 ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
                 canvas.toBlob(async (blob) => {
-                    if (!blob) return;
+                    if (!blob || isCancelled) return;
 
                     const formData = new FormData();
                     formData.append("image", new File([blob], "capture.jpg", { type: "image/jpeg" }));
@@ -81,7 +88,7 @@ export default function CameraAgeDetector() {
         startCameraAndCapture();
 
         return () => {
-            hasCaptured.current = true; // prevent late capture if unmounted
+            isCancelled = true;
             if (timeoutId) clearTimeout(timeoutId);
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());

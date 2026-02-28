@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-28T05:38:27.828Z",
+  "lastUpdated": "2026-02-28T05:46:28.525Z",
   "activeFeatures": [
     "kiosk-initial",
     "k",
@@ -210,9 +210,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:42:27.312Z",
-        "lastUpdated": "2026-02-28T05:04:45.858Z"
+        "lastUpdated": "2026-02-28T05:46:28.525Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/components/admin/CategoryManager.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/admin/MenuManager.tsx"
     },
     "shop": {
       "phase": "do",
@@ -353,7 +353,7 @@
   "session": {
     "startedAt": "2026-02-28T01:00:00.934Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-02-28T05:38:27.828Z"
+    "lastActivity": "2026-02-28T05:46:28.525Z"
   },
   "history": [
     {
@@ -1857,6 +1857,12 @@
     {
       "timestamp": "2026-02-28T05:38:27.828Z",
       "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T05:46:28.525Z",
+      "feature": "admin",
       "phase": "do",
       "action": "updated"
     }

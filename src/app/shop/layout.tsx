@@ -138,7 +138,7 @@ export default function ShopLayout({
         />
       )}
 
-      {useCamera && <CameraAgeDetector />}
+      {/* {useCamera && <CameraAgeDetector />} */}
     </div>
   );
 }
