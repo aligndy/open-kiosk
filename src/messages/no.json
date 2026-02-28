@@ -21,6 +21,7 @@
   "cart.empty": "Handlekurven er tom",
   "cart.backToMenu": "Tilbake til menyen",
   "cart.totalAmount": "Totalbeløp",
+  "cart.total": "Total",
   "cart.checkout": "Gå til kassen",
   "cart.addToCart": "Legg i handlekurv {price}",
   "option.required": "Påkrevd",

@@ -22,6 +22,7 @@
   "cart.empty": "Le panier est vide",
   "cart.backToMenu": "Retour au menu",
   "cart.totalAmount": "Montant total",
+  "cart.total": "Total",
   "cart.checkout": "Payer",
   "cart.addToCart": "Ajouter au panier ({price})",
   "option.required": "Obligatoire",

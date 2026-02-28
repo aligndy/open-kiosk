@@ -22,6 +22,7 @@
   "cart.empty": "Cart is empty",
   "cart.backToMenu": "Back to Menu",
   "cart.totalAmount": "Total",
+  "cart.total": "Total",
   "cart.checkout": "Checkout",
   "cart.addToCart": "Add to Cart {price}",
   "option.required": "Required",

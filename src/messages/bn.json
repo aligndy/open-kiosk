@@ -21,6 +21,7 @@
   "cart.empty": "কার্ট খালি",
   "cart.backToMenu": "মেনুতে ফিরে যান",
   "cart.totalAmount": "মোট পরিমাণ",
+  "cart.total": "মোট",
   "cart.checkout": "চেকআউট",
   "cart.addToCart": "{price} কার্টে যোগ করুন",
   "option.required": "প্রয়োজনীয়",

@@ -21,6 +21,7 @@
   "cart.empty": "Coșul este gol",
   "cart.backToMenu": "Înapoi la meniu",
   "cart.totalAmount": "Total",
+  "cart.total": "Total",
   "cart.checkout": "Finalizare comandă",
   "cart.addToCart": "Adaugă în coș {price}",
   "option.required": "Obligatoriu",

@@ -21,6 +21,7 @@
   "cart.empty": "Sepet boş",
   "cart.backToMenu": "Menüye Dön",
   "cart.totalAmount": "Toplam Tutar",
+  "cart.total": "Toplam",
   "cart.checkout": "Ödeme Yap",
   "cart.addToCart": "{price} Sepete Ekle",
   "option.required": "Gerekli",

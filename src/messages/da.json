@@ -21,6 +21,7 @@
   "cart.empty": "Kurven er tom",
   "cart.backToMenu": "Tilbage til menuen",
   "cart.totalAmount": "Samlet beløb",
+  "cart.total": "Total",
   "cart.checkout": "Gå til kassen",
   "cart.addToCart": "Læg i kurv {price}",
   "option.required": "Påkrævet",

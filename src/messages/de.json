@@ -22,6 +22,7 @@
   "cart.empty": "Warenkorb ist leer",
   "cart.backToMenu": "Zurück zum Menü",
   "cart.totalAmount": "Gesamtbetrag",
+  "cart.total": "Summe",
   "cart.checkout": "Zur Kasse",
   "cart.addToCart": "{price} Zum Warenkorb hinzufügen",
   "option.required": "Erforderlich",

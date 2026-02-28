@@ -21,6 +21,7 @@
   "cart.empty": "Το καλάθι είναι άδειο",
   "cart.backToMenu": "Επιστροφή στο μενού",
   "cart.totalAmount": "Συνολικό ποσό",
+  "cart.total": "Σύνολο",
   "cart.checkout": "Ολοκλήρωση παραγγελίας",
   "cart.addToCart": "Προσθήκη στο καλάθι {price}",
   "option.required": "Απαραίτητο",

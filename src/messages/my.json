@@ -21,6 +21,7 @@
   "cart.empty": "စျေးဝယ်ခြင်းတောင်းထဲတွင် ဘာမှမရှိပါ",
   "cart.backToMenu": "Menu သို့ ပြန်သွားရန်",
   "cart.totalAmount": "စုစုပေါင်း",
+  "cart.total": "စုစုပေါင်း",
   "cart.checkout": "ငွေရှင်းရန်",
   "cart.addToCart": "{price} စျေးဝယ်ခြင်းတောင်းထဲသို့ ထည့်ရန်",
   "option.required": "မဖြစ်မနေ",

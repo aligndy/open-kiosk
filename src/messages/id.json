@@ -21,6 +21,7 @@
   "cart.empty": "Keranjang kosong",
   "cart.backToMenu": "Kembali ke Menu",
   "cart.totalAmount": "Total Harga",
+  "cart.total": "Total",
   "cart.checkout": "Bayar",
   "cart.addToCart": "Tambah ke Keranjang {price}",
   "option.required": "Wajib",

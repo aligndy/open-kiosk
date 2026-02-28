@@ -21,6 +21,7 @@
   "cart.empty": "வண்டி காலியாக உள்ளது",
   "cart.backToMenu": "மெனுவுக்குத் திரும்பு",
   "cart.totalAmount": "மொத்த தொகை",
+  "cart.total": "மொத்தம்",
   "cart.checkout": "செக் அவுட்",
   "cart.addToCart": "{price} வண்டியில் சேர்",
   "option.required": "கட்டாயம்",

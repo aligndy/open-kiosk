@@ -21,6 +21,7 @@
   "cart.empty": "Кошик порожній",
   "cart.backToMenu": "Повернутися до меню",
   "cart.totalAmount": "Загальна сума",
+  "cart.total": "Всього",
   "cart.checkout": "Оформити замовлення",
   "cart.addToCart": "Додати в кошик {price}",
   "option.required": "Обов'язково",

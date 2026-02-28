@@ -21,6 +21,7 @@
   "cart.empty": "កន្ត្រកទទេ",
   "cart.backToMenu": "ត្រលប់ទៅម៉ឺនុយ",
   "cart.totalAmount": "ចំនួនសរុប",
+  "cart.total": "សរុប",
   "cart.checkout": "ទូទាត់",
   "cart.addToCart": "ដាក់ចូលកន្ត្រក {price}",
   "option.required": "ចាំបាច់",

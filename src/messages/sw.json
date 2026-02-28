@@ -21,6 +21,7 @@
   "cart.empty": "Kikapu kiko tupu",
   "cart.backToMenu": "Rudi kwenye Menyu",
   "cart.totalAmount": "Jumla ya Bei",
+  "cart.total": "Jumla",
   "cart.checkout": "Lipa",
   "cart.addToCart": "Ongeza kwenye Kikapu {price}",
   "option.required": "Inahitajika",

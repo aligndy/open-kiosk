@@ -22,6 +22,7 @@
   "cart.empty": "カートは空です",
   "cart.backToMenu": "メニューに戻る",
   "cart.totalAmount": "合計金額",
+  "cart.total": "合計",
   "cart.checkout": "お会計",
   "cart.addToCart": "{price} カートに入れる",
   "option.required": "必須",

@@ -22,6 +22,7 @@
   "cart.empty": "购物车是空的",
   "cart.backToMenu": "返回菜单",
   "cart.totalAmount": "总金额",
+  "cart.total": "总计",
   "cart.checkout": "结账",
   "cart.addToCart": "添加 {price} 到购物车",
   "option.required": "必选",

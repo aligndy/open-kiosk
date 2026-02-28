@@ -21,6 +21,7 @@
   "cart.empty": "Корзина пуста",
   "cart.backToMenu": "Вернуться в меню",
   "cart.totalAmount": "Итого",
+  "cart.total": "Итого",
   "cart.checkout": "Оформить заказ",
   "cart.addToCart": "Добавить в корзину {price}",
   "option.required": "Обязательно",

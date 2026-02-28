@@ -21,6 +21,7 @@
   "cart.empty": "Количката е празна",
   "cart.backToMenu": "Обратно към менюто",
   "cart.totalAmount": "Обща сума",
+  "cart.total": "Общо",
   "cart.checkout": "Плащане",
   "cart.addToCart": "Добави в количката {price}",
   "option.required": "Задължително",
