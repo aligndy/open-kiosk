@@ -56,6 +56,7 @@ export default function CameraAgeDetector() {
                             body: formData,
                         });
                         const data = await res.json();
+                        console.log("estimateAge result:", data);
 
                         if (res.ok && data.isVendingMode) {
                             setVendingMode(true);

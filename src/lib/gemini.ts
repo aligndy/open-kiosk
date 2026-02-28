@@ -49,7 +49,7 @@ export async function generateMenuImage(
     : "";
 
   const referenceInstruction = options?.referenceImageBase64
-    ? "Use the provided reference image as a style guide. Match its visual style, color tone, composition, lighting, and overall aesthetic as closely as possible."
+    ? "Use the provided reference image as a style guide. Match its visual style, color tone, composition, lighting, and overall aesthetic as closely as possible. Maintain the same size, scale, and angle of the subject as shown in the reference image."
     : "";
 
   const fullPrompt = `Generate a professional cafe menu photo in a perfect 1:1 square format. Product photography style, top-down or 45-degree angle view. The subject should be centered in the frame.
