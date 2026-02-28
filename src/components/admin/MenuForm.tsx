@@ -18,6 +18,18 @@ interface OptionGroupInput {
 interface Category {
   id: number;
   name: string;
+  referenceImageUrl?: string | null;
+}
+
+interface MenuImageItem {
+  id: number;
+  menuId: number;
+  imageUrl: string;
+  prompt: string | null;
+  transparentBg: boolean | null;
+  usedReferenceImage: boolean | null;
+  isAiGenerated: boolean;
+  createdAt: string;
 }
 
 interface MenuFormProps {
@@ -34,13 +46,17 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState<number | "">("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePrompt, setImagePrompt] = useState("");
   const [transparentBg, setTransparentBg] = useState(true);
   const [generatingImage, setGeneratingImage] = useState(false);
+  const [useReferenceImage, setUseReferenceImage] = useState(true);
   const [optionGroups, setOptionGroups] = useState<OptionGroupInput[]>([]);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // Gallery state
+  const [galleryImages, setGalleryImages] = useState<MenuImageItem[]>([]);
+  const [galleryUploading, setGalleryUploading] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -74,36 +90,86 @@ export default function MenuForm({ menuId }: MenuFormProps) {
             })
           )
         );
+
+        // Load gallery images
+        const imagesRes = await fetch(`/api/menus/${menuId}/images`);
+        setGalleryImages(await imagesRes.json());
       }
       setLoading(false);
     };
     init();
   }, [menuId, isEdit]);
 
-  const handleImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const refreshGallery = async () => {
+    if (!menuId) return;
+    const res = await fetch(`/api/menus/${menuId}/images`);
+    setGalleryImages(await res.json());
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
+    if (!file) return;
+
+    if (isEdit && menuId) {
+      // Upload via gallery API
+      setGalleryUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch(`/api/menus/${menuId}/images`, {
+          method: "POST",
+          body: formData,
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setImageUrl(data.imageUrl);
+          await refreshGallery();
+        } else {
+          const data = await res.json();
+          alert(data.error?.message || "업로드 실패");
+        }
+      } catch {
+        alert("업로드 중 오류가 발생했습니다.");
+      }
+      setGalleryUploading(false);
+      e.target.value = "";
+    } else {
+      // New menu: just set as file for submit
       setImageUrl(URL.createObjectURL(file));
+      // Store file for later submit - we use a hidden approach
+      const formData = new FormData();
+      formData.append("image", file);
+      (window as unknown as Record<string, FormData>).__menuImageFile = formData;
     }
   };
 
   const defaultPrompt = [name, description].filter(Boolean).join(" - ");
+
+  const selectedCategory = categories.find((c) => c.id === categoryId);
+  const categoryRefImage = selectedCategory?.referenceImageUrl || null;
 
   const generateImage = async () => {
     const finalPrompt = imagePrompt.trim() || defaultPrompt;
     if (!finalPrompt) return;
     setGeneratingImage(true);
     try {
+      const requestBody: Record<string, unknown> = {
+        prompt: finalPrompt,
+        menuId: menuId || null,
+        transparentBg,
+      };
+      if (useReferenceImage && categoryRefImage) {
+        requestBody.referenceImageUrl = categoryRefImage;
+      }
       const res = await fetch("/api/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: finalPrompt, menuId: menuId || null, transparentBg }),
+        body: JSON.stringify(requestBody),
       });
       const data = await res.json();
       if (data.imageUrl) {
         setImageUrl(data.imageUrl);
-        setImageFile(null);
+        if (isEdit) await refreshGallery();
       } else {
         alert(data.error?.message || "이미지 생성 실패");
       }
@@ -111,6 +177,21 @@ export default function MenuForm({ menuId }: MenuFormProps) {
       alert("이미지 생성 중 오류가 발생했습니다.");
     }
     setGeneratingImage(false);
+  };
+
+  const selectGalleryImage = async (img: MenuImageItem) => {
+    if (!menuId) return;
+    await fetch(`/api/menus/${menuId}/images/${img.id}`, { method: "PUT" });
+    setImageUrl(img.imageUrl);
+  };
+
+  const deleteGalleryImage = async (img: MenuImageItem) => {
+    if (!menuId) return;
+    await fetch(`/api/menus/${menuId}/images/${img.id}`, { method: "DELETE" });
+    if (imageUrl === img.imageUrl) {
+      setImageUrl(null);
+    }
+    await refreshGallery();
   };
 
   const addOptionGroup = () => {
@@ -173,20 +254,21 @@ export default function MenuForm({ menuId }: MenuFormProps) {
     try {
       let savedMenuId = menuId;
 
-      // Save menu (with image file if present)
-      if (imageFile) {
-        const formData = new FormData();
+      // Check for stored file (new menu case)
+      const storedFormData = (window as unknown as Record<string, FormData>).__menuImageFile;
+      const hasNewFile = !isEdit && storedFormData;
+
+      if (hasNewFile) {
+        const formData = storedFormData;
         formData.append("name", name.trim());
         formData.append("description", description);
         formData.append("price", String(price));
         formData.append("categoryId", String(categoryId));
-        formData.append("image", imageFile);
 
-        const url = isEdit ? `/api/menus/${menuId}` : "/api/menus";
-        const method = isEdit ? "PUT" : "POST";
-        const res = await fetch(url, { method, body: formData });
+        const res = await fetch("/api/menus", { method: "POST", body: formData });
         const data = await res.json();
         savedMenuId = data.id;
+        delete (window as unknown as Record<string, FormData>).__menuImageFile;
       } else {
         const body: Record<string, unknown> = {
           name: name.trim(),
@@ -194,7 +276,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           price: Number(price),
           categoryId: Number(categoryId),
         };
-        if (imageUrl) body.imageUrl = imageUrl;
+        if (imageUrl && !imageUrl.startsWith("blob:")) body.imageUrl = imageUrl;
 
         const url = isEdit ? `/api/menus/${menuId}` : "/api/menus";
         const method = isEdit ? "PUT" : "POST";
@@ -209,14 +291,12 @@ export default function MenuForm({ menuId }: MenuFormProps) {
 
       // Save option groups
       if (isEdit && savedMenuId) {
-        // For edit: delete existing groups that are no longer present, update/create rest
         const menuRes = await fetch(`/api/menus/${savedMenuId}`);
         const currentMenu = await menuRes.json();
         const existingGroupIds = new Set(
           optionGroups.filter((g) => g.id).map((g) => g.id)
         );
 
-        // Delete removed groups
         for (const existing of currentMenu.optionGroups) {
           if (!existingGroupIds.has(existing.id)) {
             await fetch(
@@ -226,7 +306,6 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           }
         }
 
-        // Update existing and create new groups
         for (let i = 0; i < optionGroups.length; i++) {
           const group = optionGroups[i];
           if (!group.name.trim()) continue;
@@ -268,7 +347,6 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           }
         }
       } else if (savedMenuId) {
-        // For new menu: create all option groups
         for (let i = 0; i < optionGroups.length; i++) {
           const group = optionGroups[i];
           if (!group.name.trim()) continue;
@@ -360,11 +438,60 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         </div>
       </div>
 
-      {/* Image */}
+      {/* Image Gallery */}
       <div className="bg-white rounded-lg shadow p-4 space-y-4">
         <h3 className="font-medium text-gray-800">이미지</h3>
 
-        {imageUrl && (
+        {/* Gallery Grid */}
+        {isEdit && galleryImages.length > 0 && (
+          <div className="grid grid-cols-4 gap-3">
+            {galleryImages.map((img) => (
+              <div
+                key={img.id}
+                className={`relative group cursor-pointer rounded-lg border-2 overflow-hidden ${
+                  imageUrl === img.imageUrl
+                    ? "border-blue-500 ring-2 ring-blue-200"
+                    : "border-gray-200 hover:border-gray-400"
+                }`}
+                onClick={() => selectGalleryImage(img)}
+              >
+                <img
+                  src={img.imageUrl}
+                  alt="메뉴 이미지"
+                  className="w-full aspect-square object-cover"
+                  title={
+                    img.prompt
+                      ? `${img.prompt}${img.transparentBg ? ' | 흰배경' : ''}${img.usedReferenceImage ? ' | 레퍼런스' : ''}`
+                      : undefined
+                  }
+                />
+                {imageUrl === img.imageUrl && (
+                  <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded">
+                    선택됨
+                  </div>
+                )}
+                {img.isAiGenerated && (
+                  <div className="absolute bottom-1 left-1 bg-purple-600 text-white text-[10px] px-1 py-0.5 rounded font-medium">
+                    AI
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteGalleryImage(img);
+                  }}
+                  className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Current image preview (for new menus or if no gallery) */}
+        {(!isEdit || galleryImages.length === 0) && imageUrl && (
           <div className="mb-2">
             <img
               src={imageUrl}
@@ -381,9 +508,13 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           <input
             type="file"
             accept="image/*"
-            onChange={handleImageFile}
+            onChange={handleImageUpload}
+            disabled={galleryUploading}
             className="text-sm"
           />
+          {galleryUploading && (
+            <span className="text-xs text-gray-500 ml-2">업로드 중...</span>
+          )}
         </div>
 
         <div className="border-t pt-4">
@@ -415,6 +546,17 @@ export default function MenuForm({ menuId }: MenuFormProps) {
             />
             흰 배경으로 생성
           </label>
+          {categoryRefImage && (
+            <label className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+              <input
+                type="checkbox"
+                checked={useReferenceImage}
+                onChange={(e) => setUseReferenceImage(e.target.checked)}
+              />
+              레퍼런스 이미지 스타일 적용
+              <img src={categoryRefImage} alt="레퍼런스" className="w-8 h-8 object-cover rounded border ml-1" />
+            </label>
+          )}
         </div>
       </div>
 
@@ -520,7 +662,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           disabled={saving}
           className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm"
         >
-          {saving ? "저장 중..." : isEdit ? "수정" : "등록"}
+          {saving ? "저장 중..." : isEdit ? "저장" : "등록"}
         </button>
         <button
           type="button"

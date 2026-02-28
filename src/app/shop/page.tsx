@@ -6,10 +6,12 @@ import { CategoryWithMenus, MenuWithOptions } from "@/types";
 import OptionModal from "@/components/shop/OptionModal";
 import CategoryTabs from "@/components/shop/CategoryTabs";
 import MenuGrid from "@/components/shop/MenuGrid";
+import VendingGrid from "@/components/shop/VendingGrid";
 
 export default function ShopPage() {
   const [categories, setCategories] = useState<CategoryWithMenus[]>([]);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [vendingMode, setVendingMode] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState<MenuWithOptions | null>(null);
   const [loading, setLoading] = useState(true);
   const currentLanguage = useLanguageStore((s) => s.currentLanguage);
@@ -28,6 +30,20 @@ export default function ShopPage() {
   }, []);
 
   const currentCategory = categories.find((c) => c.id === activeCategory);
+
+  const handleCategorySelect = (id: number) => {
+    setVendingMode(false);
+    setActiveCategory(id);
+  };
+
+  const handleVendingToggle = () => {
+    setVendingMode((prev) => !prev);
+    if (!vendingMode) {
+      setActiveCategory(null);
+    } else if (categories.length > 0) {
+      setActiveCategory(categories[0].id);
+    }
+  };
 
   if (loading) {
     return (
@@ -50,15 +66,24 @@ export default function ShopPage() {
       <CategoryTabs
         categories={categories}
         activeCategory={activeCategory}
-        onSelect={setActiveCategory}
+        onSelect={handleCategorySelect}
         currentLanguage={currentLanguage}
+        vendingMode={vendingMode}
+        onVendingToggle={handleVendingToggle}
       />
 
-      <MenuGrid
-        menus={currentCategory?.menus ?? []}
-        currentLanguage={currentLanguage}
-        onSelect={setSelectedMenu}
-      />
+      {vendingMode ? (
+        <VendingGrid
+          categories={categories}
+          currentLanguage={currentLanguage}
+        />
+      ) : (
+        <MenuGrid
+          menus={currentCategory?.menus ?? []}
+          currentLanguage={currentLanguage}
+          onSelect={setSelectedMenu}
+        />
+      )}
 
       {/* Option modal */}
       {selectedMenu && (

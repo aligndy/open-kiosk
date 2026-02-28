@@ -36,7 +36,7 @@ ${JSON.stringify({ items }, null, 2)}
 
 export async function generateMenuImage(
   prompt: string,
-  options?: { transparentBg?: boolean }
+  options?: { transparentBg?: boolean; referenceImageBase64?: string }
 ): Promise<Buffer> {
   const genAI = getGeminiClient();
   const model = genAI.getGenerativeModel({
@@ -48,16 +48,33 @@ export async function generateMenuImage(
     ? "The background MUST be pure white (#FFFFFF). No shadows, no gradients, no textures on the background. Only the food/drink item should be visible on a completely clean white background."
     : "";
 
+  const referenceInstruction = options?.referenceImageBase64
+    ? "Use the provided reference image as a style guide. Match its visual style, color tone, composition, lighting, and overall aesthetic as closely as possible."
+    : "";
+
   const fullPrompt = `Generate a professional cafe menu photo. Product photography style, top-down or 45-degree angle view.
 ${bgInstruction}
+${referenceInstruction}
 Item: ${prompt}
 Style: Professional food photography, bright even lighting, high resolution, appetizing presentation`;
 
-  const result = await model.generateContent(fullPrompt);
-  const parts = result.response.candidates?.[0]?.content?.parts;
-  if (!parts) throw new Error("No image generated");
+  const parts: Array<{ text: string } | { inlineData: { mimeType: string; data: string } }> = [];
 
-  for (const part of parts) {
+  if (options?.referenceImageBase64) {
+    parts.push({
+      inlineData: {
+        mimeType: "image/png",
+        data: options.referenceImageBase64,
+      },
+    });
+  }
+  parts.push({ text: fullPrompt });
+
+  const result = await model.generateContent(parts);
+  const responseParts = result.response.candidates?.[0]?.content?.parts;
+  if (!responseParts) throw new Error("No image generated");
+
+  for (const part of responseParts) {
     if (part.inlineData) {
       return Buffer.from(part.inlineData.data, "base64");
     }

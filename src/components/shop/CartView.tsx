@@ -6,9 +6,10 @@ import PaymentModal from "@/components/shop/PaymentModal";
 
 interface CartViewProps {
   onBack: () => void;
+  onPaymentComplete?: () => void;
 }
 
-export default function CartView({ onBack }: CartViewProps) {
+export default function CartView({ onBack, onPaymentComplete }: CartViewProps) {
   const items = useCartStore((s) => s.items);
   const removeItem = useCartStore((s) => s.removeItem);
   const totalAmount = useCartStore((s) => s.totalAmount());
@@ -150,7 +151,7 @@ export default function CartView({ onBack }: CartViewProps) {
       </div>
 
       {showPayment && (
-        <PaymentModal onClose={() => setShowPayment(false)} />
+        <PaymentModal onClose={() => setShowPayment(false)} onPaymentComplete={onPaymentComplete} />
       )}
     </>
   );

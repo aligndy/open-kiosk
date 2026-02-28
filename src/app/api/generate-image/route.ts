@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateMenuImage } from "@/lib/gemini";
-import { writeFile, mkdir } from "fs/promises";
+import { writeFile, mkdir, readFile } from "fs/promises";
 import path from "path";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { prompt, menuId, transparentBg } = body;
+  const { prompt, menuId, transparentBg, referenceImageUrl } = body;
 
   if (!prompt) {
     return NextResponse.json(
@@ -16,7 +16,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const imageBuffer = await generateMenuImage(prompt, { transparentBg: transparentBg !== false });
+    let referenceImageBase64: string | undefined;
+
+    if (referenceImageUrl) {
+      const filePath = path.join(process.cwd(), "public", referenceImageUrl);
+      const fileBuffer = await readFile(filePath);
+      referenceImageBase64 = fileBuffer.toString("base64");
+    }
+
+    const imageBuffer = await generateMenuImage(prompt, {
+      transparentBg: transparentBg !== false,
+      referenceImageBase64,
+    });
     const fileName = `menu-${menuId || "new"}-${Date.now()}.png`;
     const generatedDir = path.join(process.cwd(), "public", "generated");
     await mkdir(generatedDir, { recursive: true });
@@ -28,6 +39,16 @@ export async function POST(request: Request) {
       await prisma.menu.update({
         where: { id: Number(menuId) },
         data: { imageUrl },
+      });
+      await prisma.menuImage.create({
+        data: {
+          menuId: Number(menuId),
+          imageUrl,
+          prompt,
+          transparentBg: transparentBg !== false,
+          usedReferenceImage: !!referenceImageUrl,
+          isAiGenerated: true,
+        },
       });
     }
 

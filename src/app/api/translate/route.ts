@@ -4,7 +4,7 @@ import { translateTexts } from "@/lib/gemini";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { targetLanguage } = body;
+  const { targetLanguage, onlyMissing } = body;
 
   if (!targetLanguage) {
     return NextResponse.json(
@@ -21,19 +21,35 @@ export async function POST(request: Request) {
 
     const items: { id: number; type: string; field: string; value: string }[] = [];
 
+    const hasTrans = (json: string | null, lang: string): boolean => {
+      try {
+        const map = JSON.parse(json || "{}");
+        return !!map[lang]?.trim();
+      } catch {
+        return false;
+      }
+    };
+
     for (const cat of categories) {
+      if (onlyMissing && hasTrans(cat.nameTranslations, targetLanguage)) continue;
       items.push({ id: cat.id, type: "category", field: "name", value: cat.name });
     }
     for (const menu of menus) {
-      items.push({ id: menu.id, type: "menu", field: "name", value: menu.name });
+      if (!(onlyMissing && hasTrans(menu.nameTranslations, targetLanguage))) {
+        items.push({ id: menu.id, type: "menu", field: "name", value: menu.name });
+      }
       if (menu.description) {
-        items.push({ id: menu.id, type: "menu", field: "description", value: menu.description });
+        if (!(onlyMissing && hasTrans(menu.descriptionTranslations, targetLanguage))) {
+          items.push({ id: menu.id, type: "menu", field: "description", value: menu.description });
+        }
       }
     }
     for (const group of optionGroups) {
+      if (onlyMissing && hasTrans(group.nameTranslations, targetLanguage)) continue;
       items.push({ id: group.id, type: "optionGroup", field: "name", value: group.name });
     }
     for (const opt of options) {
+      if (onlyMissing && hasTrans(opt.nameTranslations, targetLanguage)) continue;
       items.push({ id: opt.id, type: "option", field: "name", value: opt.name });
     }
 

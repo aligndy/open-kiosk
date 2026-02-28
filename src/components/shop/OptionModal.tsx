@@ -85,8 +85,8 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
     .every((g) => selectedOptions[g.id] !== undefined);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
-      <div className="flex max-h-[90vh] w-full max-w-lg flex-col rounded-t-2xl bg-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 pb-[10vh]">
+      <div className="flex max-h-[85vh] w-full max-w-lg flex-col rounded-2xl bg-white mx-4">
         {/* Close button */}
         <div className="flex justify-end p-3">
           <button

@@ -8,9 +8,10 @@ import SignaturePad, { SignaturePadRef } from "@/components/shop/SignaturePad";
 
 interface PaymentModalProps {
   onClose: () => void;
+  onPaymentComplete?: () => void;
 }
 
-export default function PaymentModal({ onClose }: PaymentModalProps) {
+export default function PaymentModal({ onClose, onPaymentComplete }: PaymentModalProps) {
   const router = useRouter();
   const signatureRef = useRef<SignaturePadRef>(null);
   const items = useCartStore((s) => s.items);
@@ -46,6 +47,7 @@ export default function PaymentModal({ onClose }: PaymentModalProps) {
 
       const order = await res.json();
       clearCart();
+      onPaymentComplete?.();
       router.push(`/shop/order-complete?orderId=${order.id}&orderNumber=${order.orderNumber}`);
     } catch {
       alert("주문에 실패했습니다. 다시 시도해주세요.");

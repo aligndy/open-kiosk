@@ -3,6 +3,11 @@
 import { create } from "zustand";
 import type { CartItem, SelectedOption } from "@/types";
 
+function optionsKey(options: SelectedOption[]): string {
+  const sorted = [...options].sort((a, b) => a.groupId - b.groupId || a.optionId - b.optionId);
+  return JSON.stringify(sorted.map((o) => ({ groupId: o.groupId, optionId: o.optionId })));
+}
+
 interface CartStore {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "subtotal">) => void;
@@ -11,6 +16,9 @@ interface CartStore {
   clearCart: () => void;
   totalAmount: () => number;
   totalItems: () => number;
+  addOrIncrementItem: (item: Omit<CartItem, "subtotal" | "quantity">) => void;
+  removeByMatch: (menuId: number, selectedOptions: SelectedOption[]) => void;
+  getItemCount: (menuId: number, selectedOptions: SelectedOption[]) => number;
 }
 
 function calcSubtotal(item: Omit<CartItem, "subtotal">): number {
@@ -52,6 +60,44 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   clearCart: () => set({ items: [] }),
+
+  addOrIncrementItem: (item) => {
+    const key = optionsKey(item.selectedOptions);
+    set((state) => {
+      const idx = state.items.findIndex(
+        (i) => i.menuId === item.menuId && optionsKey(i.selectedOptions) === key
+      );
+      if (idx >= 0) {
+        const items = [...state.items];
+        const newQty = items[idx].quantity + 1;
+        items[idx] = {
+          ...items[idx],
+          quantity: newQty,
+          subtotal: calcSubtotal({ ...items[idx], quantity: newQty }),
+        };
+        return { items };
+      }
+      const newItem = { ...item, quantity: 1 };
+      return { items: [...state.items, { ...newItem, subtotal: calcSubtotal(newItem) }] };
+    });
+  },
+
+  removeByMatch: (menuId, selectedOptions) => {
+    const key = optionsKey(selectedOptions);
+    set((state) => ({
+      items: state.items.filter(
+        (i) => !(i.menuId === menuId && optionsKey(i.selectedOptions) === key)
+      ),
+    }));
+  },
+
+  getItemCount: (menuId, selectedOptions) => {
+    const key = optionsKey(selectedOptions);
+    const item = get().items.find(
+      (i) => i.menuId === menuId && optionsKey(i.selectedOptions) === key
+    );
+    return item?.quantity ?? 0;
+  },
 
   totalAmount: () => get().items.reduce((sum, item) => sum + item.subtotal, 0),
 

@@ -26,17 +26,22 @@ export default function OrderComplete() {
   const orderNumber = searchParams.get("orderNumber") || "";
   const [countdown, setCountdown] = useState(5);
   const [order, setOrder] = useState<Order | null>(null);
+  const [orderLoaded, setOrderLoaded] = useState(false);
 
   useEffect(() => {
     if (orderId) {
       fetch(`/api/orders/${orderId}`)
         .then((res) => res.json())
         .then((data) => setOrder(data))
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => setOrderLoaded(true));
+    } else {
+      setOrderLoaded(true);
     }
   }, [orderId]);
 
   useEffect(() => {
+    if (!orderLoaded) return;
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -49,7 +54,7 @@ export default function OrderComplete() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [router]);
+  }, [router, orderLoaded]);
 
   function parseOptions(json: string): { group: string; option: string; price: number }[] {
     try {
@@ -78,7 +83,12 @@ export default function OrderComplete() {
       )}
 
       {/* Order Items */}
-      {order && order.items.length > 0 && (
+      {!orderLoaded && (
+        <div className="mb-4 w-full max-w-sm rounded-xl bg-white p-4 shadow-sm text-center text-gray-400">
+          주문 내역 로딩 중...
+        </div>
+      )}
+      {orderLoaded && order && order.items.length > 0 && (
         <div className="mb-4 w-full max-w-sm rounded-xl bg-white p-4 shadow-sm">
           <h2 className="mb-3 text-lg font-bold text-gray-800">주문 내역</h2>
           <ul className="space-y-3">

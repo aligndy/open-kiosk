@@ -8,14 +8,16 @@ datasource db {
 }
 
 model Category {
-  id               Int      @id @default(autoincrement())
-  name             String
-  nameTranslations String   @default("{}")
-  sortOrder        Int      @default(0)
-  isActive         Boolean  @default(true)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  menus            Menu[]
+  id                Int      @id @default(autoincrement())
+  name              String
+  nameTranslations  String   @default("{}")
+  sortOrder         Int      @default(0)
+  isActive          Boolean  @default(true)
+  referenceImageUrl String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  menus             Menu[]
+  images            CategoryImage[]
 }
 
 model Menu {
@@ -34,6 +36,7 @@ model Menu {
   updatedAt               DateTime      @updatedAt
   optionGroups            OptionGroup[]
   orderItems              OrderItem[]
+  images                  MenuImage[]
 }
 
 model OptionGroup {
@@ -85,4 +88,26 @@ model StoreSettings {
   storeName          String @default("카페")
   defaultLanguage    String @default("ko")
   supportedLanguages String @default("[\"ko\"]")
+}
+
+model CategoryImage {
+  id            Int      @id @default(autoincrement())
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  imageUrl      String
+  prompt        String?
+  isAiGenerated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
+
+model MenuImage {
+  id                 Int      @id @default(autoincrement())
+  menuId             Int
+  menu               Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  imageUrl           String
+  prompt             String?
+  transparentBg      Boolean?
+  usedReferenceImage Boolean?
+  isAiGenerated      Boolean  @default(false)
+  createdAt          DateTime @default(now())
 }

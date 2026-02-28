@@ -42,6 +42,8 @@ export default function TranslationManager() {
   const [loading, setLoading] = useState(false);
   const [translating, setTranslating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [prefilling, setPrefilling] = useState(false);
+  const [prefillStatus, setPrefillStatus] = useState("");
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -156,6 +158,34 @@ export default function TranslationManager() {
       alert("번역 중 오류가 발생했습니다.");
     }
     setTranslating(false);
+  };
+
+  const prefillAll = async () => {
+    if (languages.length === 0) return;
+    setPrefilling(true);
+    let totalTranslated = 0;
+    try {
+      for (let i = 0; i < languages.length; i++) {
+        const lang = languages[i];
+        const label = LANGUAGE_LABELS[lang] || lang;
+        setPrefillStatus(`${label} 번역 중... (${i + 1}/${languages.length})`);
+        const res = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ targetLanguage: lang, onlyMissing: true }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          totalTranslated += data.translatedCount;
+        }
+      }
+      if (selectedLang) await fetchTranslations(selectedLang);
+      alert(`${languages.length}개 언어, 총 ${totalTranslated}개 항목 번역 완료`);
+    } catch {
+      alert("전체 번역 중 오류가 발생했습니다.");
+    }
+    setPrefilling(false);
+    setPrefillStatus("");
   };
 
   const updateTranslation = (key: string, value: string) => {
@@ -319,6 +349,14 @@ export default function TranslationManager() {
               className="px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 disabled:opacity-50"
             >
               {translating ? "번역 중..." : "AI 자동 번역"}
+            </button>
+
+            <button
+              onClick={prefillAll}
+              disabled={prefilling || translating}
+              className="px-4 py-2 bg-teal-600 text-white text-sm rounded-md hover:bg-teal-700 disabled:opacity-50"
+            >
+              {prefilling ? prefillStatus : "전체 언어 AI prefill"}
             </button>
 
             <button

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useLanguageStore } from "@/stores/languageStore";
 import CartView from "@/components/shop/CartView";
@@ -16,8 +17,24 @@ export default function ShopLayout({
   const totalAmount = useCartStore((s) => s.totalAmount());
   const { currentLanguage, supportedLanguages, setLanguage, setSupportedLanguages } =
     useLanguageStore();
+  const router = useRouter();
   const [showCart, setShowCart] = useState(false);
   const [storeName, setStoreName] = useState("카페");
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleLogoClick = useCallback(() => {
+    clickCountRef.current += 1;
+    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+    if (clickCountRef.current >= 3) {
+      clickCountRef.current = 0;
+      router.push("/admin");
+      return;
+    }
+    clickTimerRef.current = setTimeout(() => {
+      clickCountRef.current = 0;
+    }, 500);
+  }, [router]);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -42,7 +59,7 @@ export default function ShopLayout({
   if (showCart) {
     return (
       <div className="flex min-h-screen flex-col bg-gray-50">
-        <CartView onBack={() => setShowCart(false)} />
+        <CartView onBack={() => setShowCart(false)} onPaymentComplete={() => setShowCart(false)} />
       </div>
     );
   }
@@ -51,7 +68,7 @@ export default function ShopLayout({
     <div className="flex min-h-screen flex-col bg-gray-50">
       {/* Header */}
       <header className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-3 shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-900">{storeName}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 select-none cursor-default" onClick={handleLogoClick}>{storeName}</h1>
         <div className="flex items-center gap-3">
           <LanguageSelector
             currentLanguage={currentLanguage}
