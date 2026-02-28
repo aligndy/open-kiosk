@@ -135,17 +135,18 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
   };
 
   return (
-    <div className="relative isolate w-full max-w-5xl mx-auto mt-4 mb-8 overflow-hidden rounded-2xl border-[12px] border-zinc-800 bg-white shadow-2xl">
-      {/* Vending machine inner frame */}
-      <div className="absolute inset-0 border-4 border-gray-300 pointer-events-none z-[2] rounded-sm" />
-
+    <div className="relative isolate w-full max-w-5xl mx-auto mt-4 mb-8 overflow-hidden rounded-2xl border-[12px] bg-white shadow-2xl" style={{ borderColor: '#d4c4b0' }}>
       {/* Subtle glass reflection */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent pointer-events-none z-[3]" />
 
       {/* Rows */}
-      <div className="relative z-[1] flex flex-col py-4 px-3 gap-y-0">
+      <div className="relative z-[1] flex flex-col gap-y-0">
         {chunks.map((rowCards, rowIdx) => (
-          <div key={rowIdx} className="relative w-full flex flex-col">
+          <div
+            key={rowIdx}
+            className="relative w-full flex flex-col bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/vending_bg2.png')" }}
+          >
 
             {/* Items grid - each cell contains image + price + button */}
             <div className="grid gap-0 px-0" style={{ gridTemplateColumns: `repeat(${ROW_SIZE}, 1fr)` }}>
@@ -187,25 +188,6 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
                       )}
                     </div>
 
-                    {/* Button - oval push button image */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAdd(card);
-                      }}
-                      className="relative mt-1.5 mb-1 active:scale-90 active:translate-y-px transition-all duration-100 flex items-center justify-center"
-                    >
-                      <img
-                        src="/image.png"
-                        alt="button"
-                        className="w-11 h-8 sm:w-14 sm:h-9 object-contain"
-                        draggable={false}
-                      />
-                      {count > 0 && (
-                        <span className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-bold text-white">{count}</span>
-                      )}
-                    </button>
-
                     {/* Menu name */}
                     <span className="text-xs sm:text-sm font-semibold text-gray-800 truncate w-full text-center leading-tight">
                       {card.menuName}
@@ -227,8 +209,39 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
               })}
             </div>
 
-            {/* Shelf with blue trim */}
-            <div className="w-full h-2.5 bg-gradient-to-b from-blue-300 to-blue-400 shadow-sm mt-0.5" />
+            {/* Button bar with background strip */}
+            <div className="relative w-full flex items-center justify-center">
+              <img
+                src="/vending_bg3.png"
+                alt=""
+                className="absolute inset-0 w-full h-full object-fill"
+                draggable={false}
+              />
+              <div className="relative z-[1] grid w-full" style={{ gridTemplateColumns: `repeat(${ROW_SIZE}, 1fr)` }}>
+                {rowCards.map((card, idx) => {
+                  const count = getCount(card);
+                  return (
+                    <div key={`btn-${card.menuId}-${idx}`} className="flex items-center justify-center py-1">
+                      <button
+                        onClick={() => handleAdd(card)}
+                        className="relative active:scale-90 active:translate-y-px transition-all duration-100 flex items-center justify-center"
+                      >
+                        <img
+                          src="/image.png"
+                          alt="button"
+                          className="w-11 h-8 sm:w-14 sm:h-9 object-contain"
+                          draggable={false}
+                        />
+                        {count > 0 && (
+                          <span className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-bold text-white">{count}</span>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
           </div>
         ))}
       </div>
