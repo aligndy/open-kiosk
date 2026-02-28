@@ -66,6 +66,7 @@
   "admin.menu.inactive": "ไม่ใช้งาน",
   "admin.menu.confirmDelete": "ต้องการลบเมนูนี้หรือไม่?",
   "admin.menu.duplicate": "ทำซ้ำ",
+  "admin.menu.countUnit": " รายการ",
   "admin.menuForm.basicInfo": "ข้อมูลพื้นฐาน",
   "admin.menuForm.category": "หมวดหมู่",
   "admin.menuForm.selectPlaceholder": "เลือก",

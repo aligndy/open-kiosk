@@ -66,6 +66,7 @@
   "admin.menu.inactive": "無効",
   "admin.menu.confirmDelete": "このメニューを削除しますか？",
   "admin.menu.duplicate": "複製",
+  "admin.menu.countUnit": "件",
   "admin.menuForm.basicInfo": "基本情報",
   "admin.menuForm.category": "カテゴリー",
   "admin.menuForm.selectPlaceholder": "選択してください",

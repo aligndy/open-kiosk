@@ -66,6 +66,7 @@
   "admin.menu.inactive": "Không hoạt động",
   "admin.menu.confirmDelete": "Bạn có chắc chắn muốn xóa món này?",
   "admin.menu.duplicate": "Sao chép",
+  "admin.menu.countUnit": " mục",
   "admin.menuForm.basicInfo": "Thông tin cơ bản",
   "admin.menuForm.category": "Danh mục",
   "admin.menuForm.selectPlaceholder": "Chọn",

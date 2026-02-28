@@ -66,6 +66,7 @@
   "admin.menu.inactive": "비활성",
   "admin.menu.confirmDelete": "이 메뉴를 삭제하시겠습니까?",
   "admin.menu.duplicate": "복제",
+  "admin.menu.countUnit": "개",
   "admin.menuForm.basicInfo": "기본 정보",
   "admin.menuForm.category": "카테고리",
   "admin.menuForm.selectPlaceholder": "선택하세요",

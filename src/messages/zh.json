@@ -66,6 +66,7 @@
   "admin.menu.inactive": "未激活",
   "admin.menu.confirmDelete": "确定删除此菜单吗？",
   "admin.menu.duplicate": "复制",
+  "admin.menu.countUnit": "个",
   "admin.menuForm.basicInfo": "基本信息",
   "admin.menuForm.category": "类别",
   "admin.menuForm.selectPlaceholder": "请选择",

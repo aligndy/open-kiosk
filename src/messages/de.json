@@ -66,6 +66,7 @@
   "admin.menu.inactive": "Inaktiv",
   "admin.menu.confirmDelete": "Möchten Sie dieses Menü löschen?",
   "admin.menu.duplicate": "Duplizieren",
+  "admin.menu.countUnit": " Einträge",
   "admin.menuForm.basicInfo": "Grundlegende Informationen",
   "admin.menuForm.category": "Kategorie",
   "admin.menuForm.selectPlaceholder": "Bitte auswählen",
