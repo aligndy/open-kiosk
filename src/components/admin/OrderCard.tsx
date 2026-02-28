@@ -1,5 +1,7 @@
 "use client";
 
+import { useT, useFormatPrice } from "@/lib/i18n";
+
 interface OrderItem {
   id: number;
   menuName: string;
@@ -52,6 +54,9 @@ function parseOptions(optionsJson: string) {
 export type { Order, OrderItem };
 
 export default function OrderCard({ order, showComplete, onComplete, isNew }: OrderCardProps) {
+  const t = useT();
+  const fp = useFormatPrice();
+
   return (
     <div className={`bg-white rounded-lg shadow p-4 border ${isNew ? "border-red-400 ring-2 ring-red-200" : ""}`}>
       <div className="flex justify-between items-center mb-3">
@@ -72,7 +77,7 @@ export default function OrderCard({ order, showComplete, onComplete, isNew }: Or
                 {item.menuName} x{item.quantity}
               </span>
               <span className="text-gray-600">
-                {item.subtotal.toLocaleString()}원
+                {fp(item.subtotal)}
               </span>
             </div>
             {parseOptions(item.selectedOptions) && (
@@ -86,14 +91,14 @@ export default function OrderCard({ order, showComplete, onComplete, isNew }: Or
 
       <div className="border-t pt-2 flex justify-between items-center">
         <span className="font-bold text-gray-800">
-          {order.totalAmount.toLocaleString()}원
+          {fp(order.totalAmount)}
         </span>
         {showComplete && (
           <button
             onClick={() => onComplete(order.id)}
             className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
           >
-            완료
+            {t("admin.order.complete")}
           </button>
         )}
       </div>

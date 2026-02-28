@@ -43,6 +43,7 @@ export interface OptionItem {
 export interface CartItem {
   menuId: number;
   menuName: string;
+  menuNameTranslations: string;
   imageUrl: string | null;
   quantity: number;
   unitPrice: number;
@@ -54,7 +55,9 @@ export interface SelectedOption {
   groupId: number;
   optionId: number;
   groupName: string;
+  groupNameTranslations: string;
   optionName: string;
+  optionNameTranslations: string;
   priceModifier: number;
 }
 

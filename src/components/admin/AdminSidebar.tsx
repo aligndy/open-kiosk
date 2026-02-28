@@ -2,28 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const navItems = [
-  { href: "/admin/orders", label: "주문" },
-  { href: "/admin/categories", label: "카테고리" },
-  { href: "/admin/menus", label: "메뉴" },
-  { href: "/admin/translations", label: "번역" },
-  { href: "/admin/settings", label: "설정" },
-];
+import { useT } from "@/lib/i18n";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const t = useT();
+
+  const navItems = [
+    { href: "/admin/orders", labelKey: "admin.nav.orders" },
+    { href: "/admin/categories", labelKey: "admin.nav.categories" },
+    { href: "/admin/menus", labelKey: "admin.nav.menus" },
+    { href: "/admin/translations", labelKey: "admin.nav.translations" },
+    { href: "/admin/settings", labelKey: "admin.nav.settings" },
+  ];
 
   return (
     <aside className="w-56 bg-white shadow-md flex flex-col">
       <div className="p-4 border-b flex items-center justify-between">
-        <h1 className="text-lg font-bold text-gray-800">카페 관리자</h1>
+        <h1 className="text-lg font-bold text-gray-800">{t("admin.title")}</h1>
         <Link
           href="/shop"
           target="_blank"
           className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
         >
-          미리보기
+          {t("admin.preview")}
         </Link>
       </div>
       <nav className="flex-1 p-2">
@@ -40,7 +42,7 @@ export default function AdminSidebar() {
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           );
         })}

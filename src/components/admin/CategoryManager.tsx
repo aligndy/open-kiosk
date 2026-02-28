@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n";
 
 interface Category {
   id: number;
@@ -25,6 +26,7 @@ export default function CategoryManager() {
   const [newName, setNewName] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editName, setEditName] = useState("");
+  const t = useT();
 
   // Gallery modal state
   const [galleryCategory, setGalleryCategory] = useState<Category | null>(null);
@@ -76,7 +78,7 @@ export default function CategoryManager() {
   };
 
   const deleteCategory = async (id: number) => {
-    if (!confirm("이 카테고리를 삭제하시겠습니까?")) return;
+    if (!confirm(t("admin.category.confirmDelete"))) return;
     await fetch(`/api/categories/${id}`, { method: "DELETE" });
     fetchCategories();
   };
@@ -123,10 +125,10 @@ export default function CategoryManager() {
         fetchCategories();
       } else {
         const data = await res.json();
-        alert(data.error?.message || "이미지 생성 실패");
+        alert(data.error?.message || t("admin.menuForm.imageGenFailed"));
       }
     } catch {
-      alert("이미지 생성 중 오류가 발생했습니다.");
+      alert(t("admin.menuForm.imageGenError"));
     }
     setGalleryGenerating(false);
   };
@@ -147,10 +149,10 @@ export default function CategoryManager() {
         fetchCategories();
       } else {
         const data = await res.json();
-        alert(data.error?.message || "업로드 실패");
+        alert(data.error?.message || t("admin.menuForm.uploadFailed"));
       }
     } catch {
-      alert("업로드 중 오류가 발생했습니다.");
+      alert(t("admin.menuForm.uploadError"));
     }
     setGalleryUploading(false);
   };
@@ -234,20 +236,20 @@ export default function CategoryManager() {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-800 mb-4">카테고리 관리</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-4">{t("admin.category.management")}</h2>
 
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <h3 className="text-sm font-medium text-gray-700 mb-3">
-          새 카테고리 추가
+          {t("admin.category.addNew")}
         </h3>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
-            <label className="block text-xs text-gray-500 mb-1">이름</label>
+            <label className="block text-xs text-gray-500 mb-1">{t("admin.category.name")}</label>
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              placeholder="카테고리 이름"
+              placeholder={t("admin.category.categoryName")}
               className="w-full border rounded-md px-3 py-2 text-sm"
               onKeyDown={(e) => e.key === "Enter" && addCategory()}
             />
@@ -256,24 +258,24 @@ export default function CategoryManager() {
             onClick={addCategory}
             className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
           >
-            추가
+            {t("common.add")}
           </button>
         </div>
       </div>
 
       {loading ? (
-        <p className="text-gray-500">로딩 중...</p>
+        <p className="text-gray-500">{t("common.loading")}</p>
       ) : categories.length === 0 ? (
-        <p className="text-gray-500">카테고리가 없습니다.</p>
+        <p className="text-gray-500">{t("admin.category.noCategories")}</p>
       ) : (
         <div className="bg-white rounded-lg shadow">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-gray-50">
                 <th className="w-10 px-2 py-3" />
-                <th className="text-left px-4 py-3 text-gray-600 font-medium">이름</th>
-                <th className="text-left px-4 py-3 text-gray-600 font-medium w-24">레퍼런스</th>
-                <th className="text-right px-4 py-3 text-gray-600 font-medium w-36">관리</th>
+                <th className="text-left px-4 py-3 text-gray-600 font-medium">{t("admin.category.name")}</th>
+                <th className="text-left px-4 py-3 text-gray-600 font-medium w-24">{t("admin.category.reference")}</th>
+                <th className="text-right px-4 py-3 text-gray-600 font-medium w-36">{t("admin.category.manage")}</th>
               </tr>
             </thead>
             <tbody>
@@ -305,14 +307,14 @@ export default function CategoryManager() {
                       </td>
                       <td className="px-4 py-2">
                         {cat.referenceImageUrl ? (
-                          <img src={cat.referenceImageUrl} alt="레퍼런스" className="w-10 h-10 object-cover rounded border" />
+                          <img src={cat.referenceImageUrl} alt={t("admin.category.reference")} className="w-10 h-10 object-cover rounded border" />
                         ) : (
-                          <span className="text-gray-400 text-xs">없음</span>
+                          <span className="text-gray-400 text-xs">{t("common.none")}</span>
                         )}
                       </td>
                       <td className="px-4 py-2 text-right">
-                        <button onClick={saveEdit} className="text-blue-600 hover:text-blue-800 text-sm mr-2">저장</button>
-                        <button onClick={() => setEditingId(null)} className="text-gray-500 hover:text-gray-700 text-sm">취소</button>
+                        <button onClick={saveEdit} className="text-blue-600 hover:text-blue-800 text-sm mr-2">{t("common.save")}</button>
+                        <button onClick={() => setEditingId(null)} className="text-gray-500 hover:text-gray-700 text-sm">{t("common.cancel")}</button>
                       </td>
                     </>
                   ) : (
@@ -325,18 +327,18 @@ export default function CategoryManager() {
                         <button
                           onClick={() => openGallery(cat)}
                           className="hover:opacity-80 transition-opacity"
-                          title="갤러리 열기"
+                          title={t("admin.category.openGallery")}
                         >
                           {cat.referenceImageUrl ? (
-                            <img src={cat.referenceImageUrl} alt="레퍼런스" className="w-10 h-10 object-cover rounded border cursor-pointer" />
+                            <img src={cat.referenceImageUrl} alt={t("admin.category.reference")} className="w-10 h-10 object-cover rounded border cursor-pointer" />
                           ) : (
                             <span className="inline-flex items-center justify-center w-10 h-10 rounded border border-dashed border-gray-300 text-gray-400 text-lg cursor-pointer hover:border-blue-400 hover:text-blue-400">+</span>
                           )}
                         </button>
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <button onClick={() => startEdit(cat)} className="text-blue-600 hover:text-blue-800 text-sm mr-2">수정</button>
-                        <button onClick={() => deleteCategory(cat.id)} className="text-red-600 hover:text-red-800 text-sm">삭제</button>
+                        <button onClick={() => startEdit(cat)} className="text-blue-600 hover:text-blue-800 text-sm mr-2">{t("common.edit")}</button>
+                        <button onClick={() => deleteCategory(cat.id)} className="text-red-600 hover:text-red-800 text-sm">{t("common.delete")}</button>
                       </td>
                     </>
                   )}
@@ -358,7 +360,7 @@ export default function CategoryManager() {
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-800">
-                {galleryCategory.name} - 레퍼런스 이미지
+                {t("admin.category.referenceImages", { name: galleryCategory.name })}
               </h3>
               <button
                 onClick={closeGallery}
@@ -371,17 +373,17 @@ export default function CategoryManager() {
             {/* Drop overlay */}
             {fileDragOver && (
               <div className="mb-4 flex items-center justify-center rounded-xl border-2 border-dashed border-blue-400 bg-blue-50 py-10">
-                <p className="text-blue-500 font-medium">이미지를 여기에 놓으세요</p>
+                <p className="text-blue-500 font-medium">{t("admin.menuForm.dropImageHere")}</p>
               </div>
             )}
 
             {/* Image Grid */}
             {galleryLoading ? (
-              <p className="text-gray-500 text-sm py-4">로딩 중...</p>
+              <p className="text-gray-500 text-sm py-4">{t("common.loading")}</p>
             ) : galleryImages.length === 0 && !fileDragOver ? (
               <div className="mb-4 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 py-10 text-gray-400">
                 <svg className="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                <p className="text-sm">이미지를 드래그하거나 아래 버튼으로 추가하세요</p>
+                <p className="text-sm">{t("admin.menuForm.dragOrUpload")}</p>
               </div>
             ) : (
               <div className="grid grid-cols-4 gap-3 mb-4">
@@ -397,13 +399,13 @@ export default function CategoryManager() {
                   >
                     <img
                       src={img.imageUrl}
-                      alt="카테고리 이미지"
+                      alt={t("admin.category.categoryImage")}
                       className="w-full aspect-square object-cover"
                       title={img.prompt || undefined}
                     />
                     {galleryCategory.referenceImageUrl === img.imageUrl && (
                       <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded">
-                        선택됨
+                        {t("admin.menuForm.selected")}
                       </div>
                     )}
                     {img.isAiGenerated && (
@@ -433,7 +435,7 @@ export default function CategoryManager() {
                   type="text"
                   value={galleryPrompt}
                   onChange={(e) => setGalleryPrompt(e.target.value)}
-                  placeholder="이미지 설명 입력"
+                  placeholder={t("admin.category.imageDescription")}
                   className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
                   onKeyDown={(e) => e.key === "Enter" && generateGalleryImage()}
                   disabled={galleryGenerating}
@@ -444,14 +446,14 @@ export default function CategoryManager() {
                   className="flex items-center gap-1.5 px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  {galleryGenerating ? "생성 중..." : "AI 생성"}
+                  {galleryGenerating ? t("admin.menuForm.generating") : t("admin.menuForm.aiGenerate")}
                 </button>
               </div>
 
               {/* File Upload */}
               <label className={`flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer whitespace-nowrap ${galleryUploading ? "opacity-40 pointer-events-none" : ""}`}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                {galleryUploading ? "업로드 중..." : "파일 업로드"}
+                {galleryUploading ? t("admin.menuForm.uploading") : t("admin.menuForm.fileUpload")}
                 <input
                   type="file"
                   accept="image/*"

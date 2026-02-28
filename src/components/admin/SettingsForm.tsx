@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/lib/i18n";
 
 const AVAILABLE_LANGUAGES = [
   { code: "ko", label: "한국어" },
@@ -26,6 +27,7 @@ export default function SettingsForm() {
   const [missingCount, setMissingCount] = useState(0);
   const [prefilling, setPrefilling] = useState(false);
   const [prefillStatus, setPrefillStatus] = useState("");
+  const t = useT();
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -89,7 +91,7 @@ export default function SettingsForm() {
       for (let i = 0; i < nonKo.length; i++) {
         const lang = nonKo[i];
         const label = AVAILABLE_LANGUAGES.find((l) => l.code === lang)?.label || lang;
-        setPrefillStatus(`${label} 번역 중... (${i + 1}/${nonKo.length})`);
+        setPrefillStatus(t("admin.settings.translatingLang", { label, current: i + 1, total: nonKo.length }));
         const res = await fetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,10 +100,10 @@ export default function SettingsForm() {
         const data = await res.json();
         if (data.success) totalTranslated += data.translatedCount;
       }
-      alert(`${nonKo.length}개 언어, 총 ${totalTranslated}개 항목 번역 완료`);
+      alert(t("admin.settings.translationComplete", { count: nonKo.length, total: totalTranslated }));
       await checkMissingTranslations(supportedLanguages);
     } catch {
-      alert("번역 중 오류가 발생했습니다.");
+      alert(t("admin.settings.translationError"));
     }
     setPrefilling(false);
     setPrefillStatus("");
@@ -140,26 +142,26 @@ export default function SettingsForm() {
           }),
         });
       }
-      alert("설정이 저장되었습니다.");
+      alert(t("admin.settings.saved"));
     } catch {
-      alert("저장 중 오류가 발생했습니다.");
+      alert(t("common.saveError"));
     }
     setSaving(false);
   };
 
   if (loading) {
-    return <p className="text-gray-500">로딩 중...</p>;
+    return <p className="text-gray-500">{t("common.loading")}</p>;
   }
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-800 mb-4">설정</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-4">{t("admin.settings.title")}</h2>
 
       <div className="max-w-lg space-y-6">
         <div className="bg-white rounded-lg shadow p-4 space-y-4">
-          <h3 className="font-medium text-gray-800">매장 정보</h3>
+          <h3 className="font-medium text-gray-800">{t("admin.settings.storeInfo")}</h3>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">매장명</label>
+            <label className="block text-sm text-gray-600 mb-1">{t("admin.settings.storeName")}</label>
             <input
               type="text"
               value={storeName}
@@ -168,22 +170,22 @@ export default function SettingsForm() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">매장 설명</label>
+            <label className="block text-sm text-gray-600 mb-1">{t("admin.settings.storeDescription")}</label>
             <textarea
               value={storeDescription}
               onChange={(e) => setStoreDescription(e.target.value)}
               className="w-full border rounded-md px-3 py-2 text-sm"
               rows={3}
-              placeholder="매장에 대한 간단한 설명을 입력하세요"
+              placeholder={t("admin.settings.storeDescPlaceholder")}
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">매장 로고</label>
+            <label className="block text-sm text-gray-600 mb-1">{t("admin.settings.storeLogo")}</label>
             {(logoUrl || logoFile) && !clearLogo ? (
               <div className="flex items-center gap-3 mb-2">
                 <img
                   src={logoFile ? URL.createObjectURL(logoFile) : logoUrl!}
-                  alt="매장 로고"
+                  alt={t("admin.settings.storeLogo")}
                   className="w-20 h-20 object-contain rounded-lg border bg-gray-50"
                 />
                 <button
@@ -191,18 +193,18 @@ export default function SettingsForm() {
                   onClick={() => { setClearLogo(true); setLogoFile(null); }}
                   className="text-sm text-red-500 hover:text-red-700"
                 >
-                  로고 삭제
+                  {t("admin.settings.deleteLogo")}
                 </button>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 py-8 mb-2 text-gray-400">
                 <svg className="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                <p className="text-xs">로고가 없습니다</p>
+                <p className="text-xs">{t("admin.settings.noLogo")}</p>
               </div>
             )}
             <label className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              로고 업로드
+              {t("admin.settings.uploadLogo")}
               <input
                 type="file"
                 accept="image/*"
@@ -218,9 +220,9 @@ export default function SettingsForm() {
         </div>
 
         <div className="bg-white rounded-lg shadow p-4 space-y-4">
-          <h3 className="font-medium text-gray-800">지원 언어</h3>
+          <h3 className="font-medium text-gray-800">{t("admin.settings.supportedLanguages")}</h3>
           <p className="text-xs text-gray-500">
-            키오스크에서 사용할 언어를 선택하세요. 한국어는 기본으로 포함됩니다.
+            {t("admin.settings.languageDescription")}
           </p>
           <div className="grid grid-cols-2 gap-2">
             {AVAILABLE_LANGUAGES.map((lang) => (
@@ -249,16 +251,16 @@ export default function SettingsForm() {
           disabled={saving}
           className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm"
         >
-          {saving ? "저장 중..." : "저장"}
+          {saving ? t("common.saving") : t("common.save")}
         </button>
 
         {missingCount > 0 && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-medium text-amber-800">
-                번역되지 않은 텍스트가 {missingCount}개 있습니다
+                {t("admin.settings.missingTranslations", { count: missingCount })}
               </p>
-              <p className="text-xs text-amber-600 mt-0.5">AI로 빠진 번역을 한번에 채울 수 있습니다</p>
+              <p className="text-xs text-amber-600 mt-0.5">{t("admin.settings.canPrefill")}</p>
             </div>
             <button
               onClick={prefillMissing}
@@ -266,7 +268,7 @@ export default function SettingsForm() {
               className="shrink-0 flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 disabled:opacity-50"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              {prefilling ? prefillStatus : "지금 바로 빠진 텍스트 번역"}
+              {prefilling ? prefillStatus : t("admin.settings.prefillNow")}
             </button>
           </div>
         )}

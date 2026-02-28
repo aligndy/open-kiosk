@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MenuWithOptions, SelectedOption, getTranslation } from "@/types";
 import { useCartStore } from "@/stores/cartStore";
 import { useLanguageStore } from "@/stores/languageStore";
+import { t, formatPrice } from "@/lib/i18n";
 
 interface OptionModalProps {
   menu: MenuWithOptions;
@@ -62,7 +63,9 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
           groupId: group.id,
           optionId: option.id,
           groupName: group.name,
+          groupNameTranslations: group.nameTranslations,
           optionName: option.name,
+          optionNameTranslations: option.nameTranslations,
           priceModifier: option.priceModifier,
         });
       }
@@ -71,6 +74,7 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
     addItem({
       menuId: menu.id,
       menuName: menu.name,
+      menuNameTranslations: menu.nameTranslations,
       imageUrl: menu.imageUrl,
       quantity,
       unitPrice: menu.price,
@@ -131,7 +135,7 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
             </p>
           )}
           <p className="mt-1 text-3xl font-extrabold text-amber-600">
-            {menu.price.toLocaleString()}원
+            {formatPrice(menu.price, currentLanguage)}
           </p>
 
           {/* Option groups */}
@@ -140,7 +144,7 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
               <h3 className="mb-2 text-lg font-bold text-gray-800">
                 {getTranslation(group.nameTranslations, currentLanguage, group.name)}
                 {group.required && (
-                  <span className="ml-2 text-sm font-medium text-red-500">필수</span>
+                  <span className="ml-2 text-sm font-medium text-red-500">{t("option.required", currentLanguage)}</span>
                 )}
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -159,8 +163,7 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
                       {getTranslation(option.nameTranslations, currentLanguage, option.name)}
                       {option.priceModifier !== 0 && (
                         <span className="ml-1 text-base text-gray-500">
-                          {option.priceModifier > 0 ? "+" : ""}
-                          {option.priceModifier.toLocaleString()}원
+                          {option.priceModifier > 0 ? "+" : ""}{formatPrice(option.priceModifier, currentLanguage)}
                         </span>
                       )}
                     </button>
@@ -197,7 +200,7 @@ export default function OptionModal({ menu, onClose }: OptionModalProps) {
             disabled={!allRequiredSelected}
             className="flex h-16 w-full items-center justify-center rounded-xl bg-amber-500 text-xl font-bold text-white active:bg-amber-600 disabled:bg-gray-300 disabled:text-gray-500"
           >
-            {totalPrice.toLocaleString()}원 장바구니 담기
+            {t("cart.addToCart", currentLanguage, { price: formatPrice(totalPrice, currentLanguage) })}
           </button>
         </div>
       </div>

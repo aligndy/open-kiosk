@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useLanguageStore } from "@/stores/languageStore";
+import { useT, useFormatPrice } from "@/lib/i18n";
 import SignaturePad, { SignaturePadRef } from "@/components/shop/SignaturePad";
 
 interface PaymentModalProps {
@@ -19,6 +20,8 @@ export default function PaymentModal({ onClose, onPaymentComplete }: PaymentModa
   const clearCart = useCartStore((s) => s.clearCart);
   const currentLanguage = useLanguageStore((s) => s.currentLanguage);
   const [submitting, setSubmitting] = useState(false);
+  const t = useT();
+  const fp = useFormatPrice();
 
   async function handlePayment() {
     if (submitting) return;
@@ -50,7 +53,7 @@ export default function PaymentModal({ onClose, onPaymentComplete }: PaymentModa
       onPaymentComplete?.();
       router.push(`/shop/order-complete?orderId=${order.id}&orderNumber=${order.orderNumber}`);
     } catch {
-      alert("주문에 실패했습니다. 다시 시도해주세요.");
+      alert(t("payment.orderFailed"));
       setSubmitting(false);
     }
   }
@@ -58,19 +61,19 @@ export default function PaymentModal({ onClose, onPaymentComplete }: PaymentModa
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">결제</h2>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-900">{t("payment.title")}</h2>
 
         {/* Total */}
         <div className="mb-6 rounded-xl bg-gray-50 p-4 text-center">
-          <p className="text-lg text-gray-500">결제 금액</p>
+          <p className="text-lg text-gray-500">{t("payment.amount")}</p>
           <p className="text-4xl font-extrabold text-gray-900">
-            {totalAmount.toLocaleString()}원
+            {fp(totalAmount)}
           </p>
         </div>
 
         {/* Signature */}
         <div className="mb-3">
-          <p className="mb-2 text-lg font-semibold text-gray-700">서명</p>
+          <p className="mb-2 text-lg font-semibold text-gray-700">{t("payment.signature")}</p>
           <SignaturePad ref={signatureRef} />
         </div>
 
@@ -78,7 +81,7 @@ export default function PaymentModal({ onClose, onPaymentComplete }: PaymentModa
           onClick={() => signatureRef.current?.clear()}
           className="mb-6 flex h-10 items-center justify-center rounded-lg border border-gray-300 px-4 text-base font-medium text-gray-600 active:bg-gray-50"
         >
-          다시쓰기
+          {t("payment.clearSignature")}
         </button>
 
         {/* Actions */}
@@ -88,14 +91,14 @@ export default function PaymentModal({ onClose, onPaymentComplete }: PaymentModa
             disabled={submitting}
             className="flex h-16 flex-1 items-center justify-center rounded-xl border-2 border-gray-300 text-xl font-bold text-gray-600 active:bg-gray-50 disabled:opacity-50"
           >
-            취소
+            {t("common.cancel")}
           </button>
           <button
             onClick={handlePayment}
             disabled={submitting}
             className="flex h-16 flex-[2] items-center justify-center rounded-xl bg-amber-500 text-xl font-bold text-white active:bg-amber-600 disabled:bg-gray-300"
           >
-            {submitting ? "처리 중..." : "결제 완료"}
+            {submitting ? t("payment.processing") : t("payment.complete")}
           </button>
         </div>
       </div>

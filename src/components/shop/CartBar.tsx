@@ -1,5 +1,7 @@
 "use client";
 
+import { useT, useFormatPrice } from "@/lib/i18n";
+
 interface CartBarProps {
   totalItems: number;
   totalAmount: number;
@@ -7,6 +9,9 @@ interface CartBarProps {
 }
 
 export default function CartBar({ totalItems, totalAmount, onOpenCart }: CartBarProps) {
+  const t = useT();
+  const fp = useFormatPrice();
+
   if (totalItems === 0) return null;
 
   return (
@@ -16,14 +21,14 @@ export default function CartBar({ totalItems, totalAmount, onOpenCart }: CartBar
         className="flex h-16 w-full items-center justify-between rounded-xl bg-amber-500 px-6 text-white active:bg-amber-600"
       >
         <span className="text-xl font-bold">
-          장바구니 보기
+          {t("cart.viewCart")}
         </span>
         <div className="flex items-center gap-3">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-600 text-lg font-bold">
             {totalItems}
           </span>
           <span className="text-2xl font-bold">
-            {totalAmount.toLocaleString()}원
+            {fp(totalAmount)}
           </span>
         </div>
       </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/lib/i18n";
 
 interface TranslationItem {
   id: number;
@@ -40,10 +41,10 @@ export default function TranslationManager() {
   const [selectedLang, setSelectedLang] = useState("");
   const [items, setItems] = useState<TranslationItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [translating, setTranslating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [prefilling, setPrefilling] = useState(false);
   const [prefillStatus, setPrefillStatus] = useState("");
+  const t = useT();
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -139,27 +140,6 @@ export default function TranslationManager() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLang]);
 
-  const translateAll = async () => {
-    if (!selectedLang) return;
-    setTranslating(true);
-    try {
-      const res = await fetch("/api/translate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetLanguage: selectedLang }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        await fetchTranslations(selectedLang);
-      } else {
-        alert(data.error?.message || "번역 실패");
-      }
-    } catch {
-      alert("번역 중 오류가 발생했습니다.");
-    }
-    setTranslating(false);
-  };
-
   const prefillAll = async () => {
     if (languages.length === 0) return;
     setPrefilling(true);
@@ -168,7 +148,7 @@ export default function TranslationManager() {
       for (let i = 0; i < languages.length; i++) {
         const lang = languages[i];
         const label = LANGUAGE_LABELS[lang] || lang;
-        setPrefillStatus(`${label} 번역 중... (${i + 1}/${languages.length})`);
+        setPrefillStatus(t("admin.translation.translatingLang", { label, current: i + 1, total: languages.length }));
         const res = await fetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -180,9 +160,9 @@ export default function TranslationManager() {
         }
       }
       if (selectedLang) await fetchTranslations(selectedLang);
-      alert(`${languages.length}개 언어, 총 ${totalTranslated}개 항목 번역 완료`);
+      alert(t("admin.translation.translationComplete", { count: languages.length, total: totalTranslated }));
     } catch {
-      alert("전체 번역 중 오류가 발생했습니다.");
+      alert(t("admin.translation.prefillError"));
     }
     setPrefilling(false);
     setPrefillStatus("");
@@ -298,35 +278,35 @@ export default function TranslationManager() {
         }
       }
 
-      alert("번역이 저장되었습니다.");
+      alert(t("admin.translation.saved"));
     } catch {
-      alert("저장 중 오류가 발생했습니다.");
+      alert(t("common.saveError"));
     }
     setSaving(false);
   };
 
   const typeLabel = (type: string, field: string) => {
     const labels: Record<string, string> = {
-      category: "카테고리",
-      menu: "메뉴",
-      optionGroup: "옵션그룹",
-      option: "옵션",
+      category: t("admin.translation.typeCategory"),
+      menu: t("admin.translation.typeMenu"),
+      optionGroup: t("admin.translation.typeOptionGroup"),
+      option: t("admin.translation.typeOption"),
     };
     const fieldLabels: Record<string, string> = {
-      name: "이름",
-      description: "설명",
+      name: t("admin.translation.fieldName"),
+      description: t("admin.translation.fieldDescription"),
     };
     return `${labels[type] || type} - ${fieldLabels[field] || field}`;
   };
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-800 mb-4">번역 관리</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-4">{t("admin.translation.management")}</h2>
 
       {languages.length === 0 ? (
         <div className="bg-white rounded-lg shadow p-6 text-center text-gray-500">
-          <p>지원 언어가 설정되지 않았습니다.</p>
-          <p className="text-sm mt-1">설정 페이지에서 언어를 추가해주세요.</p>
+          <p>{t("admin.translation.noLanguages")}</p>
+          <p className="text-sm mt-1">{t("admin.translation.addLanguagesHint")}</p>
         </div>
       ) : (
         <>
@@ -344,19 +324,11 @@ export default function TranslationManager() {
             </select>
 
             <button
-              onClick={translateAll}
-              disabled={translating}
-              className="px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 disabled:opacity-50"
-            >
-              {translating ? "번역 중..." : "AI 자동 번역"}
-            </button>
-
-            <button
               onClick={prefillAll}
-              disabled={prefilling || translating}
+              disabled={prefilling}
               className="px-4 py-2 bg-teal-600 text-white text-sm rounded-md hover:bg-teal-700 disabled:opacity-50"
             >
-              {prefilling ? prefillStatus : "전체 언어 AI prefill"}
+              {prefilling ? prefillStatus : t("admin.translation.prefillAll")}
             </button>
 
             <button
@@ -364,23 +336,23 @@ export default function TranslationManager() {
               disabled={saving}
               className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
-              {saving ? "저장 중..." : "저장"}
+              {saving ? t("common.saving") : t("common.save")}
             </button>
           </div>
 
           {loading ? (
-            <p className="text-gray-500">로딩 중...</p>
+            <p className="text-gray-500">{t("common.loading")}</p>
           ) : items.length === 0 ? (
-            <p className="text-gray-500">번역할 항목이 없습니다.</p>
+            <p className="text-gray-500">{t("admin.translation.noItems")}</p>
           ) : (
             <div className="bg-white rounded-lg shadow overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-gray-50">
-                    <th className="text-left px-4 py-3 text-gray-600 font-medium w-32">유형</th>
-                    <th className="text-left px-4 py-3 text-gray-600 font-medium">원본 (한국어)</th>
+                    <th className="text-left px-4 py-3 text-gray-600 font-medium w-32">{t("admin.translation.type")}</th>
+                    <th className="text-left px-4 py-3 text-gray-600 font-medium">{t("admin.translation.original")}</th>
                     <th className="text-left px-4 py-3 text-gray-600 font-medium">
-                      번역 ({LANGUAGE_LABELS[selectedLang] || selectedLang})
+                      {t("admin.translation.translationFor", { lang: LANGUAGE_LABELS[selectedLang] || selectedLang })}
                     </th>
                   </tr>
                 </thead>
@@ -395,7 +367,7 @@ export default function TranslationManager() {
                           value={item.translated}
                           onChange={(e) => updateTranslation(item.translationKey, e.target.value)}
                           className="w-full border rounded px-2 py-1 text-sm"
-                          placeholder="번역을 입력하세요"
+                          placeholder={t("admin.translation.inputPlaceholder")}
                         />
                       </td>
                     </tr>

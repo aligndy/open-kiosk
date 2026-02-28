@@ -1,6 +1,7 @@
 "use client";
 
 import { getTranslation } from "@/types";
+import { t } from "@/lib/i18n";
 
 interface CategoryTabsProps {
   categories: { id: number; name: string; nameTranslations: string }[];
@@ -33,7 +34,7 @@ export default function CategoryTabs({
                 : "bg-gray-100 text-gray-600"
             }`}
           >
-            자판기
+            {t("shop.vending", currentLanguage)}
           </button>
         )}
         {categories.map((cat) => (

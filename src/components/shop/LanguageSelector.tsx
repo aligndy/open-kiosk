@@ -7,6 +7,9 @@ const LANGUAGE_LABELS: Record<string, string> = {
   en: "English",
   ja: "日本語",
   zh: "中文",
+  fr: "Français",
+  es: "Español",
+  de: "Deutsch",
   vi: "Tiếng Việt",
   th: "ภาษาไทย",
 };

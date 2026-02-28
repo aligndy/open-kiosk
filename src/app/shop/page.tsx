@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguageStore } from "@/stores/languageStore";
+import { useT } from "@/lib/i18n";
 import { CategoryWithMenus, MenuWithOptions } from "@/types";
 import OptionModal from "@/components/shop/OptionModal";
 import CategoryTabs from "@/components/shop/CategoryTabs";
@@ -15,6 +16,7 @@ export default function ShopPage() {
   const [selectedMenu, setSelectedMenu] = useState<MenuWithOptions | null>(null);
   const [loading, setLoading] = useState(true);
   const currentLanguage = useLanguageStore((s) => s.currentLanguage);
+  const t = useT();
 
   useEffect(() => {
     fetch("/api/categories")
@@ -48,7 +50,7 @@ export default function ShopPage() {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-xl text-gray-400">메뉴를 불러오는 중...</div>
+        <div className="text-xl text-gray-400">{t("shop.loadingMenus")}</div>
       </div>
     );
   }
@@ -56,7 +58,7 @@ export default function ShopPage() {
   if (categories.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-xl text-gray-400">등록된 메뉴가 없습니다</div>
+        <div className="text-xl text-gray-400">{t("shop.noMenus")}</div>
       </div>
     );
   }

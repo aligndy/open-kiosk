@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { CategoryWithMenus, MenuWithOptions, SelectedOption, getTranslation } from "@/types";
 import { useCartStore } from "@/stores/cartStore";
+import { formatPrice } from "@/lib/i18n";
 
 interface VendingGridProps {
   categories: CategoryWithMenus[];
@@ -12,6 +13,7 @@ interface VendingGridProps {
 interface VendingCard {
   menuId: number;
   menuName: string;
+  menuNameTranslations: string;
   imageUrl: string | null;
   unitPrice: number;
   selectedOptions: SelectedOption[];
@@ -29,6 +31,7 @@ function buildCombinations(menu: MenuWithOptions, currentLanguage: string): Vend
       {
         menuId: menu.id,
         menuName,
+        menuNameTranslations: menu.nameTranslations,
         imageUrl: menu.imageUrl,
         unitPrice: menu.price,
         selectedOptions: [],
@@ -49,8 +52,10 @@ function buildCombinations(menu: MenuWithOptions, currentLanguage: string): Vend
           {
             groupId: group.id,
             optionId: opt.id,
-            groupName: getTranslation(group.nameTranslations, currentLanguage, group.name),
-            optionName: getTranslation(opt.nameTranslations, currentLanguage, opt.name),
+            groupName: group.name,
+            groupNameTranslations: group.nameTranslations,
+            optionName: opt.name,
+            optionNameTranslations: opt.nameTranslations,
             priceModifier: opt.priceModifier,
           },
         ]);
@@ -61,10 +66,11 @@ function buildCombinations(menu: MenuWithOptions, currentLanguage: string): Vend
 
   return combos.map((selectedOptions) => {
     const optionTotal = selectedOptions.reduce((s, o) => s + o.priceModifier, 0);
-    const labels = selectedOptions.map((o) => o.optionName).join(" / ");
+    const labels = selectedOptions.map((o) => getTranslation(o.optionNameTranslations, currentLanguage, o.optionName)).join(" / ");
     return {
       menuId: menu.id,
       menuName,
+      menuNameTranslations: menu.nameTranslations,
       imageUrl: menu.imageUrl,
       unitPrice: menu.price,
       selectedOptions,
@@ -118,6 +124,7 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
               addOrIncrementItem({
                 menuId: card.menuId,
                 menuName: card.menuName,
+                menuNameTranslations: card.menuNameTranslations,
                 imageUrl: card.imageUrl,
                 unitPrice: card.unitPrice,
                 selectedOptions: card.selectedOptions,
@@ -178,7 +185,7 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
                 )}
               </p>
               <p className="mt-0.5 text-sm font-extrabold text-amber-600">
-                {card.totalPrice.toLocaleString()}원
+                {formatPrice(card.totalPrice, currentLanguage)}
               </p>
             </div>
           </button>

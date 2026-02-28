@@ -1,6 +1,7 @@
 "use client";
 
 import { MenuWithOptions, getTranslation } from "@/types";
+import { formatPrice } from "@/lib/i18n";
 
 interface MenuCardProps {
   menu: MenuWithOptions;
@@ -43,7 +44,7 @@ export default function MenuCard({ menu, currentLanguage, onSelect }: MenuCardPr
           {getTranslation(menu.nameTranslations, currentLanguage, menu.name)}
         </span>
         <span className="text-left text-2xl font-extrabold text-amber-600">
-          {menu.price.toLocaleString()}원
+          {formatPrice(menu.price, currentLanguage)}
         </span>
       </div>
     </button>

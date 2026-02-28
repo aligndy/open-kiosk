@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useT, useFormatPrice } from "@/lib/i18n";
 
 interface OptionInput {
   name: string;
@@ -39,6 +40,8 @@ interface MenuFormProps {
 export default function MenuForm({ menuId }: MenuFormProps) {
   const router = useRouter();
   const isEdit = !!menuId;
+  const t = useT();
+  const fp = useFormatPrice();
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryId, setCategoryId] = useState<number | "">("");
@@ -126,10 +129,10 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           await refreshGallery();
         } else {
           const data = await res.json();
-          alert(data.error?.message || "업로드 실패");
+          alert(data.error?.message || t("admin.menuForm.uploadFailed"));
         }
       } catch {
-        alert("업로드 중 오류가 발생했습니다.");
+        alert(t("admin.menuForm.uploadError"));
       }
       setGalleryUploading(false);
     } else {
@@ -181,7 +184,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const usedUrls = new Set<string>();
   const referenceOptions: { url: string; label: string }[] = [];
   if (categoryRefImage) {
-    referenceOptions.push({ url: categoryRefImage, label: "카테고리 레퍼런스" });
+    referenceOptions.push({ url: categoryRefImage, label: t("admin.menuForm.categoryReference") });
     usedUrls.add(categoryRefImage);
   }
   for (const m of siblingMenus) {
@@ -192,8 +195,8 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   }
   for (const img of galleryImages) {
     if (!usedUrls.has(img.imageUrl)) {
-      const label = img.isAiGenerated ? "AI 생성" : "업로드";
-      referenceOptions.push({ url: img.imageUrl, label: `${label} (내 갤러리)` });
+      const label = img.isAiGenerated ? t("admin.menuForm.galleryLabel.ai") : t("admin.menuForm.galleryLabel.upload");
+      referenceOptions.push({ url: img.imageUrl, label });
       usedUrls.add(img.imageUrl);
     }
   }
@@ -221,10 +224,10 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         setImageUrl(data.imageUrl);
         if (isEdit) await refreshGallery();
       } else {
-        alert(data.error?.message || "이미지 생성 실패");
+        alert(data.error?.message || t("admin.menuForm.imageGenFailed"));
       }
     } catch {
-      alert("이미지 생성 중 오류가 발생했습니다.");
+      alert(t("admin.menuForm.imageGenError"));
     }
     setGeneratingImage(false);
   };
@@ -295,7 +298,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!categoryId || !name.trim() || !price) {
-      alert("카테고리, 이름, 가격은 필수입니다.");
+      alert(t("admin.menuForm.requiredFields"));
       return;
     }
 
@@ -421,31 +424,31 @@ export default function MenuForm({ menuId }: MenuFormProps) {
 
       router.push("/admin/menus");
     } catch {
-      alert("저장 중 오류가 발생했습니다.");
+      alert(t("common.saveError"));
     }
 
     setSaving(false);
   };
 
   if (loading) {
-    return <p className="text-gray-500">로딩 중...</p>;
+    return <p className="text-gray-500">{t("common.loading")}</p>;
   }
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
       {/* Basic Fields */}
       <div className="bg-white rounded-lg shadow p-4 space-y-4">
-        <h3 className="font-medium text-gray-800">기본 정보</h3>
+        <h3 className="font-medium text-gray-800">{t("admin.menuForm.basicInfo")}</h3>
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1">카테고리</label>
+          <label className="block text-sm text-gray-600 mb-1">{t("admin.menuForm.category")}</label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(Number(e.target.value))}
             className="w-full border rounded-md px-3 py-2 text-sm"
             required
           >
-            <option value="">선택하세요</option>
+            <option value="">{t("admin.menuForm.selectPlaceholder")}</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
@@ -455,7 +458,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1">메뉴명</label>
+          <label className="block text-sm text-gray-600 mb-1">{t("admin.menuForm.menuName")}</label>
           <input
             type="text"
             value={name}
@@ -466,7 +469,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1">설명</label>
+          <label className="block text-sm text-gray-600 mb-1">{t("admin.menuForm.description")}</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -476,7 +479,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1">가격 (원)</label>
+          <label className="block text-sm text-gray-600 mb-1">{t("admin.menuForm.price")}</label>
           <input
             type="number"
             value={price}
@@ -495,12 +498,12 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         onDragLeave={() => setFileDragOver(false)}
         onDrop={handleFileDrop}
       >
-        <h3 className="font-medium text-gray-800">이미지</h3>
+        <h3 className="font-medium text-gray-800">{t("admin.menuForm.image")}</h3>
 
         {/* Drop overlay */}
         {fileDragOver && (
           <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-blue-400 bg-blue-50 py-10">
-            <p className="text-blue-500 font-medium">이미지를 여기에 놓으세요</p>
+            <p className="text-blue-500 font-medium">{t("admin.menuForm.dropImageHere")}</p>
           </div>
         )}
 
@@ -519,7 +522,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
               >
                 <img
                   src={img.imageUrl}
-                  alt="메뉴 이미지"
+                  alt={t("admin.menuForm.menuImage")}
                   className="w-full aspect-square object-cover"
                   title={
                     img.prompt
@@ -529,7 +532,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                 />
                 {imageUrl === img.imageUrl && (
                   <div className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded">
-                    선택됨
+                    {t("admin.menuForm.selected")}
                   </div>
                 )}
                 {img.isAiGenerated && (
@@ -557,7 +560,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           <div className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-200 py-6">
             <img
               src={imageUrl}
-              alt="메뉴 이미지"
+              alt={t("admin.menuForm.menuImage")}
               className="w-32 h-32 object-cover rounded-md border"
             />
           </div>
@@ -567,7 +570,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         {(!isEdit || galleryImages.length === 0) && !imageUrl && !fileDragOver && (
           <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 py-10 text-gray-400">
             <svg className="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-            <p className="text-sm">이미지를 드래그하거나 아래 버튼으로 추가하세요</p>
+            <p className="text-sm">{t("admin.menuForm.dragOrUpload")}</p>
           </div>
         )}
 
@@ -578,7 +581,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
               type="text"
               value={imagePrompt}
               onChange={(e) => setImagePrompt(e.target.value)}
-              placeholder={defaultPrompt || "메뉴명을 먼저 입력하세요"}
+              placeholder={defaultPrompt || t("admin.menuForm.enterNameFirst")}
               className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
             />
             <button
@@ -588,11 +591,11 @@ export default function MenuForm({ menuId }: MenuFormProps) {
               className="flex items-center gap-1.5 px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              {generatingImage ? "생성 중..." : "AI 생성"}
+              {generatingImage ? t("admin.menuForm.generating") : t("admin.menuForm.aiGenerate")}
             </button>
             <label className={`flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer whitespace-nowrap ${galleryUploading ? "opacity-40 pointer-events-none" : ""}`}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              {galleryUploading ? "업로드 중..." : "파일 업로드"}
+              {galleryUploading ? t("admin.menuForm.uploading") : t("admin.menuForm.fileUpload")}
               <input
                 type="file"
                 accept="image/*"
@@ -609,11 +612,11 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                 checked={transparentBg}
                 onChange={(e) => setTransparentBg(e.target.checked)}
               />
-              흰 배경으로 생성
+              {t("admin.menuForm.whiteBg")}
             </label>
             {referenceOptions.length > 0 && (
               <div>
-                <p className="text-sm text-gray-600 mb-1.5">레퍼런스 이미지 (클릭하여 선택/해제)</p>
+                <p className="text-sm text-gray-600 mb-1.5">{t("admin.menuForm.referenceImages")}</p>
                 <div className="flex gap-2 flex-wrap">
                   {referenceOptions.map((ref, idx) => (
                     <button
@@ -640,19 +643,19 @@ export default function MenuForm({ menuId }: MenuFormProps) {
       {/* Option Groups */}
       <div className="bg-white rounded-lg shadow p-4 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-medium text-gray-800">옵션 그룹</h3>
+          <h3 className="font-medium text-gray-800">{t("admin.menuForm.optionGroups")}</h3>
           <button
             type="button"
             onClick={addOptionGroup}
             className="text-sm text-blue-600 hover:text-blue-800"
           >
-            + 그룹 추가
+            {t("admin.menuForm.addGroup")}
           </button>
         </div>
 
         {optionGroups.length === 0 && (
           <p className="text-sm text-gray-400">
-            옵션 그룹이 없습니다. 추가 버튼을 눌러주세요.
+            {t("admin.menuForm.noOptionGroups")}
           </p>
         )}
 
@@ -663,7 +666,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                 type="text"
                 value={group.name}
                 onChange={(e) => updateGroup(gi, "name", e.target.value)}
-                placeholder="그룹명 (예: 온도, 사이즈)"
+                placeholder={t("admin.menuForm.groupNamePlaceholder")}
                 className="flex-1 border rounded px-3 py-1.5 text-sm"
               />
               <label className="flex items-center gap-1 text-sm text-gray-600 whitespace-nowrap">
@@ -672,14 +675,14 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                   checked={group.required}
                   onChange={(e) => updateGroup(gi, "required", e.target.checked)}
                 />
-                필수
+                {t("admin.menuForm.required")}
               </label>
               <button
                 type="button"
                 onClick={() => removeOptionGroup(gi)}
                 className="text-red-500 hover:text-red-700 text-sm"
               >
-                삭제
+                {t("common.delete")}
               </button>
             </div>
 
@@ -692,7 +695,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                     onChange={(e) =>
                       updateOption(gi, oi, "name", e.target.value)
                     }
-                    placeholder="옵션명"
+                    placeholder={t("admin.menuForm.optionName")}
                     className="flex-1 border rounded px-2 py-1 text-sm"
                   />
                   <div className="flex items-center gap-1">
@@ -709,7 +712,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                       }
                       className="w-24 border rounded px-2 py-1 text-sm text-right"
                     />
-                    <span className="text-xs text-gray-500">원</span>
+                    <span className="text-xs text-gray-500">{fp(0).replace("0", "").trim()}</span>
                   </div>
                   <button
                     type="button"
@@ -725,7 +728,7 @@ export default function MenuForm({ menuId }: MenuFormProps) {
                 onClick={() => addOption(gi)}
                 className="text-xs text-blue-500 hover:text-blue-700"
               >
-                + 옵션 추가
+                {t("admin.menuForm.addOption")}
               </button>
             </div>
           </div>
@@ -739,14 +742,14 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           disabled={saving}
           className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm"
         >
-          {saving ? "저장 중..." : isEdit ? "저장" : "등록"}
+          {saving ? t("common.saving") : isEdit ? t("common.save") : t("admin.menuForm.register")}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/menus")}
           className="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-sm"
         >
-          취소
+          {t("common.cancel")}
         </button>
       </div>
     </form>

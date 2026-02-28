@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useT, useFormatPrice } from "@/lib/i18n";
 
 interface OrderItem {
   id: number;
@@ -27,6 +28,8 @@ export default function OrderComplete() {
   const [countdown, setCountdown] = useState(5);
   const [order, setOrder] = useState<Order | null>(null);
   const [orderLoaded, setOrderLoaded] = useState(false);
+  const t = useT();
+  const fp = useFormatPrice();
 
   useEffect(() => {
     if (orderId) {
@@ -73,11 +76,11 @@ export default function OrderComplete() {
         </svg>
       </div>
 
-      <h1 className="mb-2 text-3xl font-bold text-gray-900">주문이 완료되었습니다</h1>
+      <h1 className="mb-2 text-3xl font-bold text-gray-900">{t("order.completed")}</h1>
 
       {orderNumber && (
         <div className="mb-4 mt-2 rounded-xl bg-white px-8 py-4 shadow-sm">
-          <p className="text-center text-base text-gray-500">주문번호</p>
+          <p className="text-center text-base text-gray-500">{t("order.orderNumber")}</p>
           <p className="text-center text-4xl font-extrabold text-amber-600">{orderNumber}</p>
         </div>
       )}
@@ -85,12 +88,12 @@ export default function OrderComplete() {
       {/* Order Items */}
       {!orderLoaded && (
         <div className="mb-4 w-full max-w-sm rounded-xl bg-white p-4 shadow-sm text-center text-gray-400">
-          주문 내역 로딩 중...
+          {t("order.loadingDetails")}
         </div>
       )}
       {orderLoaded && order && order.items.length > 0 && (
         <div className="mb-4 w-full max-w-sm rounded-xl bg-white p-4 shadow-sm">
-          <h2 className="mb-3 text-lg font-bold text-gray-800">주문 내역</h2>
+          <h2 className="mb-3 text-lg font-bold text-gray-800">{t("order.details")}</h2>
           <ul className="space-y-3">
             {order.items.map((item) => {
               const options = parseOptions(item.selectedOptions);
@@ -102,7 +105,7 @@ export default function OrderComplete() {
                       <span className="ml-1 text-sm font-normal text-gray-500">x{item.quantity}</span>
                     </span>
                     <span className="text-base font-bold text-gray-900">
-                      {item.subtotal.toLocaleString()}원
+                      {fp(item.subtotal)}
                     </span>
                   </div>
                   {options.length > 0 && (
@@ -110,7 +113,7 @@ export default function OrderComplete() {
                       {options.map((o, i) => (
                         <span key={i}>
                           {o.option}
-                          {o.price > 0 && ` (+${o.price.toLocaleString()}원)`}
+                          {o.price > 0 && ` (+${fp(o.price)})`}
                           {i < options.length - 1 && ", "}
                         </span>
                       ))}
@@ -121,23 +124,23 @@ export default function OrderComplete() {
             })}
           </ul>
           <div className="mt-3 flex items-center justify-between border-t border-gray-200 pt-3">
-            <span className="text-base font-bold text-gray-700">합계</span>
+            <span className="text-base font-bold text-gray-700">{t("order.total")}</span>
             <span className="text-xl font-extrabold text-amber-600">
-              {order.totalAmount.toLocaleString()}원
+              {fp(order.totalAmount)}
             </span>
           </div>
         </div>
       )}
 
       <p className="mb-6 text-lg text-gray-400">
-        {countdown}초 후 처음 화면으로 돌아갑니다
+        {t("order.redirectCountdown", { seconds: countdown })}
       </p>
 
       <button
         onClick={() => router.push("/shop")}
         className="flex h-16 w-full max-w-sm items-center justify-center rounded-xl bg-amber-500 text-xl font-bold text-white active:bg-amber-600"
       >
-        처음으로 돌아가기
+        {t("order.backToHome")}
       </button>
     </div>
   );

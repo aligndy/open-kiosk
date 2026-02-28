@@ -7,6 +7,7 @@ import { useLanguageStore } from "@/stores/languageStore";
 import CartView from "@/components/shop/CartView";
 import CartBar from "@/components/shop/CartBar";
 import LanguageSelector from "@/components/shop/LanguageSelector";
+import { t } from "@/lib/i18n";
 
 export default function ShopLayout({
   children,
@@ -19,7 +20,7 @@ export default function ShopLayout({
     useLanguageStore();
   const router = useRouter();
   const [showCart, setShowCart] = useState(false);
-  const [storeName, setStoreName] = useState("카페");
+  const [storeName, setStoreName] = useState(() => t("shop.defaultStoreName", currentLanguage));
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

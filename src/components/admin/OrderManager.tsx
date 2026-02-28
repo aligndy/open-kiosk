@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import { useT } from "@/lib/i18n";
 import OrderCard, { type Order } from "./OrderCard";
 
 export default function OrderManager() {
@@ -11,6 +12,7 @@ export default function OrderManager() {
   const prevOrderIdsRef = useRef<Set<number>>(new Set());
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const initialLoadRef = useRef(true);
+  const t = useT();
 
   const fetchOrders = useCallback(async () => {
     const res = await fetch(`/api/orders?status=${tab}`);
@@ -78,11 +80,11 @@ export default function OrderManager() {
       />
 
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-800">주문 관리</h2>
+        <h2 className="text-xl font-bold text-gray-800">{t("admin.order.management")}</h2>
         {newOrderIds.size > 0 && (
           <span className="flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 animate-pulse">
             <span className="h-2 w-2 rounded-full bg-red-500" />
-            새 주문 {newOrderIds.size}건
+            {t("admin.order.newOrders", { count: newOrderIds.size })}
           </span>
         )}
       </div>
@@ -96,7 +98,7 @@ export default function OrderManager() {
               : "bg-white text-gray-600 border"
           }`}
         >
-          대기중{pendingCount !== null && pendingCount > 0 && ` (${pendingCount})`}
+          {t("admin.order.pending")}{pendingCount !== null && pendingCount > 0 && ` (${pendingCount})`}
         </button>
         <button
           onClick={() => setTab("completed")}
@@ -106,15 +108,15 @@ export default function OrderManager() {
               : "bg-white text-gray-600 border"
           }`}
         >
-          완료
+          {t("admin.order.completed")}
         </button>
       </div>
 
       {loading ? (
-        <p className="text-gray-500">로딩 중...</p>
+        <p className="text-gray-500">{t("common.loading")}</p>
       ) : orders.length === 0 ? (
         <p className="text-gray-500">
-          {tab === "pending" ? "대기중인 주문이 없습니다." : "완료된 주문이 없습니다."}
+          {tab === "pending" ? t("admin.order.noPending") : t("admin.order.noCompleted")}
         </p>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
