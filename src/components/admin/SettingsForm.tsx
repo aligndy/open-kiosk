@@ -255,7 +255,7 @@ export default function SettingsForm() {
                   onChange={() => toggleLanguage(lang.code)}
                   disabled={lang.code === "ko"}
                 />
-                <span>{lang.label}</span>
+                <span>{lang.flag} {lang.label}</span>
               </label>
             ))}
           </div>
@@ -277,7 +277,7 @@ export default function SettingsForm() {
                     checked={supportedLanguages.includes(lang.code)}
                     onChange={() => toggleLanguage(lang.code)}
                   />
-                  <span>{lang.label}</span>
+                  <span>{lang.flag} {lang.label}</span>
                 </label>
               ))}
             </div>
