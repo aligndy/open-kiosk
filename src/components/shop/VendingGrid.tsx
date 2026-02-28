@@ -187,41 +187,41 @@ export default function VendingGrid({ categories, currentLanguage }: VendingGrid
                       )}
                     </div>
 
+                    {/* Button - oval push button image */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAdd(card);
+                      }}
+                      className="relative mt-1.5 mb-1 active:scale-90 active:translate-y-px transition-all duration-100 flex items-center justify-center"
+                    >
+                      <img
+                        src="/image.png"
+                        alt="button"
+                        className="w-11 h-8 sm:w-14 sm:h-9 object-contain"
+                        draggable={false}
+                      />
+                      {count > 0 && (
+                        <span className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-bold text-white">{count}</span>
+                      )}
+                    </button>
+
                     {/* Menu name */}
-                    <span className="text-[9px] sm:text-[10px] font-semibold text-gray-800 truncate w-full text-center leading-tight">
+                    <span className="text-xs sm:text-sm font-semibold text-gray-800 truncate w-full text-center leading-tight">
                       {card.menuName}
                     </span>
 
                     {/* Option label */}
                     {card.optionLabel && (
-                      <span className="text-[8px] text-gray-500 truncate w-full text-center leading-tight">
+                      <span className="text-[9px] sm:text-[10px] text-gray-500 truncate w-full text-center leading-tight">
                         {card.optionLabel}
                       </span>
                     )}
 
                     {/* Price */}
-                    <span className="text-[10px] sm:text-xs font-bold text-red-600 mt-0.5">
+                    <span className="text-sm sm:text-base font-bold text-red-600 mt-0.5">
                       {formatPrice(card.totalPrice, currentLanguage)}
                     </span>
-
-                    {/* Button - recessed slot with oval push button */}
-                    <div
-                      className="mt-1.5 mb-1 w-11 h-8 sm:w-14 sm:h-9 rounded-[10px] bg-gray-300 flex items-center justify-center"
-                      style={{ boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.25)' }}
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAdd(card);
-                        }}
-                        className={`w-9 h-5 sm:w-11 sm:h-6 rounded-[8px] active:scale-90 active:translate-y-px transition-all duration-100 flex items-center justify-center ${count > 0 ? "bg-amber-700 hover:bg-amber-800" : "bg-gradient-to-b from-zinc-600 to-zinc-800 hover:from-zinc-500 hover:to-zinc-700"}`}
-                        style={{ boxShadow: 'inset 0 -2px 3px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1), 0 1px 2px rgba(0,0,0,0.3)' }}
-                      >
-                        {count > 0 && (
-                          <span className="text-[8px] sm:text-[9px] font-bold text-white">{count}</span>
-                        )}
-                      </button>
-                    </div>
                   </div>
                 );
               })}

@@ -49,7 +49,6 @@ export default function OrderComplete() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push("/shop");
           return 0;
         }
         return prev - 1;
@@ -57,7 +56,13 @@ export default function OrderComplete() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [router, orderLoaded]);
+  }, [orderLoaded]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      router.push("/shop");
+    }
+  }, [countdown, router]);
 
   function parseOptions(json: string): { group: string; option: string; price: number }[] {
     try {
