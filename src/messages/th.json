@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "เกิดข้อผิดพลาดระหว่างสร้างรูปภาพ",
   "admin.menuForm.requiredFields": "หมวดหมู่, ชื่อ, และราคา เป็นข้อมูลที่จำเป็น",
   "admin.menuForm.enterNameFirst": "กรุณากรอกชื่อเมนูก่อน",
+  "admin.menuForm.generateDescription": "คำอธิบาย AI",
+  "admin.menuForm.generatingDescription": "กำลังสร้าง...",
+  "admin.menuForm.descGenFailed": "สร้างคำอธิบายล้มเหลว",
+  "admin.menuForm.descGenError": "เกิดข้อผิดพลาดขณะสร้างคำอธิบาย",
   "admin.menuForm.galleryLabel.ai": "สร้างด้วย AI",
   "admin.menuForm.galleryLabel.upload": "อัปโหลด",
   "admin.category.management": "จัดการหมวดหมู่",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "เกิดข้อผิดพลาดระหว่างการแปล",
   "admin.translation.prefillError": "เกิดข้อผิดพลาดระหว่างการเติมคำแปลทั้งหมด",
   "admin.translation.translatingLang": "กำลังแปลภาษา {label}... ({current}/{total})",
-  "admin.translation.translationComplete": "แปล {count} ภาษาเสร็จสมบูรณ์ รวมทั้งหมด {total} รายการ"
+  "admin.translation.retranslateAll": "แปลใหม่ทั้งหมด",
+  "admin.translation.retranslateConfirm": "สร้างคำแปลใหม่ทั้งหมดหรือไม่? การกระทำนี้จะเขียนทับคำแปลเดิม คุณต้องการดำเนินการต่อหรือไม่?",
+  "admin.translation.translationComplete": "แปล {count} ภาษาเสร็จสมบูรณ์ รวมทั้งหมด {total} รายการ",
+  "admin.settings.moreLanguages": "ดูภาษาเพิ่มเติม...",
+  "admin.settings.selectAll": "เลือกทั้งหมด",
+  "admin.settings.deselectAll": "ยกเลิกการเลือกทั้งหมด"
 }

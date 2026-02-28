@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-28T06:19:09.838Z",
+  "lastUpdated": "2026-02-28T06:30:32.801Z",
   "activeFeatures": [
     "kiosk-initial",
     "k",
@@ -57,9 +57,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:39:33.311Z",
-        "lastUpdated": "2026-02-28T06:15:12.135Z"
+        "lastUpdated": "2026-02-28T06:26:23.935Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/lib/i18n.ts"
+      "lastFile": "/Users/dgoon/works/k/src/lib/languages.ts"
     },
     "categories": {
       "phase": "do",
@@ -213,9 +213,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:42:27.312Z",
-        "lastUpdated": "2026-02-28T06:19:09.838Z"
+        "lastUpdated": "2026-02-28T06:30:32.801Z"
       },
-      "lastFile": "/Users/dgoon/works/k/src/components/admin/MenuManager.tsx"
+      "lastFile": "/Users/dgoon/works/k/src/components/admin/SettingsForm.tsx"
     },
     "shop": {
       "phase": "do",
@@ -226,7 +226,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-02-28T01:43:12.219Z",
-        "lastUpdated": "2026-02-28T06:10:44.697Z"
+        "lastUpdated": "2026-02-28T06:26:43.397Z"
       },
       "lastFile": "/Users/dgoon/works/k/src/components/shop/LanguageSelector.tsx"
     },
@@ -395,7 +395,7 @@
   "session": {
     "startedAt": "2026-02-28T01:00:00.934Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-02-28T06:19:09.838Z"
+    "lastActivity": "2026-02-28T06:30:32.801Z"
   },
   "history": [
     {
@@ -2042,6 +2042,30 @@
     },
     {
       "timestamp": "2026-02-28T06:19:09.838Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:26:23.935Z",
+      "feature": "k",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:26:43.397Z",
+      "feature": "shop",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:30:24.514Z",
+      "feature": "admin",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-02-28T06:30:32.801Z",
       "feature": "admin",
       "phase": "do",
       "action": "updated"

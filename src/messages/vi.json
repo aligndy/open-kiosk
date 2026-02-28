@@ -99,6 +99,10 @@
   "admin.menuForm.imageGenError": "Có lỗi xảy ra khi tạo ảnh.",
   "admin.menuForm.requiredFields": "Danh mục, tên và giá là bắt buộc.",
   "admin.menuForm.enterNameFirst": "Nhập tên món trước",
+  "admin.menuForm.generateDescription": "Tạo mô tả AI",
+  "admin.menuForm.generatingDescription": "Đang tạo...",
+  "admin.menuForm.descGenFailed": "Tạo mô tả thất bại",
+  "admin.menuForm.descGenError": "Lỗi khi tạo mô tả.",
   "admin.menuForm.galleryLabel.ai": "AI Tạo",
   "admin.menuForm.galleryLabel.upload": "Tải lên",
   "admin.category.management": "Quản lý danh mục",
@@ -156,5 +160,10 @@
   "admin.translation.translateError": "Đã xảy ra lỗi trong quá trình dịch.",
   "admin.translation.prefillError": "Đã xảy ra lỗi trong quá trình điền toàn bộ.",
   "admin.translation.translatingLang": "Đang dịch {label}... ({current}/{total})",
-  "admin.translation.translationComplete": "Đã dịch xong {count} ngôn ngữ, tổng cộng {total} mục"
+  "admin.translation.retranslateAll": "Dịch lại toàn bộ",
+  "admin.translation.retranslateConfirm": "Tạo lại tất cả bản dịch. Bản dịch hiện tại sẽ bị ghi đè. Bạn có chắc chắn muốn tiếp tục?",
+  "admin.translation.translationComplete": "Đã dịch xong {count} ngôn ngữ, tổng cộng {total} mục",
+  "admin.settings.moreLanguages": "Xem thêm ngôn ngữ...",
+  "admin.settings.selectAll": "Chọn tất cả",
+  "admin.settings.deselectAll": "Bỏ chọn tất cả"
 }
