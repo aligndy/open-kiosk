@@ -29,6 +29,7 @@
   "payment.title": "ชำระเงิน",
   "payment.amount": "จำนวนเงินที่ต้องชำระ",
   "payment.signature": "ลายเซ็น",
+  "payment.placeholder": "กรุณาเซ็นชื่อที่นี่",
   "payment.clearSignature": "เขียนใหม่",
   "payment.processing": "กำลังดำเนินการ...",
   "payment.complete": "ชำระเงินเสร็จสิ้น",

@@ -28,6 +28,7 @@
   "payment.title": "Πληρωμή",
   "payment.amount": "Ποσό πληρωμής",
   "payment.signature": "Υπογραφή",
+  "payment.placeholder": "Υπογράψτε εδώ",
   "payment.clearSignature": "Επαναγραφή",
   "payment.processing": "Επεξεργασία...",
   "payment.complete": "Η πληρωμή ολοκληρώθηκε",

@@ -28,6 +28,7 @@
   "payment.title": "Płatność",
   "payment.amount": "Kwota do zapłaty",
   "payment.signature": "Podpis",
+  "payment.placeholder": "Podpisz tutaj",
   "payment.clearSignature": "Wyczyść",
   "payment.processing": "Przetwarzanie...",
   "payment.complete": "Płatność zakończona",

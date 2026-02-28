@@ -28,6 +28,7 @@
   "payment.title": "পেমেন্ট",
   "payment.amount": "পরিশোধের পরিমাণ",
   "payment.signature": "স্বাক্ষর",
+  "payment.placeholder": "এখানে স্বাক্ষর করুন",
   "payment.clearSignature": "মুছে ফেলুন",
   "payment.processing": "প্রক্রিয়াকরণ হচ্ছে...",
   "payment.complete": "পেমেন্ট সম্পন্ন হয়েছে",

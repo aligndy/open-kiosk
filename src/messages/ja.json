@@ -29,6 +29,7 @@
   "payment.title": "お支払い",
   "payment.amount": "お支払い金額",
   "payment.signature": "サイン",
+  "payment.placeholder": "ここにサインしてください",
   "payment.clearSignature": "書き直す",
   "payment.processing": "処理中...",
   "payment.complete": "決済完了",

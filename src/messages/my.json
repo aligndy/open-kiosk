@@ -28,6 +28,7 @@
   "payment.title": "ငွေပေးချေမှု",
   "payment.amount": "ငွေပေးချေရမည့် ပမာဏ",
   "payment.signature": "လက်မှတ်",
+  "payment.placeholder": "ဤနေရာတွင် လက်မှတ်ထိုးပါ",
   "payment.clearSignature": "ပြန်ရေးရန်",
   "payment.processing": "ဆောင်ရွက်နေသည်...",
   "payment.complete": "ငွေပေးချေမှု အောင်မြင်ပါသည်",

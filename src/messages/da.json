@@ -28,6 +28,7 @@
   "payment.title": "Betaling",
   "payment.amount": "Betalingsbeløb",
   "payment.signature": "Underskrift",
+  "payment.placeholder": "Signer her",
   "payment.clearSignature": "Ryd",
   "payment.processing": "Behandler...",
   "payment.complete": "Betaling gennemført",

@@ -28,6 +28,7 @@
   "payment.title": "Maksu",
   "payment.amount": "Maksettava summa",
   "payment.signature": "Allekirjoitus",
+  "payment.placeholder": "Allekirjoita tähän",
   "payment.clearSignature": "Tyhjennä",
   "payment.processing": "Käsitellään...",
   "payment.complete": "Maksu suoritettu",

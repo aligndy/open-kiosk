@@ -29,6 +29,7 @@
   "payment.title": "支付",
   "payment.amount": "支付金额",
   "payment.signature": "签名",
+  "payment.placeholder": "请在此签名",
   "payment.clearSignature": "重写",
   "payment.processing": "处理中...",
   "payment.complete": "支付完成",

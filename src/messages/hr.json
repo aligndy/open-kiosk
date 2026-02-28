@@ -28,6 +28,7 @@
   "payment.title": "Plaćanje",
   "payment.amount": "Iznos plaćanja",
   "payment.signature": "Potpis",
+  "payment.placeholder": "Potpišite ovdje",
   "payment.clearSignature": "Obriši",
   "payment.processing": "Obrada u tijeku...",
   "payment.complete": "Plaćanje dovršeno",

@@ -28,6 +28,7 @@
   "payment.title": "תשלום",
   "payment.amount": "סכום לתשלום",
   "payment.signature": "חתימה",
+  "payment.placeholder": "חתום/חתמי כאן",
   "payment.clearSignature": "נקה חתימה",
   "payment.processing": "מעבד...",
   "payment.complete": "התשלום הושלם",

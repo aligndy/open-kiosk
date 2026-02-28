@@ -28,6 +28,7 @@
   "payment.title": "भुगतान",
   "payment.amount": "भुगतान राशि",
   "payment.signature": "हस्ताक्षर",
+  "payment.placeholder": "यहाँ हस्ताक्षर करें",
   "payment.clearSignature": "फिर से लिखें",
   "payment.processing": "प्रसंस्करण...",
   "payment.complete": "भुगतान पूरा हुआ",

@@ -28,6 +28,7 @@
   "payment.title": "Malipo",
   "payment.amount": "Kiasi cha Malipo",
   "payment.signature": "Sahihi",
+  "payment.placeholder": "Saini hapa",
   "payment.clearSignature": "Futa Sahihi",
   "payment.processing": "Inachakatwa...",
   "payment.complete": "Malipo Yamekamilika",

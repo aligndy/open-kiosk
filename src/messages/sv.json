@@ -28,6 +28,7 @@
   "payment.title": "Betalning",
   "payment.amount": "Belopp att betala",
   "payment.signature": "Signatur",
+  "payment.placeholder": "Signera här",
   "payment.clearSignature": "Rensa",
   "payment.processing": "Bearbetar...",
   "payment.complete": "Betalning slutförd",

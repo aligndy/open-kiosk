@@ -29,6 +29,7 @@
   "payment.title": "Thanh toán",
   "payment.amount": "Số tiền thanh toán",
   "payment.signature": "Chữ ký",
+  "payment.placeholder": "Vui lòng ký vào đây",
   "payment.clearSignature": "Xóa chữ ký",
   "payment.processing": "Đang xử lý...",
   "payment.complete": "Thanh toán hoàn tất",

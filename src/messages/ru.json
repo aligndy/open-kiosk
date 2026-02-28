@@ -28,6 +28,7 @@
   "payment.title": "Оплата",
   "payment.amount": "Сумма к оплате",
   "payment.signature": "Подпись",
+  "payment.placeholder": "Подпишите здесь",
   "payment.clearSignature": "Очистить",
   "payment.processing": "Обработка...",
   "payment.complete": "Оплата завершена",
