@@ -45,12 +45,20 @@ export async function DELETE(
     );
   }
 
-  // Delete file from disk
-  try {
-    const filePath = path.join(process.cwd(), "public", image.imageUrl);
-    await unlink(filePath);
-  } catch {
-    // File may not exist, continue
+  // Only delete file if no other record references it
+  const otherCatRefs = await prisma.category.count({
+    where: { referenceImageUrl: image.imageUrl, id: { not: categoryId } },
+  });
+  const otherImgRefs = await prisma.categoryImage.count({
+    where: { imageUrl: image.imageUrl, id: { not: Number(imageId) } },
+  });
+  if (otherCatRefs === 0 && otherImgRefs === 0) {
+    try {
+      const filePath = path.join(process.cwd(), "public", image.imageUrl);
+      await unlink(filePath);
+    } catch {
+      // File may not exist, continue
+    }
   }
 
   // Delete DB record

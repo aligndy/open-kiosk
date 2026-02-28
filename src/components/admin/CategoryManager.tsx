@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Category {
   id: number;
@@ -23,10 +23,8 @@ export default function CategoryManager() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
-  const [newSortOrder, setNewSortOrder] = useState(0);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editName, setEditName] = useState("");
-  const [editSortOrder, setEditSortOrder] = useState(0);
 
   // Gallery modal state
   const [galleryCategory, setGalleryCategory] = useState<Category | null>(null);
@@ -35,6 +33,7 @@ export default function CategoryManager() {
   const [galleryPrompt, setGalleryPrompt] = useState("");
   const [galleryGenerating, setGalleryGenerating] = useState(false);
   const [galleryUploading, setGalleryUploading] = useState(false);
+  const [fileDragOver, setFileDragOver] = useState(false);
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -50,20 +49,19 @@ export default function CategoryManager() {
 
   const addCategory = async () => {
     if (!newName.trim()) return;
+    const maxSort = categories.reduce((max, c) => Math.max(max, c.sortOrder), -1);
     await fetch("/api/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newName.trim(), sortOrder: newSortOrder }),
+      body: JSON.stringify({ name: newName.trim(), sortOrder: maxSort + 1 }),
     });
     setNewName("");
-    setNewSortOrder(0);
     fetchCategories();
   };
 
   const startEdit = (cat: Category) => {
     setEditingId(cat.id);
     setEditName(cat.name);
-    setEditSortOrder(cat.sortOrder);
   };
 
   const saveEdit = async () => {
@@ -71,7 +69,7 @@ export default function CategoryManager() {
     await fetch(`/api/categories/${editingId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: editName.trim(), sortOrder: editSortOrder }),
+      body: JSON.stringify({ name: editName.trim() }),
     });
     setEditingId(null);
     fetchCategories();
@@ -133,9 +131,8 @@ export default function CategoryManager() {
     setGalleryGenerating(false);
   };
 
-  const uploadGalleryImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !galleryCategory) return;
+  const uploadFile = async (file: File) => {
+    if (!galleryCategory) return;
     setGalleryUploading(true);
     try {
       const formData = new FormData();
@@ -156,7 +153,22 @@ export default function CategoryManager() {
       alert("업로드 중 오류가 발생했습니다.");
     }
     setGalleryUploading(false);
+  };
+
+  const uploadGalleryImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadFile(file);
     e.target.value = "";
+  };
+
+  const handleFileDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setFileDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      await uploadFile(file);
+    }
   };
 
   const selectGalleryImage = async (img: CategoryImageItem) => {
@@ -182,6 +194,44 @@ export default function CategoryManager() {
     }
   };
 
+  // Drag & drop
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+
+  const handleDragStart = (idx: number) => {
+    dragItem.current = idx;
+    setDragIdx(idx);
+  };
+
+  const handleDragEnter = (idx: number) => {
+    dragOverItem.current = idx;
+  };
+
+  const handleDragEnd = async () => {
+    if (dragItem.current === null || dragOverItem.current === null || dragItem.current === dragOverItem.current) {
+      setDragIdx(null);
+      return;
+    }
+    const reordered = [...categories];
+    const [removed] = reordered.splice(dragItem.current, 1);
+    reordered.splice(dragOverItem.current, 0, removed);
+    // Update sortOrder locally
+    const updated = reordered.map((cat, i) => ({ ...cat, sortOrder: i }));
+    setCategories(updated);
+    setDragIdx(null);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    // Persist to server
+    for (const cat of updated) {
+      await fetch(`/api/categories/${cat.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sortOrder: cat.sortOrder }),
+      });
+    }
+  };
+
   return (
     <div>
       <h2 className="text-xl font-bold text-gray-800 mb-4">카테고리 관리</h2>
@@ -202,15 +252,6 @@ export default function CategoryManager() {
               onKeyDown={(e) => e.key === "Enter" && addCategory()}
             />
           </div>
-          <div className="w-24">
-            <label className="block text-xs text-gray-500 mb-1">정렬순서</label>
-            <input
-              type="number"
-              value={newSortOrder}
-              onChange={(e) => setNewSortOrder(Number(e.target.value))}
-              className="w-full border rounded-md px-3 py-2 text-sm"
-            />
-          </div>
           <button
             onClick={addCategory}
             className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
@@ -229,17 +270,30 @@ export default function CategoryManager() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-gray-50">
+                <th className="w-10 px-2 py-3" />
                 <th className="text-left px-4 py-3 text-gray-600 font-medium">이름</th>
-                <th className="text-left px-4 py-3 text-gray-600 font-medium w-28">정렬순서</th>
                 <th className="text-left px-4 py-3 text-gray-600 font-medium w-24">레퍼런스</th>
                 <th className="text-right px-4 py-3 text-gray-600 font-medium w-36">관리</th>
               </tr>
             </thead>
             <tbody>
-              {categories.map((cat) => (
-                <tr key={cat.id} className="border-b last:border-b-0">
+              {categories.map((cat, idx) => (
+                <tr
+                  key={cat.id}
+                  draggable={editingId !== cat.id}
+                  onDragStart={() => handleDragStart(idx)}
+                  onDragEnter={() => handleDragEnter(idx)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => e.preventDefault()}
+                  className={`border-b last:border-b-0 transition-colors ${
+                    dragIdx === idx ? "opacity-40 bg-blue-50" : ""
+                  }`}
+                >
                   {editingId === cat.id ? (
                     <>
+                      <td className="px-2 py-2 text-center text-gray-300">
+                        <svg className="w-5 h-5 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M8 6h2v2H8zm6 0h2v2h-2zM8 11h2v2H8zm6 0h2v2h-2zM8 16h2v2H8zm6 0h2v2h-2z"/></svg>
+                      </td>
                       <td className="px-4 py-2">
                         <input
                           type="text"
@@ -247,14 +301,6 @@ export default function CategoryManager() {
                           onChange={(e) => setEditName(e.target.value)}
                           className="w-full border rounded px-2 py-1 text-sm"
                           onKeyDown={(e) => e.key === "Enter" && saveEdit()}
-                        />
-                      </td>
-                      <td className="px-4 py-2">
-                        <input
-                          type="number"
-                          value={editSortOrder}
-                          onChange={(e) => setEditSortOrder(Number(e.target.value))}
-                          className="w-full border rounded px-2 py-1 text-sm"
                         />
                       </td>
                       <td className="px-4 py-2">
@@ -271,8 +317,10 @@ export default function CategoryManager() {
                     </>
                   ) : (
                     <>
+                      <td className="px-2 py-3 text-center cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600">
+                        <svg className="w-5 h-5 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M8 6h2v2H8zm6 0h2v2h-2zM8 11h2v2H8zm6 0h2v2h-2zM8 16h2v2H8zm6 0h2v2h-2z"/></svg>
+                      </td>
                       <td className="px-4 py-3 text-gray-800">{cat.name}</td>
-                      <td className="px-4 py-3 text-gray-600">{cat.sortOrder}</td>
                       <td className="px-4 py-3">
                         <button
                           onClick={() => openGallery(cat)}
@@ -302,7 +350,12 @@ export default function CategoryManager() {
       {/* Gallery Modal */}
       {galleryCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6">
+          <div
+            className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6"
+            onDragOver={(e) => { e.preventDefault(); setFileDragOver(true); }}
+            onDragLeave={() => setFileDragOver(false)}
+            onDrop={handleFileDrop}
+          >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-800">
                 {galleryCategory.name} - 레퍼런스 이미지
@@ -315,11 +368,21 @@ export default function CategoryManager() {
               </button>
             </div>
 
+            {/* Drop overlay */}
+            {fileDragOver && (
+              <div className="mb-4 flex items-center justify-center rounded-xl border-2 border-dashed border-blue-400 bg-blue-50 py-10">
+                <p className="text-blue-500 font-medium">이미지를 여기에 놓으세요</p>
+              </div>
+            )}
+
             {/* Image Grid */}
             {galleryLoading ? (
               <p className="text-gray-500 text-sm py-4">로딩 중...</p>
-            ) : galleryImages.length === 0 ? (
-              <p className="text-gray-400 text-sm py-4">이미지가 없습니다. AI 생성 또는 파일 업로드를 해주세요.</p>
+            ) : galleryImages.length === 0 && !fileDragOver ? (
+              <div className="mb-4 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 py-10 text-gray-400">
+                <svg className="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                <p className="text-sm">이미지를 드래그하거나 아래 버튼으로 추가하세요</p>
+              </div>
             ) : (
               <div className="grid grid-cols-4 gap-3 mb-4">
                 {galleryImages.map((img) => (
@@ -362,48 +425,41 @@ export default function CategoryManager() {
               </div>
             )}
 
-            {/* AI Generation */}
-            <div className="border-t pt-4 space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  AI 이미지 생성
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={galleryPrompt}
-                    onChange={(e) => setGalleryPrompt(e.target.value)}
-                    placeholder="이미지 설명 (예: 따뜻한 분위기의 커피 카페)"
-                    className="flex-1 border rounded-md px-3 py-2 text-sm"
-                    onKeyDown={(e) => e.key === "Enter" && generateGalleryImage()}
-                    disabled={galleryGenerating}
-                  />
-                  <button
-                    onClick={generateGalleryImage}
-                    disabled={galleryGenerating || !galleryPrompt.trim()}
-                    className="px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 disabled:opacity-50 whitespace-nowrap"
-                  >
-                    {galleryGenerating ? "생성 중..." : "생성"}
-                  </button>
-                </div>
+            {/* Actions */}
+            <div className="border-t pt-4 flex gap-3">
+              {/* AI Generation */}
+              <div className="flex-1 flex gap-2">
+                <input
+                  type="text"
+                  value={galleryPrompt}
+                  onChange={(e) => setGalleryPrompt(e.target.value)}
+                  placeholder="이미지 설명 입력"
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
+                  onKeyDown={(e) => e.key === "Enter" && generateGalleryImage()}
+                  disabled={galleryGenerating}
+                />
+                <button
+                  onClick={generateGalleryImage}
+                  disabled={galleryGenerating || !galleryPrompt.trim()}
+                  className="flex items-center gap-1.5 px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  {galleryGenerating ? "생성 중..." : "AI 생성"}
+                </button>
               </div>
 
               {/* File Upload */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  파일 업로드
-                </label>
+              <label className={`flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer whitespace-nowrap ${galleryUploading ? "opacity-40 pointer-events-none" : ""}`}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                {galleryUploading ? "업로드 중..." : "파일 업로드"}
                 <input
                   type="file"
                   accept="image/*"
                   onChange={uploadGalleryImage}
                   disabled={galleryUploading}
-                  className="text-sm"
+                  className="hidden"
                 />
-                {galleryUploading && (
-                  <span className="text-xs text-gray-500 ml-2">업로드 중...</span>
-                )}
-              </div>
+              </label>
             </div>
           </div>
         </div>

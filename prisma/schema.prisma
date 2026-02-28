@@ -84,10 +84,12 @@ model OrderItem {
 }
 
 model StoreSettings {
-  id                 Int    @id @default(1)
-  storeName          String @default("카페")
-  defaultLanguage    String @default("ko")
-  supportedLanguages String @default("[\"ko\"]")
+  id                 Int     @id @default(1)
+  storeName          String  @default("카페")
+  storeDescription   String  @default("")
+  logoUrl            String?
+  defaultLanguage    String  @default("ko")
+  supportedLanguages String  @default("[\"ko\"]")
 }
 
 model CategoryImage {

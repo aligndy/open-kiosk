@@ -20,6 +20,7 @@ export default function ShopLayout({
   const router = useRouter();
   const [showCart, setShowCart] = useState(false);
   const [storeName, setStoreName] = useState("카페");
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -41,6 +42,7 @@ export default function ShopLayout({
       .then((r) => r.json())
       .then((data) => {
         if (data.storeName) setStoreName(data.storeName);
+        if (data.logoUrl) setLogoUrl(data.logoUrl);
         if (data.supportedLanguages) {
           try {
             const langs = JSON.parse(data.supportedLanguages);
@@ -68,7 +70,12 @@ export default function ShopLayout({
     <div className="flex min-h-screen flex-col bg-gray-50">
       {/* Header */}
       <header className="sticky top-0 z-30 flex items-center justify-between bg-white px-4 py-3 shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-900 select-none cursor-default" onClick={handleLogoClick}>{storeName}</h1>
+        <div className="flex items-center gap-2 select-none cursor-default" onClick={handleLogoClick}>
+          {logoUrl && (
+            <img src={logoUrl} alt={storeName} className="h-9 w-9 object-contain rounded" />
+          )}
+          <h1 className="text-2xl font-bold text-gray-900">{storeName}</h1>
+        </div>
         <div className="flex items-center gap-3">
           <LanguageSelector
             currentLanguage={currentLanguage}

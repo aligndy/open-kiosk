@@ -49,7 +49,6 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   const [imagePrompt, setImagePrompt] = useState("");
   const [transparentBg, setTransparentBg] = useState(true);
   const [generatingImage, setGeneratingImage] = useState(false);
-  const [useReferenceImage, setUseReferenceImage] = useState(true);
   const [optionGroups, setOptionGroups] = useState<OptionGroupInput[]>([]);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -57,6 +56,11 @@ export default function MenuForm({ menuId }: MenuFormProps) {
   // Gallery state
   const [galleryImages, setGalleryImages] = useState<MenuImageItem[]>([]);
   const [galleryUploading, setGalleryUploading] = useState(false);
+  const [fileDragOver, setFileDragOver] = useState(false);
+
+  // Reference image selection
+  const [siblingMenus, setSiblingMenus] = useState<{ id: number; name: string; imageUrl: string | null }[]>([]);
+  const [selectedRefUrl, setSelectedRefUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -106,12 +110,8 @@ export default function MenuForm({ menuId }: MenuFormProps) {
     setGalleryImages(await res.json());
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const uploadFile = async (file: File) => {
     if (isEdit && menuId) {
-      // Upload via gallery API
       setGalleryUploading(true);
       try {
         const formData = new FormData();
@@ -132,21 +132,71 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         alert("업로드 중 오류가 발생했습니다.");
       }
       setGalleryUploading(false);
-      e.target.value = "";
     } else {
-      // New menu: just set as file for submit
       setImageUrl(URL.createObjectURL(file));
-      // Store file for later submit - we use a hidden approach
       const formData = new FormData();
       formData.append("image", file);
       (window as unknown as Record<string, FormData>).__menuImageFile = formData;
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadFile(file);
+    e.target.value = "";
+  };
+
+  const handleFileDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setFileDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      await uploadFile(file);
+    }
+  };
+
+  // Fetch sibling menus when category changes
+  useEffect(() => {
+    if (!categoryId) { setSiblingMenus([]); return; }
+    fetch(`/api/menus?categoryId=${categoryId}&includeInactive=1`)
+      .then((r) => r.json())
+      .then((menus) => {
+        const siblings = menus
+          .filter((m: { id: number; imageUrl: string | null }) => m.id !== menuId && m.imageUrl)
+          .map((m: { id: number; name: string; imageUrl: string | null }) => ({
+            id: m.id, name: m.name, imageUrl: m.imageUrl,
+          }));
+        setSiblingMenus(siblings);
+      })
+      .catch(() => setSiblingMenus([]));
+  }, [categoryId, menuId]);
+
   const defaultPrompt = [name, description].filter(Boolean).join(" - ");
 
   const selectedCategory = categories.find((c) => c.id === categoryId);
   const categoryRefImage = selectedCategory?.referenceImageUrl || null;
+
+  // Available reference images: category ref + sibling menus + this menu's gallery
+  const usedUrls = new Set<string>();
+  const referenceOptions: { url: string; label: string }[] = [];
+  if (categoryRefImage) {
+    referenceOptions.push({ url: categoryRefImage, label: "카테고리 레퍼런스" });
+    usedUrls.add(categoryRefImage);
+  }
+  for (const m of siblingMenus) {
+    if (m.imageUrl && !usedUrls.has(m.imageUrl)) {
+      referenceOptions.push({ url: m.imageUrl, label: m.name });
+      usedUrls.add(m.imageUrl);
+    }
+  }
+  for (const img of galleryImages) {
+    if (!usedUrls.has(img.imageUrl)) {
+      const label = img.isAiGenerated ? "AI 생성" : "업로드";
+      referenceOptions.push({ url: img.imageUrl, label: `${label} (내 갤러리)` });
+      usedUrls.add(img.imageUrl);
+    }
+  }
 
   const generateImage = async () => {
     const finalPrompt = imagePrompt.trim() || defaultPrompt;
@@ -158,8 +208,8 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         menuId: menuId || null,
         transparentBg,
       };
-      if (useReferenceImage && categoryRefImage) {
-        requestBody.referenceImageUrl = categoryRefImage;
+      if (selectedRefUrl) {
+        requestBody.referenceImageUrl = selectedRefUrl;
       }
       const res = await fetch("/api/generate-image", {
         method: "POST",
@@ -439,11 +489,23 @@ export default function MenuForm({ menuId }: MenuFormProps) {
       </div>
 
       {/* Image Gallery */}
-      <div className="bg-white rounded-lg shadow p-4 space-y-4">
+      <div
+        className="bg-white rounded-lg shadow p-4 space-y-4"
+        onDragOver={(e) => { e.preventDefault(); setFileDragOver(true); }}
+        onDragLeave={() => setFileDragOver(false)}
+        onDrop={handleFileDrop}
+      >
         <h3 className="font-medium text-gray-800">이미지</h3>
 
+        {/* Drop overlay */}
+        {fileDragOver && (
+          <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-blue-400 bg-blue-50 py-10">
+            <p className="text-blue-500 font-medium">이미지를 여기에 놓으세요</p>
+          </div>
+        )}
+
         {/* Gallery Grid */}
-        {isEdit && galleryImages.length > 0 && (
+        {isEdit && galleryImages.length > 0 && !fileDragOver && (
           <div className="grid grid-cols-4 gap-3">
             {galleryImages.map((img) => (
               <div
@@ -491,8 +553,8 @@ export default function MenuForm({ menuId }: MenuFormProps) {
         )}
 
         {/* Current image preview (for new menus or if no gallery) */}
-        {(!isEdit || galleryImages.length === 0) && imageUrl && (
-          <div className="mb-2">
+        {(!isEdit || galleryImages.length === 0) && imageUrl && !fileDragOver && (
+          <div className="flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-200 py-6">
             <img
               src={imageUrl}
               alt="메뉴 이미지"
@@ -501,62 +563,77 @@ export default function MenuForm({ menuId }: MenuFormProps) {
           </div>
         )}
 
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">
-            파일 업로드
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            disabled={galleryUploading}
-            className="text-sm"
-          />
-          {galleryUploading && (
-            <span className="text-xs text-gray-500 ml-2">업로드 중...</span>
-          )}
-        </div>
+        {/* Empty state drop zone */}
+        {(!isEdit || galleryImages.length === 0) && !imageUrl && !fileDragOver && (
+          <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 py-10 text-gray-400">
+            <svg className="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <p className="text-sm">이미지를 드래그하거나 아래 버튼으로 추가하세요</p>
+          </div>
+        )}
 
-        <div className="border-t pt-4">
-          <label className="block text-sm text-gray-600 mb-1">
-            AI 이미지 생성
-          </label>
+        {/* Actions row */}
+        <div className="border-t pt-4 space-y-3">
           <div className="flex gap-2">
             <input
               type="text"
               value={imagePrompt}
               onChange={(e) => setImagePrompt(e.target.value)}
               placeholder={defaultPrompt || "메뉴명을 먼저 입력하세요"}
-              className="flex-1 border rounded-md px-3 py-2 text-sm"
+              className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
             />
             <button
               type="button"
               onClick={generateImage}
               disabled={generatingImage || (!imagePrompt.trim() && !defaultPrompt)}
-              className="px-4 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 disabled:opacity-50"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-40 whitespace-nowrap"
             >
-              {generatingImage ? "생성 중..." : "생성"}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              {generatingImage ? "생성 중..." : "AI 생성"}
             </button>
+            <label className={`flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer whitespace-nowrap ${galleryUploading ? "opacity-40 pointer-events-none" : ""}`}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+              {galleryUploading ? "업로드 중..." : "파일 업로드"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={galleryUploading}
+                className="hidden"
+              />
+            </label>
           </div>
-          <label className="mt-2 flex items-center gap-2 text-sm text-gray-600">
-            <input
-              type="checkbox"
-              checked={transparentBg}
-              onChange={(e) => setTransparentBg(e.target.checked)}
-            />
-            흰 배경으로 생성
-          </label>
-          {categoryRefImage && (
-            <label className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm text-gray-600">
               <input
                 type="checkbox"
-                checked={useReferenceImage}
-                onChange={(e) => setUseReferenceImage(e.target.checked)}
+                checked={transparentBg}
+                onChange={(e) => setTransparentBg(e.target.checked)}
               />
-              레퍼런스 이미지 스타일 적용
-              <img src={categoryRefImage} alt="레퍼런스" className="w-8 h-8 object-cover rounded border ml-1" />
+              흰 배경으로 생성
             </label>
-          )}
+            {referenceOptions.length > 0 && (
+              <div>
+                <p className="text-sm text-gray-600 mb-1.5">레퍼런스 이미지 (클릭하여 선택/해제)</p>
+                <div className="flex gap-2 flex-wrap">
+                  {referenceOptions.map((ref, idx) => (
+                    <button
+                      key={`${ref.label}-${idx}`}
+                      type="button"
+                      onClick={() => setSelectedRefUrl(selectedRefUrl === ref.url ? null : ref.url)}
+                      className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 transition-colors ${
+                        selectedRefUrl === ref.url
+                          ? "border-purple-500 bg-purple-50"
+                          : "border-gray-200 hover:border-gray-400"
+                      }`}
+                    >
+                      <img src={ref.url} alt={ref.label} className="w-12 h-12 object-cover rounded" />
+                      <span className="text-[11px] text-gray-500 max-w-[60px] truncate">{ref.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

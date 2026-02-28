@@ -46,6 +46,11 @@ export default function MenuManager() {
     fetchMenus();
   };
 
+  const duplicateMenu = async (id: number) => {
+    await fetch(`/api/menus/${id}/duplicate`, { method: "POST" });
+    fetchMenus();
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -72,7 +77,7 @@ export default function MenuManager() {
                 <th className="text-left px-4 py-3 text-gray-600 font-medium">카테고리</th>
                 <th className="text-right px-4 py-3 text-gray-600 font-medium">가격</th>
                 <th className="text-center px-4 py-3 text-gray-600 font-medium">상태</th>
-                <th className="text-right px-4 py-3 text-gray-600 font-medium w-40">관리</th>
+                <th className="text-right px-4 py-3 text-gray-600 font-medium w-48">관리</th>
               </tr>
             </thead>
             <tbody>
@@ -99,6 +104,7 @@ export default function MenuManager() {
                     </button>
                   </td>
                   <td className="px-4 py-2 text-right">
+                    <button onClick={() => duplicateMenu(menu.id)} className="text-gray-500 hover:text-gray-700 text-sm mr-2">복제</button>
                     <button onClick={() => router.push(`/admin/menus/${menu.id}/edit`)} className="text-blue-600 hover:text-blue-800 text-sm mr-2">수정</button>
                     <button onClick={() => deleteMenu(menu.id)} className="text-red-600 hover:text-red-800 text-sm">삭제</button>
                   </td>

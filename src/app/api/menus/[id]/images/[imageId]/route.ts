@@ -45,12 +45,20 @@ export async function DELETE(
     );
   }
 
-  // Delete file from disk
-  try {
-    const filePath = path.join(process.cwd(), "public", image.imageUrl);
-    await unlink(filePath);
-  } catch {
-    // File may not exist, continue
+  // Only delete file if no other menu or menuImage references it
+  const otherMenuRefs = await prisma.menu.count({
+    where: { imageUrl: image.imageUrl, id: { not: menuId } },
+  });
+  const otherImageRefs = await prisma.menuImage.count({
+    where: { imageUrl: image.imageUrl, id: { not: Number(imageId) } },
+  });
+  if (otherMenuRefs === 0 && otherImageRefs === 0) {
+    try {
+      const filePath = path.join(process.cwd(), "public", image.imageUrl);
+      await unlink(filePath);
+    } catch {
+      // File may not exist, continue
+    }
   }
 
   // Delete DB record
